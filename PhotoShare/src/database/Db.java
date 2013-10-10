@@ -1,5 +1,6 @@
 package database;
 
+import java.io.Console;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -29,7 +30,7 @@ public class Db {
 		    
 		    this.conn = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
 		    this.stmt = conn.createStatement();
-		    
+		    System.out.println("Connected.");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -46,10 +47,9 @@ public class Db {
 	 */
 	public void close_db() {
 		try {
-			this.conn.close();
 			this.stmt.close();
-			this.conn = null;
-			this.stmt = null;
+			this.conn.close();
+			System.out.println("Disconnected from database.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
