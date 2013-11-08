@@ -5,5 +5,7 @@
 *.war
 *.ear
 
+# Mac file thing
+.DS_Store
 # Buffer files
 *~
