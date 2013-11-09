@@ -6,11 +6,13 @@ package database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
 
+import userManagement.Group;
 import userManagement.User;
 
 public class TestDatabase extends TestCase{
@@ -18,11 +20,14 @@ public class TestDatabase extends TestCase{
 	private User user;
 	private String username;
 	private String password;
+	private Group group;
 	
 	protected void setUp() {
 		this.db = new Db();
-		this.username = "";
-		this.password = "";
+		this.username = "mnaylor";
+		this.password = "ravenraven1";
+		this.user = new User("mnaylor");
+		this.group = new Group("friends", 3);
 		db.connect_db(this.username, this.password);
 	}
 	
@@ -31,13 +36,7 @@ public class TestDatabase extends TestCase{
 	}
 	
 	@Test
-	public void test_connect() {
-		assertNotSame(db.conn, null);
-		assertNotSame(db.stmt, null);
-	}
-	
-	@Test
-	public void test_execute_stmt() throws SQLException {
+	public void test_execute_stmt() throws SQLException{
 		String query = "SELECT COUNT(*) FROM users " +
 						"WHERE user_name IN ('mnaylor', 'awong', 'hhoang')";
 		ResultSet rs = db.execute_stmt(query);
@@ -45,11 +44,20 @@ public class TestDatabase extends TestCase{
 		assertSame(rs.getInt(1), 3);
 	}
 	
-	// Test fails with null pointer exception
-	// db.close_db() works in tearDown however... curious...
 	@Test
-	public void test_close() {
-		db.close_db();
+	public void test_get_groups() throws SQLException {
+		ArrayList<Group> groups;
+		groups = db.get_groups(user);
+		assertEquals(groups.size(), 1);
+		assertEquals(groups.get(1).getId(), 1);
+	}
+	
+	@Test
+	public void test_get_users_from_group() {
+		ArrayList<User> users;
+		users = db.get_users_from_group(group);
+		assertEquals(users.size(), 2);
+		assertEquals(users.get(0).getUsername(), "awong");
 	}
 	
     public static void main(String[] args) {

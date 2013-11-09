@@ -1,12 +1,15 @@
 package database;
 
-import java.io.Console;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import userManagement.Group;
+import userManagement.User;
 
 public class Db {
 	// JDBC driver name and database URL
@@ -17,10 +20,11 @@ public class Db {
 	public Connection conn = null;
 	public Statement stmt = null;
 	
-	/*
-	 * Connects to the database
-	 * Sets the conn and stmt class variables
-	*/
+	/**
+	 * 
+	 * @param USERNAME
+	 * @param PASSWORD
+	 */
 	public void connect_db(String USERNAME, String PASSWORD) {
 		try {
 			Class drvClass = Class.forName(DRIVER_NAME); 
@@ -42,8 +46,8 @@ public class Db {
 		}
 	}
 	
-	/*
-	 * Closes class conn and stmt variables
+	/**
+	 * 
 	 */
 	public void close_db() {
 		try {
@@ -55,9 +59,10 @@ public class Db {
 		}
 	}
 	
-	/*
-	 * Executes SQL update (insert, delete, etc.) statements
-	 * Returns number of updated rows, or 0 if sql return is 0
+	/**
+	 * 
+	 * @param query
+	 * @return
 	 */
 	public Integer execute_update(String query) {
 			try {
@@ -68,9 +73,82 @@ public class Db {
 			return null;
 	}
 	
-	/*
-	 * Executes sql query 
-	 * Returns ResultSet
+	
+	public ArrayList<Group> get_groups(User user) {
+		ResultSet rs;
+		String query = "SELECT group_id, group_name "
+				       + "FROM groups"
+				       + "WHERE user_name = "
+				       + user.getUsername();
+		rs = execute_stmt(query);
+		return group_from_resultset(rs);
+	}
+	
+	/**
+	 * Gets groups (and users in groups) from a resultset
+	 * @param rs
+	 * @return
+	 */
+	public ArrayList<Group> group_from_resultset(ResultSet rs) {
+		ArrayList<Group> groups;
+		groups = new ArrayList<Group>();
+		Group temp_group;
+		
+		try {
+			while (rs.next()) {
+				String group_name = rs.getString("group_name");
+				int group_id = rs.getInt("group_id");
+				temp_group = new Group(group_name, group_id);
+				groups.add(temp_group);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		for (Group group: groups) {
+			ArrayList<User> users;
+			users = get_users_from_group(group);
+			group.setFriends(users);
+		}
+		return groups;
+	}
+	
+	public ArrayList<User> get_users_from_group(Group group) {
+		ResultSet rs;
+		String query = "SELECT friend_id "
+				       + "FROM group_lists "
+				       + "WHERE group_id = "
+				       + group.getId();
+		rs = execute_stmt(query);
+		return user_from_resultset_group(rs);
+	}
+	
+	/**
+	 * Gets users in a group
+	 * @param rs
+	 * @return
+	 */
+	public ArrayList<User> user_from_resultset_group(ResultSet rs) {
+		ArrayList<User> all_users;
+		all_users = new ArrayList<User>();
+		User temp_user;
+		
+		try {
+			while (rs.next()) {
+				String friend_id = rs.getString("friend_id");
+				temp_user = new User(friend_id);
+				all_users.add(temp_user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return all_users;
+	}
+	
+	/**
+	 * 
+	 * @param query
+	 * @return
 	 */
 	public ResultSet execute_stmt(String query) {
 		try {

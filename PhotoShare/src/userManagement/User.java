@@ -34,6 +34,7 @@ public class User {
 		this.groups = groups;
 		this.date_reg = date_reg;
 	}
+	
 	/**
 	 * Overloaded constructor to create the most basic of users
 	 * @param username
@@ -42,6 +43,14 @@ public class User {
 	public User(String username, ArrayList<Group> groups) {
 		this.username = username;
 		this.groups = groups;
+	}
+	
+	/** Overloaded constructor for just username
+	 * 
+	 * @param username
+	 */
+	public User(String username) {
+		this.username = username;
 	}
 	
 	// Getters and Setters
@@ -61,5 +70,4 @@ public class User {
 	public void setPassword(char[] password) {this.password = password;}
 	public String getDate_reg() {return date_reg;}
 	public void setDate_reg(String date_reg) {this.date_reg = date_reg;}
-	
 }

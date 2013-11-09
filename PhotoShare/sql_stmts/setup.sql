@@ -52,6 +52,7 @@ CREATE TABLE groups (
 
 INSERT INTO groups values(1,null,'public', sysdate);
 INSERT INTO groups values(2,null,'private',sysdate);
+INSERT INTO groups values(3,'mnaylor','friends', sysdate);
 
 CREATE TABLE group_lists (
    group_id    int,
@@ -62,6 +63,9 @@ CREATE TABLE group_lists (
    FOREIGN KEY(group_id) REFERENCES groups,
    FOREIGN KEY(friend_id) REFERENCES users
 );
+
+INSERT INTO group_lists values(3,'awong',sysdate,null);
+INSERT INTO group_lists values(3,'hhoang',sysdate,null);
 
 CREATE TABLE images (
    photo_id    int,
