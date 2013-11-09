@@ -1,7 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    
-<div class="center">
-	<p>Test Index</p>
-</div>
-
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Main Page</title>
+    <jsp:include page="includes/header.jsp"/>
+  </head>
+<body>
+  <p>Filler home page</p>
+</body>
+</html>
