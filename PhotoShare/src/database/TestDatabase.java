@@ -49,7 +49,7 @@ public class TestDatabase extends TestCase{
 		ArrayList<Group> groups;
 		groups = db.get_groups(user);
 		assertEquals(groups.size(), 1);
-		assertEquals(groups.get(1).getId(), 1);
+		assertEquals(groups.get(0).getId(), 3);
 	}
 	
 	@Test

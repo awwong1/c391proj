@@ -77,9 +77,9 @@ public class Db {
 	public ArrayList<Group> get_groups(User user) {
 		ResultSet rs;
 		String query = "SELECT group_id, group_name "
-				       + "FROM groups"
-				       + "WHERE user_name = "
-				       + user.getUsername();
+				       + "FROM groups "
+				       + "WHERE user_name = '"
+				       + user.getUsername() + "'";
 		rs = execute_stmt(query);
 		return group_from_resultset(rs);
 	}
