@@ -7,7 +7,7 @@
 
     <servlet>
         <servlet-name>login_Servlet</servlet-name>
-        <servlet-class>login_Servlet</servlet-class>
+        <servlet-class>/login_Servlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login_Servlet</servlet-name>

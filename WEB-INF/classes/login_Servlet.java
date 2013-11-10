@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author alexanderwwong
  */
 public class login_Servlet extends HttpServlet {
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
