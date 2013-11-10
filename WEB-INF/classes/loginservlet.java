@@ -56,7 +56,8 @@ public class loginservlet extends HttpServlet {
 	    session.setAttribute("username", eUsername);
 	    response.sendRedirect("/c391proj/index.jsp");
 	} else {
-	    out.println("<p><b>Username or Password invalid.</b></p>");
+	    String errormsg = "Username or Password invalid.";
+	    session.setAttribute("err", errormsg);
 	    response.sendRedirect("/c391proj/login.jsp");
 	} 
 	out.close();

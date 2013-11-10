@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 
 <%  
-    String error=" ";  
-    try{  
-        error=(String)request.getAttribute("err");  
-    }catch(NullPointerException e){error=" ";}        
+   String error=" ";  
+   try{  
+     error=(String) session.getAttribute("err");  
+   } catch(NullPointerException e) {
+     error=" ";
+   }        
 %>  
 
 <html>
@@ -36,6 +38,7 @@
 	      <% 
 		 if (error != null) {
 		   out.println(error); 
+		   session.setAttribute("err", null);
 		 }
 	      %>
 	    </td>  
