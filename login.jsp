@@ -13,7 +13,7 @@
     <jsp:include page="includes/header.jsp"/>
   </head>
   <body>
-    <form name="login" action="login_Servlet" method="POST">
+    <form name="login" action="loginservlet" method="POST">
       <table>               
 	<tbody>  
           <tr >  
@@ -21,11 +21,11 @@
           </tr>   
           <tr>  
             <td>UserName:</td>  
-            <td><input type="text" name="us er" value="" size="20" required="required" /></td>  
+            <td><input type="text" name="user" size="20" required="required" /></td>  
           </tr>  
           <tr>  
             <td>Password:</td>  
-            <td><input type="password" name="pass" value="" size="20" required="required" /></td>  
+            <td><input type="password" name="pass" size="20" required="required" /></td>  
           </tr>  
           <tr >                          
             <td colspan="2" align="center"><input type="submit" value="Login" />  

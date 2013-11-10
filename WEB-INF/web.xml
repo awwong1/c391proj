@@ -6,12 +6,12 @@
  version="2.4">
 
     <servlet>
-        <servlet-name>login_Servlet</servlet-name>
-        <servlet-class>/login_Servlet</servlet-class>
+        <servlet-name>loginservlet</servlet-name>
+        <servlet-class>loginservlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>login_Servlet</servlet-name>
-        <url-pattern>/login_Servlet</url-pattern>
+        <servlet-name>loginservlet</servlet-name>
+        <url-pattern>/loginservlet</url-pattern>
     </servlet-mapping>
 
 </web-app>
