@@ -19,12 +19,10 @@ Should be included in the header data
     DriverManager.registerDriver((Driver) drvClass.newInstance());
   }
     catch(Exception ex){
-    out.println("<hr>" + ex.getMessage() + "<hr>");
   }
   try {
     conn = DriverManager.getConnection(dbString, dbUser, dbPass);
     session.setAttribute("conn", conn);
   } catch (Exception e) {
-    out.println("<hr>" + e.getMessage() + "<hr>");
   }
 %>
