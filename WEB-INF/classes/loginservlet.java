@@ -9,10 +9,7 @@ import javax.servlet.http.*;
  */
 
 public class loginservlet extends HttpServlet {
-    private Connection conn = null;
-    private String driverName = "oracle.jdbc.driver.OracleDriver";
-    private String dbString = 
-	"jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+    private HttpSession session;
     private String eUsername;
     private String ePassword;
     private String tPassword;
@@ -22,6 +19,7 @@ public class loginservlet extends HttpServlet {
 	throws ServletException, IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+	session = request.getSession(true);
 
         try {
             eUsername=request.getParameter("user");
@@ -31,25 +29,7 @@ public class loginservlet extends HttpServlet {
 	    out.println("<hr>" + ex.getMessage() + "<hr>");
 	}
 	
-	//load and register the driver
-	try{
-	    Class drvClass = Class.forName(driverName); 
-	    DriverManager.registerDriver((Driver) drvClass.newInstance());
-	}
-	catch(Exception ex){
-	    out.println("<hr>" + ex.getMessage() + "<hr>");
-	}
-	
-	// Establish the connection to the database... badly
-	try{
-	    conn = DriverManager.getConnection(dbString,"awwong1",
-					       "crimsonh34rt");
-	    conn.setAutoCommit(false);
-	}
-	catch(Exception ex){
-	    out.println("<hr>" + ex.getMessage() + "<hr>");
-	}
-
+	Connection conn = (Connection) session.getAttribute("conn");
 	Statement stmt = null;
 	ResultSet rset = null;
 	String sql = "select password from users where  user_name='" + 
@@ -73,7 +53,6 @@ public class loginservlet extends HttpServlet {
 	}
 	if(ePassword.equals(tPassword)) {
 	    out.println("<p><b>Login successful.</b></p>");
-	    HttpSession session = request.getSession(true);
 	    session.setAttribute("username", eUsername);
 	    response.sendRedirect("/c391proj/index.jsp");
 	} else {
