@@ -13,7 +13,7 @@
     <jsp:include page="includes/header.jsp"/>
   </head>
   <body>
-    <form name="manageGroups" action="manage_Groups" method="POST">
+    <form name="manage_Groups" action="manage_Groups" method="POST">
       <table>
 	<tbody>  
           <tr >  

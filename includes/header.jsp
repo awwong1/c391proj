@@ -3,7 +3,7 @@ Assume necessary html definitions are already made
 Author: Alexander Wong
 -->
 <%@ page import="javax.servlet.http.*" %>
-<%@ include file="dbconn.jsp" %>
+<!--<%@ include file="dbconn.jsp" %>-->
 <% 
    String username = (String) session.getAttribute("username");
    if (username != null) {

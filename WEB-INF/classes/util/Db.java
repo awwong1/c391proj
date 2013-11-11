@@ -1,0 +1,207 @@
+package util;
+
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+import util.Group;
+import util.User;
+
+public class Db {
+    static final String USERNAME = "mnaylor";
+    static final String PASSWORD = "ravenraven1";
+    // JDBC driver name and database URL
+    static final String DRIVER_NAME = "oracle.jdbc.driver.OracleDriver";  
+    static final String DB_URL = 
+	"jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+    
+    public Connection conn = null;
+    public Statement stmt = null;
+    
+    public void connect_db() {
+	try {
+	    Class drvClass = Class.forName(DRIVER_NAME); 
+	    DriverManager.registerDriver((Driver) drvClass.newInstance());
+	    
+	    System.out.println("Connecting to database...");
+	    
+	    this.conn = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
+	    this.stmt = conn.createStatement();
+	    System.out.println("Connected.");
+	} catch (ClassNotFoundException e) {
+	    e.printStackTrace();
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	} catch (InstantiationException e) {
+	    e.printStackTrace();
+	} catch (IllegalAccessException e) {
+	    e.printStackTrace();
+	}
+    }
+    
+    /**
+     * 
+     */
+    public void close_db() {
+	try {
+	    this.stmt.close();
+	    this.conn.close();
+	    System.out.println("Disconnected from database.");
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+    }
+    
+    /**
+     * 
+     * @param query
+     * @return
+     */
+    public Integer execute_update(String query) {
+	try {
+	    return this.stmt.executeUpdate(query);
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	return null;
+    }
+    
+
+    public User get_user(String username) {
+	ResultSet rs_users;
+	ResultSet rs_persons;
+	String query_users = "select * from users "
+	    + "where user_name = '" + username + "'";
+	String query_persons = "select * from persons "
+	    + "where user_name = '" + username + "'";
+	rs_users = execute_stmt(query_users);
+	rs_persons = execute_stmt(query_persons);
+	return user_from_resultset(rs_users, rs_persons);
+    }
+    
+    public ArrayList<Group> get_groups(String username) {
+	ResultSet rs;
+	String query = "SELECT group_id, group_name "
+	    + "FROM groups "
+	    + "WHERE user_name = '"
+	    + username + "'";
+	rs = execute_stmt(query);
+	return group_from_resultset(rs);
+    }
+    
+    /**
+     * Gets groups (and users in groups) from a resultset
+     * @param rs
+     * @return
+     */
+    public ArrayList<Group> group_from_resultset(ResultSet rs) {
+	ArrayList<Group> groups;
+	groups = new ArrayList<Group>();
+	Group temp_group;
+	
+	try {
+	    while (rs.next()) {
+		String group_name = rs.getString("group_name");
+		int group_id = rs.getInt("group_id");
+		temp_group = new Group(group_name, group_id);
+		groups.add(temp_group);
+	    }
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	
+	for (Group group: groups) {
+	    ArrayList<String> users;
+	    users = get_users_from_group(group);
+	    group.setFriends(users);
+	}
+	return groups;
+    }
+    
+    public ArrayList<String> get_users_from_group(Group group) {
+	ResultSet rs;
+	String query = "SELECT friend_id "
+	    + "FROM group_lists "
+	    + "WHERE group_id = "
+	    + group.getId();
+	rs = execute_stmt(query);
+	return user_from_resultset_group(rs);
+    }
+    
+    // TODO: make it return a full user (ie. with all attributes)
+    public User user_from_resultset(ResultSet rs_user, ResultSet rs_person) {
+	String user_name;
+	String password;
+	String date;
+	String email;
+	String fname;
+	String lname;
+	String phone;
+	User user;
+	ArrayList<Group> groups;
+
+	// Get data from rs_user
+	try {
+	    while (rs_user.next() & rs_person.next()) {
+	        user_name = rs_user.getString("user_name");
+		password = rs_user.getString("password");
+		date = rs_user.getString("date_registered");
+
+       		email = rs_person.getString("email");
+		fname = rs_person.getString("fname");
+		lname = rs_person.getString("lname");
+		phone = rs_person.getString("phone");
+
+		// Get group
+		groups = get_groups(user_name);
+		
+		user = new User(user_name, email, fname, lname, phone, 
+				groups, date);
+		return user;
+
+	    }
+	    
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	return null;
+    }
+
+    /**
+     * Gets users in a group
+     * @param rs
+     * @return
+     */
+    public ArrayList<String> user_from_resultset_group(ResultSet rs) {
+	ArrayList<String> all_users;
+	all_users = new ArrayList<String>();
+	
+	try {
+	    while (rs.next()) {
+		String friend_id = rs.getString("friend_id");
+		all_users.add(friend_id);
+	    }
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	return all_users;
+    }
+    
+    /**
+     * 
+     * @param query
+     * @return
+     */
+    public ResultSet execute_stmt(String query) {
+	try {
+	    return this.stmt.executeQuery(query);
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	return null;
+    }
+}

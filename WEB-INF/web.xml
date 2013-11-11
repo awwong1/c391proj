@@ -14,4 +14,14 @@
         <url-pattern>/loginservlet</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>manage_Groups</servlet-name>
+        <servlet-class>manage_Groups</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>manage_Groups</servlet-name>
+        <url-pattern>/manage_Groups</url-pattern>
+    </servlet-mapping>
+
+
 </web-app>
