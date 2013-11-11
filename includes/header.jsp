@@ -15,7 +15,8 @@ Author: Alexander Wong
     if (username == null) {
         out.println("<a href=\"/c391proj/login.jsp\">login</a>");
     } else {
-        out.println("<a href=\"/c391proj/logout.jsp\">logout</a>"); 
+        out.println("<a href=\"/c391proj/manage_Groups\">Manage Groups</a>");
+        out.println(" | <a href=\"/c391proj/logout.jsp\">logout</a>"); 
     }
 %>
 </p>

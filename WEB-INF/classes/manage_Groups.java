@@ -13,19 +13,22 @@ public class manage_Groups extends HttpServlet {
     HttpSession session;
     Connection conn;
     Statement stmt;
+    String user;
 
     public void init(ServletConfig config) throws ServletException { 
 	super.init(config); 
-	database = new Db();
-	database.connect_db();
     }
 
     protected void doGet(HttpServletRequest request, 
 			 HttpServletResponse response)
 	throws ServletException, IOException {
 
+	database = new Db();
+	database.connect_db();
+
         response.setContentType("text/html;charset=UTF-8");
 	session = request.getSession(true);
+	user = (String) session.getAttribute("username");
 
 	PrintWriter out = response.getWriter();
 	out.println("<html><head>");
@@ -40,8 +43,7 @@ public class manage_Groups extends HttpServlet {
         /* get user from session variables
          for now, user is mnaylor
 	*/
-	ArrayList<Group> group_list = database.get_groups("mnaylor");
-	//out.println("size of group_list: " + group_list.size());
+	ArrayList<Group> group_list = database.get_groups(user);
 	
 	for (Group group: group_list) {
 	    out.println(group.getName());

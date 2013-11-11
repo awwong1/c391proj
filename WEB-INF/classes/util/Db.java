@@ -22,14 +22,6 @@ public class Db {
     public Connection conn;
     public Statement stmt;
     
-    public Db(Connection conn, Statement stmt) {
-	this.conn = conn;
-	this.stmt = stmt;
-    }
-
-    public Db(){
-    }
-
     public int connect_db() {
 	try {
 	    Class drvClass = Class.forName(DRIVER_NAME); 
@@ -91,6 +83,21 @@ public class Db {
 	rs_users = execute_stmt(query_users);
 	rs_persons = execute_stmt(query_persons);
 	return user_from_resultset(rs_users, rs_persons);
+    }
+
+    public String get_password(String username) {
+	String tPassword = "";
+	String query = "select password from users where user_name = '" + 
+	    username + "'";
+	ResultSet rs = execute_stmt(query);
+	try {
+	    while(rs != null && rs.next()) {
+		tPassword = (rs.getString(1)).trim();
+	    }
+	} catch(Exception e) {
+	    e.printStackTrace();
+	}
+	return tPassword;
     }
     
     public ArrayList<Group> get_groups(String username) {

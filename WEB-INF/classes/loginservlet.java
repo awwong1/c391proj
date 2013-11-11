@@ -2,6 +2,7 @@ import java.io.*;
 import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import util.Db;
 
 /**
  * Dummy servlet for loging in.
@@ -28,7 +29,11 @@ public class loginservlet extends HttpServlet {
 	} catch(Exception ex) {
 	    out.println("<hr>" + ex.getMessage() + "<hr>");
 	}
-	
+
+	Db database = new Db();
+	database.connect_db();
+	tPassword = database.get_password(eUsername);
+	/**
 	Connection conn = (Connection) session.getAttribute("conn");
 	Statement stmt = null;
 	ResultSet rset = null;
@@ -47,10 +52,11 @@ public class loginservlet extends HttpServlet {
 	}	     
 	try{
 	    conn.close();
-	}
+	    }
 	catch(Exception ex){
 	    out.println("<hr>" + ex.getMessage() + "<hr>");
-	}
+	}*/
+
 	if(ePassword.equals(tPassword)) {
 	    out.println("<p><b>Login successful.</b></p>");
 	    session.setAttribute("username", eUsername);
