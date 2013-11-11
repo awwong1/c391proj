@@ -46,13 +46,14 @@ public class manage_Groups extends HttpServlet {
 	ArrayList<Group> group_list = database.get_groups(user);
 	
 	for (Group group: group_list) {
-	    out.println(group.getName());
+	    out.println("<h3>" + group.getName() + "</h3>");
 	    for (String friend: group.getFriends()) {
 		out.println("<p><input type='checkbox' name='friends' "
 			    + "value='" + friend + "'>" + friend + "</p>");
 	    }
 	}
-
+	out.println("<p><input type='checkbox' name='friends' "
+		    + "value='new_friend'><input type='text' value='New Friend'/></p>");
 	out.println("<input type='text' value='New Group' size='20'/>");
 	out.println("<input type='submit' value='Submit'/>");
 	out.println("</body></html>");
