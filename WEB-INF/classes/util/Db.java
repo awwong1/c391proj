@@ -19,10 +19,18 @@ public class Db {
     static final String DB_URL = 
 	"jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
     
-    public Connection conn = null;
-    public Statement stmt = null;
+    public Connection conn;
+    public Statement stmt;
     
-    public void connect_db() {
+    public Db(Connection conn, Statement stmt) {
+	this.conn = conn;
+	this.stmt = stmt;
+    }
+
+    public Db(){
+    }
+
+    public int connect_db() {
 	try {
 	    Class drvClass = Class.forName(DRIVER_NAME); 
 	    DriverManager.registerDriver((Driver) drvClass.newInstance());
@@ -32,6 +40,7 @@ public class Db {
 	    this.conn = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
 	    this.stmt = conn.createStatement();
 	    System.out.println("Connected.");
+	    return 1;
 	} catch (ClassNotFoundException e) {
 	    e.printStackTrace();
 	} catch (SQLException e) {
@@ -41,6 +50,7 @@ public class Db {
 	} catch (IllegalAccessException e) {
 	    e.printStackTrace();
 	}
+	return 0;
     }
     
     /**
