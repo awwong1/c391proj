@@ -1,12 +1,15 @@
 *.class
 *.classpath
+
 # Package Files #
 *.jar
 *.war
 *.ear
 
 # Mac file thing
+
 .DS_Store
+
 # Buffer files
 *~
 *#
