@@ -58,6 +58,26 @@ public class Db {
 	}
     }
     
+    public Integer add_group(String user, String group_name) {
+	String query = "insert into groups " + "values ("
+	              + "group_id_sequence.nextval, '" + user + "', '" + group_name 
+	              + "', sysdate)";
+	return execute_update(query);
+    }
+
+    public Integer delete_friend(int group_id, String friend) {
+	String query = "delete from group_lists where group_id = " + group_id
+	               + " and friend_id = '" + friend + "'";
+	return execute_update(query);
+    }
+
+    public Integer add_friend(int group_id, String friend) {
+	String query = "insert into group_lists values(" + group_id
+	               + ", '" + friend + "', sysdate, null)";
+	System.out.println("query = " + query);
+	return execute_update(query);
+    }
+
     /**
      * 
      * @param query
@@ -149,7 +169,6 @@ public class Db {
 	return user_from_resultset_group(rs);
     }
     
-    // TODO: make it return a full user (ie. with all attributes)
     public User user_from_resultset(ResultSet rs_user, ResultSet rs_person) {
 	String user_name;
 	String password;
