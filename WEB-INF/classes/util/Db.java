@@ -60,8 +60,8 @@ public class Db {
     
     public Integer add_group(String user, String group_name) {
 	String query = "insert into groups " + "values ("
-	              + "group_id_sequence.nextval, '" + user + "', '" + group_name 
-	              + "', sysdate)";
+	    + "group_id_sequence.nextval, '" + user + "', '" + 
+	    group_name + "', sysdate)";
 	return execute_update(query);
     }
 
@@ -239,5 +239,38 @@ public class Db {
 	    e.printStackTrace();
 	}
 	return null;
+    }
+
+    /**
+     * Checks if a user with specified username exists within the database
+     * Returns true if username exists, otherwise returns false
+     *
+     * @param String username
+     * @return boolean
+     */
+    public boolean userExists(String username) {
+	String userquery = "select * from users where user_name='" + 
+	    username + "'";
+	ResultSet rset = execute_stmt(userquery);
+	try {
+	    if (!rset.next()) {
+		return false;
+	    }
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	return true;
+    }
+    
+    /**
+     * Adds a user to the database, given a specified username and password
+     * @param String username, String password
+     * @return Integer
+     */
+    public Integer addUser(String username, String password) {
+	String query = "insert into users values ('" + 
+	    username + "', '" + 
+	    password + "', sysdate)";
+	return execute_update(query);
     }
 }

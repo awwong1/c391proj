@@ -13,9 +13,10 @@ Author: Alexander Wong
 <a href="/c391proj/index.jsp">home</a> | 
 <%
     if (username == null) {
-        out.println("<a href=\"/c391proj/login.jsp\">login</a>");
+	out.println("<a href=\"/c391proj/register.jsp\">register</a>");
+        out.println(" | <a href=\"/c391proj/login.jsp\">login</a>");
     } else {
-        out.println("<a href=\"/c391proj/manage_Groups\">Manage Groups</a>");
+        out.println("<a href=\"/c391proj/manage_Groups\">manage groups</a>");
         out.println(" | <a href=\"/c391proj/logout.jsp\">logout</a>"); 
     }
 %>

@@ -1,12 +1,21 @@
+<!-- 
+Webpage for logging in, displays form names and servlet error response messages
+-->
+
 <!DOCTYPE html>
 
 <%  
-   String error=" ";  
+   String error = null;  
+   String username = null;
    try{  
-     error=(String) session.getAttribute("err");  
+      error = (String) session.getAttribute("err");  
+      username = (String) session.getAttribute("username");
    } catch(NullPointerException e) {
-     error=" ";
-   }        
+      e.printStackTrace();
+   }
+   if (username != null) {
+      response.sendRedirect("/c391proj/index.jsp");
+   }
 %>  
 
 <html>
@@ -19,10 +28,10 @@
       <table>               
 	<tbody>  
           <tr >  
-            <td colspan="2"align="center"> Enter your Login Detail</td>  
+            <td colspan="2"align="center">Returning user login:</td>  
           </tr>   
           <tr>  
-            <td>UserName:</td>  
+            <td>Username:</td>  
             <td><input type="text" name="user" size="20" required="required" /></td>  
           </tr>  
           <tr>  
@@ -38,10 +47,11 @@
 	      <% 
 		 if (error != null) {
 		   out.println(error); 
-		   session.setAttribute("err", null);
+		   session.removeAttribute("err");
 		 }
 	      %>
 	    </td>  
+	  </tr>
 	</tbody> 
       </table>
     </form>
