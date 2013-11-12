@@ -32,17 +32,26 @@ public class registerservlet extends HttpServlet {
 	    ePassword = request.getParameter("pass");
 	    ePassword2 = request.getParameter("pass2");
 	} catch (Exception e) {
-	    out.println("<hr>" + e.getMessage() + "<hr>");
+	    system.out.println("<hr>" + e.getMessage() + "<hr>");
+	    response.sendRedirect("/c391proj/register.jsp");
 	}
 
 	// Check if a user exists with the same username
-	
-
+	if (db.userExists(eUsername)) {
+	    errorMsg = "Username already exists";
+	    session.setAttribute("err", errorMsg);
+	    response.sendRedirect("/c391proj/register.jsp");
+	    return;
+	}
 	// Check if the passwords match
 	if (!ePassword.equals(ePassword2)) {
 	    errorMsg = "Passwords do not match";
 	    session.setAttribute("err", errorMsg);
 	    response.sendRedirect("/c391proj/register.jsp");
+	    return;
 	}
+
+	// Add the new user to the database, notify that user is added
+	
     }
 }
