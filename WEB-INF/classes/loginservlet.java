@@ -33,6 +33,7 @@ public class loginservlet extends HttpServlet {
 	Db database = new Db();
 	database.connect_db();
 	tPassword = database.get_password(eUsername);
+	database.close_db();
 	/**
 	Connection conn = (Connection) session.getAttribute("conn");
 	Statement stmt = null;
