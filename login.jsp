@@ -1,11 +1,15 @@
+<!-- 
+Webpage for logging in, displays form names and servlet error response messages
+-->
+
 <!DOCTYPE html>
 
 <%  
-   String error=" ";  
+   String error="";  
    try{  
      error=(String) session.getAttribute("err");  
    } catch(NullPointerException e) {
-     error=" ";
+     error="";
    }        
 %>  
 
@@ -19,10 +23,10 @@
       <table>               
 	<tbody>  
           <tr >  
-            <td colspan="2"align="center"> Enter your Login Detail</td>  
+            <td colspan="2"align="center">Returning user login:</td>  
           </tr>   
           <tr>  
-            <td>UserName:</td>  
+            <td>Username:</td>  
             <td><input type="text" name="user" size="20" required="required" /></td>  
           </tr>  
           <tr>  
@@ -42,6 +46,7 @@
 		 }
 	      %>
 	    </td>  
+	  </tr>
 	</tbody> 
       </table>
     </form>
