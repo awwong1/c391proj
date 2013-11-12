@@ -89,7 +89,7 @@ public class Db {
 	} catch (SQLException e) {
 	    e.printStackTrace();
 	}
-	return null;
+	return 0;
     }
     
 

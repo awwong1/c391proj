@@ -63,11 +63,17 @@ public class manage_Groups extends HttpServlet {
 	    try {
 		new_friend = request.getParameter(group.getName() + "new_friend");
 		System.out.println("new friend = " + new_friend);
+		
 	    } catch (Exception e) {
 		e.printStackTrace();
 	    }
 	    if (new_friend != null && !new_friend.equals("New Friend")) {
-		database.add_friend(group.getId(), new_friend);
+		Integer success = database.add_friend(group.getId(), new_friend);
+		if (success == 0) {
+		    // TODO: print to screen
+		    System.out.println("friend username doesn't exist");
+		}
+
 	    }   
 	}
 
@@ -104,11 +110,11 @@ public class manage_Groups extends HttpServlet {
 			    + group.getName() + "'"
 			    + "value='" + friend + "'>" + friend + "</p>");
 	    }
-	    out.println("<p><blockquote><input type='text' name = " + group.getName() 
-			+ "new_friend value='New Friend'/></blockquote></p>");
+	    out.println("<p>&nbsp;&nbsp;&nbsp;<input type='text' name = " + group.getName() 
+			+ "new_friend placeholder='New Friend'/></blockquote></p>");
 	}
 	
-	out.println("<input type='text' name = 'new_group' value='New Group' size='20'/>");
+	out.println("<input type='text' name = 'new_group' placeholder='New Group' size='20'/>");
 	out.println("<p><input type='submit' value='Submit'/></p>");
 	out.println("</body></html>");
 	out.close();
