@@ -5,12 +5,17 @@ Webpage for registering a new user. Only displays if not logged in.
 <!DOCTYPE html>
 
 <%
-  String error = "";
-  try {
-    error = (String) session.getAttribute("err");
-  } catch (NullPointerException e) {
-    error = "";
-  }
+   String error = null;
+   String username = null;
+   try {
+      error = (String) session.getAttribute("err");
+      username = (String) session.getAttribute("username");
+   } catch (NullPointerException e) {
+      e.printStackTrace();
+   }
+   if (username != null) {
+      response.sendRedirect("/c391proj/index.jsp");
+   }
 %>
 
 <html>
@@ -34,13 +39,13 @@ Webpage for registering a new user. Only displays if not logged in.
 	  <tr>
 	    <td>New Password:</td>
 	    <td> 
-	      <input type="text" name="pass" size="20" required="required" />
+	      <input type="password" name="pass" size="20" required="required" />
 	    </td>
 	  </tr>
 	  <tr>
 	    <td>Confirm Password:</td>
 	    <td> 
-	      <input type="text" name="pass2" size="20" required="required" />
+	      <input type="password" name="pass2" size="20" required="required" />
 	    </td>
 	  </tr>
 	  <tr>

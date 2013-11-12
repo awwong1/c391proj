@@ -34,29 +34,6 @@ public class loginservlet extends HttpServlet {
 	database.connect_db();
 	tPassword = database.get_password(eUsername);
 	database.close_db();
-	/**
-	Connection conn = (Connection) session.getAttribute("conn");
-	Statement stmt = null;
-	ResultSet rset = null;
-	String sql = "select password from users where  user_name='" + 
-	    eUsername + "'";
-	out.println(sql);
-	try{
-	    stmt = conn.createStatement();
-	    rset = stmt.executeQuery(sql);
-	    while(rset != null && rset.next()) {
-		tPassword = (rset.getString(1)).trim();
-	    }
-	}
-	catch(Exception ex){
-	    out.println("<hr>" + ex.getMessage() + "<hr>");
-	}	     
-	try{
-	    conn.close();
-	    }
-	catch(Exception ex){
-	    out.println("<hr>" + ex.getMessage() + "<hr>");
-	}*/
 
 	if(ePassword.equals(tPassword)) {
 	    out.println("<p><b>Login successful.</b></p>");

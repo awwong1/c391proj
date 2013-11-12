@@ -5,12 +5,17 @@ Webpage for logging in, displays form names and servlet error response messages
 <!DOCTYPE html>
 
 <%  
-   String error="";  
+   String error = null;  
+   String username = null;
    try{  
-     error=(String) session.getAttribute("err");  
+      error = (String) session.getAttribute("err");  
+      username = (String) session.getAttribute("username");
    } catch(NullPointerException e) {
-     error="";
-   }        
+      e.printStackTrace();
+   }
+   if (username != null) {
+      response.sendRedirect("/c391proj/index.jsp");
+   }
 %>  
 
 <html>
@@ -42,7 +47,7 @@ Webpage for logging in, displays form names and servlet error response messages
 	      <% 
 		 if (error != null) {
 		   out.println(error); 
-		   session.setAttribute("err", null);
+		   session.removeAttribute("err");
 		 }
 	      %>
 	    </td>  

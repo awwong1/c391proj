@@ -249,27 +249,28 @@ public class Db {
      * @return boolean
      */
     public boolean userExists(String username) {
-	private ResultSet rset;
-	private String userquery;
-	userquery = "select * from users where user_name='" + username + "'";
+	String userquery = "select * from users where user_name='" + 
+	    username + "'";
+	ResultSet rset = execute_stmt(userquery);
 	try {
-	    rset = execute_stmt(userquery);
+	    if (!rset.next()) {
+		return false;
+	    }
 	} catch (SQLException e) {
 	    e.printStackTrace();
-	}
-	if (!rs.next()) {
-	    return false;
 	}
 	return true;
     }
     
     /**
      * Adds a user to the database, given a specified username and password
+     * @param String username, String password
+     * @return Integer
      */
     public Integer addUser(String username, String password) {
-	String query = "insert into users values ("
-	    + "group_id_sequence.nextval, '" + user + "', '" + 
-	    group_name + "', sysdate)";
-
+	String query = "insert into users values ('" + 
+	    username + "', '" + 
+	    password + "', sysdate)";
+	return execute_update(query);
     }
 }
