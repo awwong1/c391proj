@@ -15,7 +15,7 @@ public class Db {
     static final String USERNAME = "mnaylor";
     static final String PASSWORD = "ravenraven1";
     // JDBC driver name and database URL
-    static final String DRIVER_NAME = "oracle.jdbc.driver.OracleDriver";  
+    static final String DRIVER_NAME = "oracle.jdbc.driver.OracleDriver";
     static final String DB_URL = 
 	"jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
     
@@ -24,14 +24,10 @@ public class Db {
     
     public int connect_db() {
 	try {
-	    Class drvClass = Class.forName(DRIVER_NAME); 
+	    Class drvClass = Class.forName(DRIVER_NAME);
 	    DriverManager.registerDriver((Driver) drvClass.newInstance());
-	    
-	    System.out.println("Connecting to database...");
-	    
 	    this.conn = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
 	    this.stmt = conn.createStatement();
-	    System.out.println("Connected.");
 	    return 1;
 	} catch (ClassNotFoundException e) {
 	    e.printStackTrace();
@@ -74,7 +70,7 @@ public class Db {
     public Integer add_friend(int group_id, String friend) {
 	String query = "insert into group_lists values(" + group_id
 	               + ", '" + friend + "', sysdate, null)";
-	System.out.println("query = " + query);
+	System.out.println(query);
 	return execute_update(query);
     }
 
@@ -87,7 +83,7 @@ public class Db {
 	try {
 	    return this.stmt.executeUpdate(query);
 	} catch (SQLException e) {
-	    e.printStackTrace();
+	    //e.printStackTrace();
 	}
 	return 0;
     }
