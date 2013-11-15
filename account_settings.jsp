@@ -13,9 +13,11 @@ username, firstname, lastname, address, email, phone
    } catch (NullPointerException e) {
       e.printStackTrace();
    }
+   // cannot access this page unless logged in
    if (username != null) {
       response.sendRedirect("/c391proj/index.jsp");
    }
+   // prepopulate the fields with user information
 %>
 
 <html>
@@ -24,5 +26,7 @@ username, firstname, lastname, address, email, phone
     <jsp:include page="includes/header.jsp"/>
   </head>
   <body>
+    <form name="updateAccount" action="updateAccount" method="POST">
+    </form>
   </body>
 </head>
