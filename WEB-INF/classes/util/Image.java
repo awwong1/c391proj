@@ -7,10 +7,10 @@ public class Image {
 	String dateUploaded;
 	String location;
 	String subject;
-	String description
+	String description;
 	int permitted;
-	Blob thumbnail;
-	Blob photo;
+	BLOB thumbnail;
+	BLOB photo;
 
 
 	/*
@@ -26,11 +26,11 @@ public class Image {
 	 * @param photo
 	*/
 	public Image(int photo_id, String ownername, String dateUploaded, String location,
-		     String subject, String description, int permitted, Blob thumbnail,
-		     Blob photo)
+		     String subject, String description, int permitted, BLOB thumbnail,
+		     BLOB photo) {
 		this.photo_id = photo_id;
 		this.ownername = ownername;
-		this.date = dateUploaded;
+		this.dateUploaded = dateUploaded;
 		this.location = location;
 		this.subject = subject;
 		this.description = description;
@@ -54,9 +54,9 @@ public class Image {
 	public void setDescription() {this.description = description;}
 	public int getPermitted() {return permitted;}
 	public void setPermitted() {this.permitted = permitted;}
-	public Blob getThumbnail() {return thumbnail;}
+	public BLOB getThumbnail() {return thumbnail;}
 	public void setThumbnail() {this.thumbnail = thumbnail;}
-	public Blob getPhoto() {return photo;}
+	public BLOB getPhoto() {return photo;}
 	public void setPhoto() {this.photo = photo;}
 }
 

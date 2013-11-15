@@ -9,7 +9,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import util.User;
-import util.Image;
 import util.Db;
 
 /**
@@ -20,13 +19,14 @@ import util.Db;
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 
-public class UploadImage extends HttpServlet {
+public class uploadImage extends HttpServlet {
 	private Db database;
 	private HttpSession session;
 	private String owner;
 	private String location;
-	private Sring date;
+	private String date;
 	private String subject;
+	private String description;
 	private int security;
 	private int image_id;
 	public String response_message;
@@ -56,7 +56,7 @@ public class UploadImage extends HttpServlet {
 			InputStream instream = item.getInputStream();
 			
 			BufferedImage img = ImageIO.read(instream);
-			BufferedImage thumbNail = string(img, 10);
+			BufferedImage thumbNail = shrink(img, 10);
 			
 			/*
 			 *Connect to the database and create a statement
@@ -83,15 +83,15 @@ public class UploadImage extends HttpServlet {
 				date = "sysdate";
 			}
 			subject = request.getParameter("subject");
-			security = (Integer) request.getElementById("security").value;
+			security = (Integer) request.getParameter("security").toInteger();
 			image_id = database.execute_stmt("image_id_sequence.nextval");
 			
 	
                         /*
                          * Insert a empty blob into the table
                          */
-			database.addEmptyImage(image_id,  owner, security, subject, location, 
-					date, desc);
+//			database.addEmptyImage(image_id,  owner, security, subject, location, 
+//					date, desc);
 
 			/*
 			 * Get BLOB from database
@@ -104,7 +104,7 @@ public class UploadImage extends HttpServlet {
 			/*
 			 * Write thumbnail image into a BLOB object
 			 */ 
-			OutputStream os = myThumb.getBinaryOutputStream();
+			OutputStream outstream = myThumb.getBinaryOutputStream();
 			ImageIO.write(thumbNail, "jpg", outstream);
 			
 			/*

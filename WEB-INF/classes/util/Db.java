@@ -305,7 +305,7 @@ public class Db {
 	BLOB thumb;
         String query = "SELECT * FROM images WHERE image_id = " + image_id + " FOR UPDATE";
         rs_thumb = execute_stmt(query);
-        thumb = ((OracleResultSet)rset).getBLOB("thumbnail");
+        thumb = ((OracleResultSet)rs_thumb).getBLOB("thumbnail");
 	return thumb;
     }
 
@@ -324,7 +324,6 @@ public class Db {
 	return execute_update(query);
     }
 
-}
 
 
 }
