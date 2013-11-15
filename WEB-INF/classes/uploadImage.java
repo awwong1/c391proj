@@ -104,7 +104,7 @@ public class uploadImage extends HttpServlet {
 			/*
 			 * Write thumbnail image into a BLOB object
 			 */ 
-			OutputStream outstream = myThumb.getBinaryOutputStream();
+			OutputStream outstream = myThumb.setBinaryStream();
 			ImageIO.write(thumbNail, "jpg", outstream);
 			
 			/*

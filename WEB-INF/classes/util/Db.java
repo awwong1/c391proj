@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import oracle.sql.*;
+import oracle.jdbc.*;
 
 import util.Group;
 import util.User;
