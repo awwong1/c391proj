@@ -1,5 +1,6 @@
 package util;
 
+import java.sql.*;
 
 public class Image {
 	int photo_id;
@@ -9,8 +10,8 @@ public class Image {
 	String subject;
 	String description;
 	int permitted;
-	BLOB thumbnail;
-	BLOB photo;
+	Blob thumbnail;
+	Blob photo;
 
 
 	/*
@@ -26,8 +27,8 @@ public class Image {
 	 * @param photo
 	*/
 	public Image(int photo_id, String ownername, String dateUploaded, String location,
-		     String subject, String description, int permitted, BLOB thumbnail,
-		     BLOB photo) {
+		     String subject, String description, int permitted, Blob thumbnail,
+		     Blob photo) {
 		this.photo_id = photo_id;
 		this.ownername = ownername;
 		this.dateUploaded = dateUploaded;
@@ -54,9 +55,9 @@ public class Image {
 	public void setDescription() {this.description = description;}
 	public int getPermitted() {return permitted;}
 	public void setPermitted() {this.permitted = permitted;}
-	public BLOB getThumbnail() {return thumbnail;}
+	public Blob getThumbnail() {return thumbnail;}
 	public void setThumbnail() {this.thumbnail = thumbnail;}
-	public BLOB getPhoto() {return photo;}
+	public Blob getPhoto() {return photo;}
 	public void setPhoto() {this.photo = photo;}
 }
 

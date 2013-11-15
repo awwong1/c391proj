@@ -1,5 +1,6 @@
 package util;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -274,13 +275,13 @@ public class Db {
     }
 
     /**
-     * Insert a empty BLOB into the database
+     * Insert a empty Blob into the database
      * @param int photo_id, String owner, int permitted, String subject, String place,
-     * String date, String desc, BLOB thumbnail, BLOB photo
+     * String date, String desc, Blob thumbnail, Blob photo
      * @return Integer
      */
     public Integer addEmptyImage(int image_id, String owner, int permitted, String subject, String
-                             place, String date, String desc, BLOB thumbnail, BLOB photo) {
+                             place, String date, String desc, Blob thumbnail, Blob photo) {
         String query = "insert into images values (" + image_id + ", '"  + owner
                 + "', '" + permitted + "', '" + subject + "', '" + place + "', '" + date + "', '"
                 + desc + "', empty_blob(), empty_blob())";
@@ -290,24 +291,32 @@ public class Db {
     /**
      * 
      */
-    public BLOB getImageByImageId(int image_id) {
+    public Blob getImageById(int image_id) {
 	ResultSet rs_image;
-	BLOB image;
+	Blob image = null;
 	String query = "SELECT * FROM images WHERE image_id = " + image_id + " FOR UPDATE";
-	rs_image = execute_stmt(query);
-	image = ((OracleResultSet)rs_image).getBLOB("photo");
+	try {
+	    rs_image = execute_stmt(query);
+	    image = ((OracleResultSet)rs_image).getBlob("photo");
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
 	return image;
     }	
 
     /**
      *
      */
-    public BLOB getThumbnailByImageId(int image_id) {
+    public Blob getThumbnailById(int image_id) {
         ResultSet rs_thumb;
-	BLOB thumb;
+	Blob thumb = null;
         String query = "SELECT * FROM images WHERE image_id = " + image_id + " FOR UPDATE";
-        rs_thumb = execute_stmt(query);
-        thumb = ((OracleResultSet)rs_thumb).getBLOB("thumbnail");
+	try {
+	    rs_thumb = execute_stmt(query);
+	    thumb = ((OracleResultSet)rs_thumb).getBlob("thumbnail");
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
 	return thumb;
     }
 
@@ -315,11 +324,11 @@ public class Db {
    /**
     * Insert a blob the database
     * @param int photo_id, String owner, int permitted, String subject, String place,
-    * String date, String desc, BLOB thumbnail, BLOB photo 
+    * String date, String desc, Blob thumbnail, Blob photo 
     * @return Integer
     */  
-    public Integer addImage(String owner, int permitted, String subject, String
-			     place, String date, String desc, BLOB thumbnail, BLOB photo) {
+    public Integer addImage(String owner, int permitted, String subject, String 
+			     place, String date, String desc, Blob thumbnail, Blob photo) {
 	String query = "insert into images values (image_id_sequence.nextval, '" + owner
 		+ "', '" + permitted + "', '" + subject + "', '" + place + "', '" + date + "', '" 
 		+ desc + "', " + thumbnail + ", " + photo + ")";
