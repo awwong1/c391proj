@@ -83,7 +83,7 @@ public class uploadImage extends HttpServlet {
 				date = "sysdate";
 			}
 			subject = request.getParameter("subject");
-			security = (Integer) request.getParameter("security").toInteger();
+			security = request.getParameter("security").value;
 			image_id = database.execute_stmt("image_id_sequence.nextval");
 			
 	
