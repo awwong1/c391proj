@@ -29,6 +29,13 @@
         <servlet-name>manage_Groups</servlet-name>
         <url-pattern>/manage_Groups</url-pattern>
     </servlet-mapping>
-
+    <servlet>
+        <servlet-name>uploadImage</servlet-name>
+        <servlet-class>uploadImage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>uploadImage</servlet-name>
+        <url-pattern>/uploadImage</url-pattern>
+    </servlet-mapping>
 
 </web-app>

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import util.Group;
 import util.User;
+import util.Image;
 
 public class Db {
     static final String USERNAME = "mnaylor";
@@ -269,4 +270,61 @@ public class Db {
 	    password + "', sysdate)";
 	return execute_update(query);
     }
+
+    /**
+     * Insert a empty BLOB into the database
+     * @param int photo_id, String owner, int permitted, String subject, String place,
+     * String date, String desc, BLOB thumbnail, BLOB photo
+     * @return Integer
+     */
+    public Integer addEmptyImage(int image_id, String owner, int permitted, String subject, String
+                             place, String date, String desc, BLOB thumbnail, BLOB photo) {
+        String query = "insert into images values (" + image_id + ", '"  + owner
+                + "', '" + permitted + "', '" + subject + "', '" + place + "', '" + date + "', '"
+                + desc + "', empty_blob(), empty_blob())";
+        return execute_update(query);
+    }
+
+    /**
+     * 
+     */
+    public BLOB getImageByImageId(int image_id) {
+	ResultSet rs_image;
+	BLOB image;
+	String query = "SELECT * FROM images WHERE image_id = " + image_id + " FOR UPDATE";
+	rs_image = execute_stmt(query);
+	image = ((OracleResultSet)rs_image).getBLOB("photo");
+	return image;
+    }	
+
+    /**
+     *
+     */
+    public BLOB getThumbnailByImageId(int image_id) {
+        ResultSet rs_thumb;
+	BLOB thumb;
+        String query = "SELECT * FROM images WHERE image_id = " + image_id + " FOR UPDATE";
+        rs_thumb = execute_stmt(query);
+        thumb = ((OracleResultSet)rset).getBLOB("thumbnail");
+	return thumb;
+    }
+
+
+   /**
+    * Insert a blob the database
+    * @param int photo_id, String owner, int permitted, String subject, String place,
+    * String date, String desc, BLOB thumbnail, BLOB photo 
+    * @return Integer
+    */  
+    public Integer addImage(String owner, int permitted, String subject, String
+			     place, String date, String desc, BLOB thumbnail, BLOB photo) {
+	String query = "insert into images values (image_id_sequence.nextval, '" + owner
+		+ "', '" + permitted + "', '" + subject + "', '" + place + "', '" + date + "', '" 
+		+ desc + "', " + thumbnail + ", " + photo + ")";
+	return execute_update(query);
+    }
+
+}
+
+
 }

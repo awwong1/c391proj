@@ -12,7 +12,7 @@ DROP TABLE groups CASCADE CONSTRAINTS;
 DROP TABLE persons CASCADE CONSTRAINTS;
 DROP TABLE users CASCADE CONSTRAINTS;
 DROP SEQUENCE group_id_sequence;
-
+DROP SEQUENCE image_id_sequence;
 
 CREATE TABLE users (
    user_name varchar(24),
@@ -81,9 +81,15 @@ CREATE TABLE images (
    place varchar(128),
    timing date,
    description varchar(2048),
-   thumbnail blob,
-   photo blob,
+   thumbnail BLOB,
+   photo BLOB,
    PRIMARY KEY(photo_id),
    FOREIGN KEY(owner_name) REFERENCES users,
    FOREIGN KEY(permitted) REFERENCES groups
 );
+
+CREATE SEQUENCE image_id_sequence
+  START WITH 3
+  INCREMENT BY 1
+  CACHE 200;
+
