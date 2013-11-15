@@ -17,7 +17,12 @@ username, firstname, lastname, address, email, phone
    if (username != null) {
       response.sendRedirect("/c391proj/index.jsp");
    }
-   // prepopulate the fields with user information
+   // prepopulate the fields with user information if none exist
+   try {
+      email = (String) session.getAttribute("email");
+   } catch (NullPointerException e) {
+
+   }
 %>
 
 <html>
