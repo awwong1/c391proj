@@ -304,7 +304,7 @@ public class Db {
     /**
      * 
      */
-    public Blob getImageById(int image_id) {
+    public Blob getImageById(int image_id, String photo_thumb) {
 	ResultSet rs_image;
 	Blob image = null;
 	String query = "SELECT * FROM images WHERE photo_id = " +
@@ -312,28 +312,11 @@ public class Db {
 	try {
 	    rs_image = execute_stmt(query);
 	    rs_image.next();
-	    image = ((OracleResultSet)rs_image).getBlob("photo");
+	    image = ((OracleResultSet)rs_image).getBlob(photo_thumb);
 	} catch (SQLException e) {
 	    e.printStackTrace();
 	}
 	return image;
-    }
-
-    /**
-     *
-     */
-    public Blob getThumbnailById() {
-        ResultSet rs_thumb;
-	Blob thumb = null;
-        String query = "SELECT * FROM images WHERE image_id = "
-	    + " image_id_sequence.currval FOR UPDATE";
-	try {
-	    rs_thumb = execute_stmt(query);
-	    thumb = ((OracleResultSet)rs_thumb).getBlob("thumbnail");
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-	return thumb;
     }
     
     /**

@@ -94,21 +94,18 @@ public class uploadImage extends HttpServlet {
 	     * Get Blob from database
 	     */
 	    
-	    Blob myImage = database.getImageById(image_id);
-	    //Blob myThumb = database.getThumbnailById();	
-	    
+	    Blob myImage = database.getImageById(image_id, "photo");
+	    Blob myThumb = database.getImageById(image_id, "thumbnail");	
 	    
 	    /*
 	     * Write thumbnail image into a Blob object
-	     */
-	    /* 
-	    OutputStream outstream = myThumb.setBinaryStream();
+	     */ 
+	    OutputStream outstream = myThumb.setBinaryStream(0);
 	    ImageIO.write(thumbNail, "jpg", outstream);
-	    */
 	    /*
 	     * Write image into a Blob object
 	     */	
-	    OutputStream outstream = myImage.setBinaryStream(0);
+	    outstream = myImage.setBinaryStream(0);
 	    byte[] buffer = new byte[2048];
 	    int length = -1;
 	    while ((length = instream.read(buffer)) != -1)
