@@ -66,13 +66,20 @@ public class manageUser extends HttpServlet {
 	
 	String nEmail = request.getParameter("email");
 	if (!nEmail.equals(eEmail)) {
-	    database.setEmail(eUsername, nEmail);
-	    returnmsg = returnmsg + "Email changed from '" +
-		eEmail + "' to '" + nEmail + "'<br>";
-	    session.setAttribute("email", nEmail);
+	    // Check if the email already exists:
+	    if (database.emailExists(nEmail)) {
+		returnmsg = returnmsg + "Email '" + 
+		    nEmail + "' already taken by another user.<br>";
+		session.setAttribute("email", eEmail);
+	    } else {
+		database.setEmail(eUsername, nEmail);
+		returnmsg = returnmsg + "Email changed from '" +
+		    eEmail + "' to '" + nEmail + "'<br>";
+		session.setAttribute("email", nEmail);
+	    }
 	}
 	
-	String nFirstname = request.getParameter("firstname");
+	    String nFirstname = request.getParameter("firstname");
 	if (!nFirstname.equals(eFirstname)) {
 	    database.updateFname(eUsername, nFirstname);
 	    returnmsg = returnmsg + "First Name changed from '" +

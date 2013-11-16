@@ -52,7 +52,6 @@ public class Db {
 	try {
 	    this.stmt.close();
 	    this.conn.close();
-	    System.out.println("Disconnected from database.");
 	} catch (SQLException e) {
 	    e.printStackTrace();
 	}

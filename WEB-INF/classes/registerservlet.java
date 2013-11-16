@@ -16,6 +16,10 @@ public class registerservlet extends HttpServlet {
     private String ePassword;
     private String ePassword2;
     private String eEmail;
+    private String eFname;
+    private String eLname;
+    private String eAddress;
+    private String ePhone;
     private String errorMsg;
 
     protected void service(HttpServletRequest request,
@@ -34,6 +38,10 @@ public class registerservlet extends HttpServlet {
 	    ePassword = request.getParameter("pass");
 	    eEmail = request.getParameter("email");
 	    ePassword2 = request.getParameter("pass2");
+	    eFname = request.getParameter("firstname");
+	    eLname = request.getParameter("lastname");
+	    ePhone = request.getParameter("phone");
+	    eAddress = request.getParameter("address");
 	} catch (Exception e) {
 	    returnClose(e.getMessage());
 	    response.sendRedirect("/c391proj/register.jsp");
@@ -62,9 +70,15 @@ public class registerservlet extends HttpServlet {
 	    response.sendRedirect("/c391proj/register.jsp");
 	    return;
 	}
+	
 	// Add the new user to the database, notify that user is added
 	database.addUser(eUsername, ePassword);
 	database.setEmail(eUsername, eEmail);
+	database.updateFname(eUsername, eFname);
+	database.updateLname(eUsername, eLname);
+	database.updateAddress(eUsername, eAddress);
+	database.updatePhone(eUsername, ePhone);
+	
 	errorMsg = "Sucessfully registered, please log in.";
 	returnClose(errorMsg);
 	response.sendRedirect("/c391proj/register.jsp");
