@@ -10,6 +10,7 @@ public class User {
     private String fname;
     private String lname;
     private String phone;
+    private String address;
     private ArrayList<Group> groups;
     private char[] password;
     private String date_reg;
@@ -21,16 +22,19 @@ public class User {
      * @param fname
      * @param lname
      * @param phone
+     * @param address
      * @param groups
      * @param date_reg
      */
     public User(String username, String email, String fname, String lname,
-		String phone, ArrayList<Group> groups, String date_reg){
+		String phone, String address, ArrayList<Group> groups, 
+		String date_reg){
 	this.username = username;
 	this.email = email;
 	this.fname = fname;
 	this.lname = lname;
 	this.phone = phone;
+	this.address = address;
 	this.groups = groups;
 	this.date_reg = date_reg;
     }
@@ -64,6 +68,8 @@ public class User {
     public void setLname(String lname) {this.lname = lname;}
     public String getPhone() {return phone;}
     public void setPhone(String phone) {this.phone = phone;}
+    public String getAddress() {return address;}
+    public void setAddress(String address) {this.address = address;}
     public ArrayList<Group> getGroups() {return groups;}
     public void setGroups(ArrayList<Group> groups) {this.groups = groups;}
     public char[] getPassword() {return password;}

@@ -22,6 +22,15 @@
       <url-pattern>/registerservlet</url-pattern>
     </servlet-mapping>
     <servlet>
+      <servlet-name>manageUser</servlet-name>
+      <servlet-class>manageUser</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>manageUser</servlet-name>
+      <url-pattern>/manageUser</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>manage_Groups</servlet-name>
         <servlet-class>manage_Groups</servlet-class>
     </servlet>

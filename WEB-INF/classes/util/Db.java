@@ -170,41 +170,39 @@ public class Db {
     }
     
     public User user_from_resultset(ResultSet rs_user, ResultSet rs_person) {
-	String user_name;
-	String password;
-	String date;
-	String email;
-	String fname;
-	String lname;
-	String phone;
-	User user;
-	ArrayList<Group> groups;
+	String user_name = null;
+	String password = null;
+	String date = null;
+	String email = null;
+	String fname = null;
+	String lname = null;
+	String phone = null;
+	String address = null;
+	User user = null;
+	ArrayList<Group> groups = null;
 
 	// Get data from rs_user
 	try {
-	    while (rs_user.next() & rs_person.next()) {
+	    while (rs_user.next()) { 
 	        user_name = rs_user.getString("user_name");
 		password = rs_user.getString("password");
 		date = rs_user.getString("date_registered");
-
-       		email = rs_person.getString("email");
-		fname = rs_person.getString("fname");
-		lname = rs_person.getString("lname");
-		phone = rs_person.getString("phone");
-
-		// Get group
-		groups = get_groups(user_name);
-		
-		user = new User(user_name, email, fname, lname, phone, 
-				groups, date);
-		return user;
-
 	    }
-	    
+	    while (rs_person.next()) {
+       		email = rs_person.getString("email");
+		fname = rs_person.getString("first_name");
+		lname = rs_person.getString("last_name");
+		phone = rs_person.getString("phone");
+		address = rs_person.getString("address");
+	    }
+	    groups = get_groups(user_name);
+	    user = new User(user_name, email, fname, lname, phone, address,
+			    groups, date);
+	
 	} catch (SQLException e) {
 	    e.printStackTrace();
 	}
-	return null;
+	return user;
     }
 
     /**
@@ -276,15 +274,16 @@ public class Db {
 
     /**
      * Insert a empty Blob into the database
-     * @param int photo_id, String owner, int permitted, String subject, String place,
-     * String date, String desc, Blob thumbnail, Blob photo
+     * @param int photo_id, String owner, int permitted, String subject, 
+     * String place, String date, String desc, Blob thumbnail, Blob photo
      * @return Integer
      */
-    public Integer addEmptyImage(int image_id, String owner, int permitted, String subject, String
-                             place, String date, String desc, Blob thumbnail, Blob photo) {
-        String query = "insert into images values (" + image_id + ", '"  + owner
-                + "', '" + permitted + "', '" + subject + "', '" + place + "', '" + date + "', '"
-                + desc + "', empty_blob(), empty_blob())";
+    public Integer addEmptyImage(int image_id, String owner, int permitted, 
+				 String subject, String place, String date, 
+				 String desc, Blob thumbnail, Blob photo) {
+        String query = "insert into images values (" + image_id + ", '"  + 
+	    owner + "', '" + permitted + "', '" + subject + "', '" + place + 
+	    "', '" + date + "', '" + desc + "', empty_blob(), empty_blob())";
         return execute_update(query);
     }
 
@@ -294,7 +293,8 @@ public class Db {
     public Blob getImageById(int image_id) {
 	ResultSet rs_image;
 	Blob image = null;
-	String query = "SELECT * FROM images WHERE image_id = " + image_id + " FOR UPDATE";
+	String query = "SELECT * FROM images WHERE image_id = " + image_id + 
+	    " FOR UPDATE";
 	try {
 	    rs_image = execute_stmt(query);
 	    image = ((OracleResultSet)rs_image).getBlob("photo");
@@ -310,7 +310,8 @@ public class Db {
     public Blob getThumbnailById(int image_id) {
         ResultSet rs_thumb;
 	Blob thumb = null;
-        String query = "SELECT * FROM images WHERE image_id = " + image_id + " FOR UPDATE";
+        String query = "SELECT * FROM images WHERE image_id = " + image_id + 
+	    " FOR UPDATE";
 	try {
 	    rs_thumb = execute_stmt(query);
 	    thumb = ((OracleResultSet)rs_thumb).getBlob("thumbnail");
@@ -323,18 +324,17 @@ public class Db {
 
    /**
     * Insert a blob the database
-    * @param int photo_id, String owner, int permitted, String subject, String place,
-    * String date, String desc, Blob thumbnail, Blob photo 
+    * @param int photo_id, String owner, int permitted, String subject, 
+    * String place, String date, String desc, Blob thumbnail, Blob photo 
     * @return Integer
     */  
-    public Integer addImage(String owner, int permitted, String subject, String 
-			     place, String date, String desc, Blob thumbnail, Blob photo) {
-	String query = "insert into images values (image_id_sequence.nextval, '" + owner
-		+ "', '" + permitted + "', '" + subject + "', '" + place + "', '" + date + "', '" 
+    public Integer addImage(String owner, int permitted, String subject, 
+			    String place, String date, String desc, 
+			    Blob thumbnail, Blob photo) {
+	String query = "insert into images values " + 
+	    "(image_id_sequence.nextval, '" + owner + "', '" + permitted + 
+	    "', '" + subject + "', '" + place + "', '" + date + "', '" 
 		+ desc + "', " + thumbnail + ", " + photo + ")";
 	return execute_update(query);
     }
-
-
-
 }
