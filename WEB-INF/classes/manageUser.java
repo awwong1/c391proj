@@ -6,7 +6,7 @@ import util.Db;
 import util.User;
 
 /**
- * Class for handling data within the persons table, such as:
+ * Class for setting data within the persons table, such as:
  * username, firstname, lastname, address, email, phone, and
  * changing password.
  * @author alexanderwwong
@@ -39,38 +39,75 @@ public class manageUser extends HttpServlet {
 	    response.sendRedirect("/c391proj/login.jsp");
 	    return;
 	}
+
 	// Check if we must populate the fields
 	try {
 	    isPopulated = (Integer) session.getAttribute("isPopulated");
 	} catch (NullPointerException e) {
-	    isPopulated = 0;
+	    isPopulated = 1;
 	}
-	if (isPopulated.equals(0)) {
-	    // Grab the user and populate the fields for the user 
-	    Db database = new Db();
-	    database.connect_db();
-	    user = database.get_user(eUsername);
-	    database.close_db();
-	    
-	    // Parse the fields and throw it into the necessary strings
-	    // Don't grab the password, user will only be allowed to set
-	    eEmail = user.getEmail();
-	    System.out.println(eEmail);
-	    ePhone = user.getPhone();
-	    eFirstname = user.getFname();
-	    eLastname = user.getLname();
-	    eAddress = user.getAddress();
-	    
-	    session.setAttribute("email", eEmail);
-	    session.setAttribute("phone", ePhone);
-	    session.setAttribute("firstname", eFirstname);
-	    session.setAttribute("lastname", eLastname);
-	    session.setAttribute("address", eAddress);
-	    response.sendRedirect("/c391proj/account_settings.jsp");
-	} else {
-	    // Edit the fields in the database with the specified values
-	    // or return error messages to the user
+	// Grab the user and populate the fields for the user 
+	Db database = new Db();
+	database.connect_db();
+	user = database.get_user(eUsername);
+	database.close_db();
+	
+	// Parse the fields and throw it into the necessary strings
+	// Don't grab the password, user will only be allowed to set
+	eEmail = user.getEmail();
+	ePhone = user.getPhone();
+	eFirstname = user.getFname();
+	eLastname = user.getLname();
+	eAddress = user.getAddress();
+	
+	// Populate the database fields with the necessary new info
+	String returnmsg = "";
+	database.connect_db();
+	
+	String nEmail = request.getParameter("email");
+	if (!nEmail.equals(eEmail)) {
+	    database.setEmail(eUsername, nEmail);
+	    returnmsg = returnmsg + "Email changed from '" +
+		eEmail + "' to '" + nEmail + "'<br>";
+	    session.setAttribute("email", nEmail);
 	}
+	
+	String nFirstname = request.getParameter("firstname");
+	if (!nFirstname.equals(eFirstname)) {
+	    database.updateFname(eUsername, nFirstname);
+	    returnmsg = returnmsg + "First Name changed from '" +
+		eFirstname + "' to '" + nFirstname + "'<br>";
+	    session.setAttribute("firstname", nFirstname);
+	}
+	
+	String nLastname = request.getParameter("lastname");
+	if (!nLastname.equals(eLastname)) {
+	    database.updateLname(eUsername, nLastname);
+	    returnmsg = returnmsg + "Last Name changed from '" +
+		eLastname + "' to '" + nLastname + "'<br>";
+	    session.setAttribute("lastname", nLastname);
+	}
+	
+	String nAddress = request.getParameter("address");
+	if (!nAddress.equals(eAddress)) {
+	    database.updateAddress(eUsername, nAddress);
+	    returnmsg = returnmsg + "Address changed from '" +
+		eAddress + "' to '" + nAddress + "'<br>";
+	    session.setAttribute("address", nAddress);
+	}
+	
+	String nPhone = request.getParameter("phone");
+	if (!nPhone.equals(ePhone)) {
+	    database.updatePhone(eUsername, nPhone);
+	    returnmsg = returnmsg + "Phone changed from '" +
+		ePhone + "' to '" + nPhone + "'<br>";
+	    session.setAttribute("phone", nPhone);
+	}
+	
+	database.close_db();
+	session.setAttribute("err", returnmsg);
+	response.sendRedirect("/c391proj/account_settings.jsp");
+	
 	return;
     }
 }

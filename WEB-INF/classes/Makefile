@@ -11,6 +11,7 @@ all:
 	make manage_Groups
 	make uploadImage
 	make manageUser
+	make getUserInfo
 login:
 	javac $(custsource) $(custclass) loginservlet.java
 register:
@@ -21,6 +22,8 @@ uploadImage:
 	javac $(custsource) $(custclass) uploadImage.java
 manageUser:
 	javac $(custsource) $(custclass) manageUser.java
+getUserInfo:
+	javac $(custsource) $(custclass) getUserInfo.java
 clean:
 	rm -rf *.class
 	rm -rf ./util/*.class

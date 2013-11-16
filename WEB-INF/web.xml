@@ -29,7 +29,14 @@
       <servlet-name>manageUser</servlet-name>
       <url-pattern>/manageUser</url-pattern>
     </servlet-mapping>
-    
+    <servlet>
+      <servlet-name>getUserInfo</servlet-name>
+      <servlet-class>getUserInfo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>getUserInfo</servlet-name>
+      <url-pattern>/getUserInfo</url-pattern>
+    </servlet-mapping>    
     <servlet>
         <servlet-name>manage_Groups</servlet-name>
         <servlet-class>manage_Groups</servlet-class>

@@ -13,18 +13,16 @@ username, firstname, lastname, address, email, phone
    String address = null;
    String phone = null;
    String password = null;
+
+   String redirectURL = null;
+
    try {
       error = (String) session.getAttribute("err");
       username = (String) session.getAttribute("username");
    } catch (NullPointerException e) {
       e.printStackTrace();
    }
-   // cannot access this page unless logged in
-   if (username == null) {
-      String errormsg = "Please log in before accessing account information";
-      session.setAttribute("err", errormsg);
-      response.sendRedirect("/c391proj/login.jsp");
-   }
+
    // prepopulate the fields with user information if none exist
    email = (String) session.getAttribute("email");
    firstname = (String) session.getAttribute("firstname");
@@ -32,8 +30,18 @@ username, firstname, lastname, address, email, phone
    address = (String) session.getAttribute("address");
    phone = (String) session.getAttribute("phone");
    if (email==null) {
-      session.setAttribute("isPopulated", 0);
-      response.sendRedirect("/c391proj/manageUser");
+       redirectURL = "/c391proj/getUserInfo";
+   }
+
+   // cannot access this page unless logged in
+   if (username == null) {
+      String errormsg = "Please log in before accessing account information";
+      session.setAttribute("err", errormsg);
+      redirectURL = "/c391proj/login.jsp";
+   }
+   
+   if (redirectURL != null) {
+       response.sendRedirect(redirectURL);
    }
 %>
 
@@ -50,50 +58,79 @@ username, firstname, lastname, address, email, phone
 	</tr>
 	<tr>
 	  <td>Username:</td>
-	  <td><input type="text" name="username" maxlength="24" 
-		     placeholder="username"
-		     required="required" 
-		     value=<% out.write(username);%> />
-	  </td>
+	  <td><% out.write(username);%></td>
 	</tr>
 	<tr>
 	  <td>Email:</td>
 	  <td><input type="text" name="email" maxlength="128"
 		     placeholder="email"
-		     required="required" 
-		     value=<% out.write(""+email);%> />
+		     required="required"
+		     <% if (email!= null) {
+			out.write("value="+email);
+			}%> />
 	  </td>
 	</tr>
 	<tr>
 	  <td>First Name:</td>
 	  <td><input type="text" name="firstname" maxlength="24"
 		     placeholder="first name"
-		     value=<% out.write(""+firstname); %>
-		     required="required" />
+		     <% if (firstname!= null) {
+			out.write("value="+firstname);
+			}%> />
 	  </td>
 	</tr>
 	<tr>
 	  <td>Last Name:</td>
 	  <td><input type="text" name="lastname" maxlength="24"
 		     placeholder="last name"
-		     value=<% out.write(""+lastname); %>
-		     required="required" />
+		     <% if (lastname!= null) {
+			out.write("value="+lastname);
+			}%> />
 	  </td>
 	</tr>
 	<tr>
 	  <td>Address:</td>
 	  <td><input type="text" name="address" maxlength="128"
 		     placeholder="address"
-		     value=<% out.write(""+address); %>
-		     required="required" />
+		     <% if (address!= null) {
+			out.write("value="+address);
+			}%> />
 	  </td>
 	</tr>
 	<tr>
 	  <td>Phone:</td>
 	  <td><input type="text" name="phone" maxlength="10"
 		     placeholder="phone"
-		     value=<% out.write(""+phone); %>
-		     required="required" />
+		     <% if (phone!= null) {
+			out.write("value="+phone);
+			}%> />
+	  </td>
+	</tr>
+	<tr>
+	  <td>New Password:</td>
+	  <td><input type="pass" name="pass" maxlength="24"
+		     placeholder="new password" />
+	  </td>
+	</tr>
+	<tr>
+	  <td>Confrim New Password:</td>
+	  <td><input type="pass" name="pass2" maxlength="24"
+		     placeholder="confirm password" />
+	  </td>
+	</tr>
+	<tr>
+	  <td colspan="2" align="center">
+	    <input type="submit" value="Send Changes" />
+	  </td>
+	</tr>
+	<tr>
+	  <td colspan="2" align="center">
+	    <%
+	       if (error != null) {
+	          out.write(error);
+	          session.removeAttribute("err");
+	       }
+	       %> 
 	  </td>
 	</tr>
       </table>
