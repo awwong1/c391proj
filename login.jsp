@@ -32,14 +32,17 @@ Webpage for logging in, displays form names and servlet error response messages
           </tr>   
           <tr>  
             <td>Username:</td>  
-            <td><input type="text" name="user" size="20" required="required" /></td>  
+            <td><input type="text" name="user" size="24" 
+		       required="required" /></td>  
           </tr>  
           <tr>  
             <td>Password:</td>  
-            <td><input type="password" name="pass" size="20" required="required" /></td>  
+            <td><input type="password" name="pass" size="24" 
+		       required="required" /></td>  
           </tr>  
           <tr >                          
-            <td colspan="2" align="center"><input type="submit" value="Login" />  
+            <td colspan="2" align="center"><input type="submit" 
+						  value="Login" />  
               <input type="reset" value="Clear" /></td>  
           </tr>        
           <tr>  
