@@ -15,6 +15,7 @@ public class registerservlet extends HttpServlet {
     private String eUsername;
     private String ePassword;
     private String ePassword2;
+    private String eEmail;
     private String errorMsg;
 
     protected void service(HttpServletRequest request,
@@ -31,6 +32,7 @@ public class registerservlet extends HttpServlet {
 	try {
 	    eUsername = request.getParameter("user");
 	    ePassword = request.getParameter("pass");
+	    eEmail = request.getParameter("email");
 	    ePassword2 = request.getParameter("pass2");
 	} catch (Exception e) {
 	    returnClose(e.getMessage());
@@ -45,6 +47,14 @@ public class registerservlet extends HttpServlet {
 	    response.sendRedirect("/c391proj/register.jsp");
 	    return;
 	}
+	// Check if the email already exists
+	if (database.emailExists(eEmail)) {
+	    errorMsg = "Email already exists";
+	    returnClose(errorMsg);
+	    response.sendRedirect("/c391proj/register.jsp");
+	    return;
+	}
+
 	// Check if the passwords match
 	if (!ePassword.equals(ePassword2)) {
 	    errorMsg = "Passwords do not match";
@@ -54,6 +64,7 @@ public class registerservlet extends HttpServlet {
 	}
 	// Add the new user to the database, notify that user is added
 	database.addUser(eUsername, ePassword);
+	database.setEmail(eUsername, eEmail);
 	errorMsg = "Sucessfully registered, please log in.";
 	returnClose(errorMsg);
 	response.sendRedirect("/c391proj/register.jsp");

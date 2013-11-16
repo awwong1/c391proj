@@ -31,21 +31,31 @@ Webpage for registering a new user. Only displays if not logged in.
 	    <td colspan="2" align="center"> New user registration: </td>
 	  </tr>
 	  <tr>
-	    <td>New Username:</td>
+	    <td>Username:</td>
 	    <td> 
-	      <input type="text" name="user" size="20" required="required" />
+	      <input type="text" name="user" maxlength="24" 
+		     required="required" />
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>New Email:</td>
+	    <td>
+	      <input type="text" name="email" maxlength="128" 
+		     required="required" />
 	    </td>
 	  </tr>
 	  <tr>
 	    <td>New Password:</td>
 	    <td> 
-	      <input type="password" name="pass" size="20" required="required" />
+	      <input type="password" name="pass" maxlength="24" 
+		     required="required" />
 	    </td>
 	  </tr>
 	  <tr>
 	    <td>Confirm Password:</td>
 	    <td> 
-	      <input type="password" name="pass2" size="20" required="required" />
+	      <input type="password" name="pass2" maxlength="24" 
+		     required="required" />
 	    </td>
 	  </tr>
 	  <tr>

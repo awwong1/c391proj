@@ -15,6 +15,12 @@ Handles loging out by destroying the session variable.
    }
    if (username != null) {
       session.removeAttribute("username");
+      session.removeAttribute("email");
+      session.removeAttribute("firstname");
+      session.removeAttribute("lastname");
+      session.removeAttribute("address");
+      session.removeAttribute("emailphone");
+      session.removeAttribute("isPopulated");
       session.setAttribute("err", "You have sucessfully been logged out.");
    } else {
       session.setAttribute("err", "Please login first.");

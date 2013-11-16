@@ -87,7 +87,7 @@ public class Db {
 	try {
 	    return this.stmt.executeUpdate(query);
 	} catch (SQLException e) {
-	    //e.printStackTrace();
+	    e.printStackTrace();
 	}
 	return 0;
     }
@@ -337,4 +337,92 @@ public class Db {
 		+ desc + "', " + thumbnail + ", " + photo + ")";
 	return execute_update(query);
     }
+    
+    /**
+     * Checks if a person with a given email address already exists
+     * @param String email
+     * @return boolean
+     */
+    public boolean emailExists(String email) {
+	String query = "select email from persons where email = '" + 
+	    email + "'";
+	ResultSet rs = execute_stmt(query);
+	try {
+	    return rs.next();
+	} finally {
+	    return false;
+	}
+    }
+
+    /**
+     * Set the email of a user. Handles if does not exist.
+     * @param String username, String email
+     * @return Integer
+     */
+    public Integer setEmail(String username, String email) {
+	String checkquery = "select user_name, email from persons where " + 
+	    "user_name = '" + username + "'";
+	ResultSet rscheck = execute_stmt(checkquery);
+	try {
+	    if (rscheck.next()) {
+		// update the email
+		String updatequery = "update persons set email = '" + email + 
+		    "' where user_name = '" + username + "'";
+		return execute_update(updatequery);
+	    } else {
+		// add a row into the database
+		String addquery = "insert into persons (user_name, email)" + 
+		    "values ('" + username + "', '" + email + "')";
+		return execute_update(addquery);
+	    }
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	return 0;
+    }
+    
+    /**
+     * Set the first name of a user. Row must exist prior to update.
+     * @param String username, String fname
+     * @return Integer
+     */
+    public Integer updateFname(String username, String fname) {
+	String query = "update persons set first_name = '" + 
+	    fname + "' where user_name = '" + username + "'";
+	return execute_update(query);
+    }
+
+    /**
+     * Set the last name of a user. Row must exist prior to update.
+     * @param String username, String lname
+     * @return Integer
+     */
+    public Integer updateLname(String username, String lname) {
+	String query = "update persons set last_name = '" + 
+	    lname + "' where user_name = '" + username + "'";
+	return execute_update(query);
+    }
+    
+    /**
+     * Set the address of a user. Row must exist prior to update.
+     * @param String username, String address
+     * @return Integer
+     */
+    public Integer updateAddress(String username, String address) {
+	String query = "update persons set address = '" + 
+	    address + "' where user_name = '" + username + "'";
+	return execute_update(query);
+    }
+
+    /**
+     * Set the phone of a user. Row must exist prior to update.
+     * @param String username, String phone
+     * @return Integer
+     */
+    public Integer updatePhone(String username, String phone) {
+	String query = "update persons set phone = '" + 
+	    phone + "' where user_name = '" + username + "'";
+	return execute_update(query);
+    }
+
 }
