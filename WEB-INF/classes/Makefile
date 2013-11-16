@@ -23,3 +23,4 @@ manageUser:
 	javac $(custsource) $(custclass) manageUser.java
 clean:
 	rm -rf *.class
+	rm -rf ./util/*.class
