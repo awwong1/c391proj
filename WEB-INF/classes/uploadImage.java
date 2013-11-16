@@ -28,13 +28,23 @@ public class uploadImage extends HttpServlet {
     private String subject;
     private String description;
     private int security;
-    private int image_id;
     public String response_message;
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		
 	try {
+
+	    /*
+	     * Check if user is logged in, if not redirect
+	     */		
+	    response.setContentType("text/html");
+	    session = request.getSession(true);
+	    owner = (String) session.getAttribute("username");
+	    if(owner == null) {
+		response.sendRedirect("login.jsp");
+	    }
+
 	    /*
 	     * Parse the HTTP request to get the image stream
 	     */
@@ -61,20 +71,11 @@ public class uploadImage extends HttpServlet {
 	     */
 	    database = new Db();
 	    database.connect_db();
-	    
-	    /*
-	     * Check if user is logged in, if not redirect
-	     */		
-	    response.setContentType("text/html");
-	    session = request.getSession(true);
-	    owner = (String) session.getAttribute("username");
-	    if(owner == null) {
-		response.sendRedirect("login.jsp");
-	    }
-	    
+	    	    
 	    /* 
 	     * Get inputs from owner
 	     */
+	    /*
 	    location = request.getParameter("location");
 	    date = request.getParameter("date");
 	    if (date == null) {
@@ -82,40 +83,37 @@ public class uploadImage extends HttpServlet {
 	    }
 	    subject = request.getParameter("subject");
 	    security = Integer.parseInt(request.getParameter("security"));
-	    // image_id = database.execute_stmt("image_id_sequence.nextval");
-	    
-	    
+	    */
 	    /*
 	     * Insert a empty blob into the table
 	     */
-	    //			database.addEmptyImage(image_id,  owner, security, subject, location, 
-	    //					date, desc);
+	    int image_id = database.get_next_image_id();
+	    database.addEmptyImage(owner, 1, "", "", "", image_id);
 	    
 	    /*
 	     * Get Blob from database
 	     */
 	    
 	    Blob myImage = database.getImageById(image_id);
-	    Blob myThumb = database.getThumbnailById(image_id);	
+	    //Blob myThumb = database.getThumbnailById();	
 	    
 	    
 	    /*
 	     * Write thumbnail image into a Blob object
-	     */ 
-	    // OutputStream outstream = myThumb.setBinaryStream();
-	    OutputStream outstream = null;
+	     */
+	    /* 
+	    OutputStream outstream = myThumb.setBinaryStream();
 	    ImageIO.write(thumbNail, "jpg", outstream);
-	    
+	    */
 	    /*
 	     * Write image into a Blob object
 	     */	
-	    //int size = myImage.getBufferSize();
-	    int size = 0;
-	    byte[] buffer = new byte[size];
+	    OutputStream outstream = myImage.setBinaryStream(0);
+	    byte[] buffer = new byte[2048];
 	    int length = -1;
 	    while ((length = instream.read(buffer)) != -1)
 		outstream.write(buffer, 0, length);			
-	    
+	    System.out.println("after oustream.write");
 	    instream.close();
 	    outstream.close();
 	    response_message = " File has been Uploaded!    ";

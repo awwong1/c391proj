@@ -18,7 +18,8 @@ Webpage for uploading images
       <jsp:include page="includes/header.jsp"/>
   </head>
   <body>
-    <form name="uploadimage" action="uploadImage" method="POST">
+    <form name="uploadimage" action="uploadImage" enctype="multipart/form-data" 
+	  method="POST">
       <table>
         <tr>
 	  <th>File path: </th>

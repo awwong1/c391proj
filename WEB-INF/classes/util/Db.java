@@ -272,18 +272,32 @@ public class Db {
 	return execute_update(query);
     }
 
+
+    public int get_next_image_id() {
+        int pic_id = 0;
+	String query = "select image_id_sequence.nextval "
+	               + "from dual";
+	ResultSet rset1 = execute_stmt(query);
+	try {
+	    rset1.next();
+	    pic_id = rset1.getInt(1);
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	return pic_id;
+    }
+
     /**
      * Insert a empty Blob into the database
      * @param int photo_id, String owner, int permitted, String subject, 
      * String place, String date, String desc, Blob thumbnail, Blob photo
      * @return Integer
      */
-    public Integer addEmptyImage(int image_id, String owner, int permitted, 
-				 String subject, String place, String date, 
-				 String desc, Blob thumbnail, Blob photo) {
-        String query = "insert into images values (" + image_id + ", '"  + 
-	    owner + "', '" + permitted + "', '" + subject + "', '" + place + 
-	    "', '" + date + "', '" + desc + "', empty_blob(), empty_blob())";
+    public Integer addEmptyImage(String owner, int permitted, String subject, 
+				 String place, String desc, Integer pic_id) {
+        String query = "insert into images values (" + pic_id + ", '"  
+	    + owner + "', " + permitted + ", '" + subject + "', '" + place + 
+	    "', sysdate, '" + desc + "', empty_blob(), empty_blob())";
         return execute_update(query);
     }
 
@@ -293,25 +307,26 @@ public class Db {
     public Blob getImageById(int image_id) {
 	ResultSet rs_image;
 	Blob image = null;
-	String query = "SELECT * FROM images WHERE image_id = " + image_id + 
-	    " FOR UPDATE";
+	String query = "SELECT * FROM images WHERE photo_id = " +
+	    image_id + " FOR UPDATE";
 	try {
 	    rs_image = execute_stmt(query);
+	    rs_image.next();
 	    image = ((OracleResultSet)rs_image).getBlob("photo");
 	} catch (SQLException e) {
 	    e.printStackTrace();
 	}
 	return image;
-    }	
+    }
 
     /**
      *
      */
-    public Blob getThumbnailById(int image_id) {
+    public Blob getThumbnailById() {
         ResultSet rs_thumb;
 	Blob thumb = null;
-        String query = "SELECT * FROM images WHERE image_id = " + image_id + 
-	    " FOR UPDATE";
+        String query = "SELECT * FROM images WHERE image_id = "
+	    + " image_id_sequence.currval FOR UPDATE";
 	try {
 	    rs_thumb = execute_stmt(query);
 	    thumb = ((OracleResultSet)rs_thumb).getBlob("thumbnail");
@@ -319,23 +334,6 @@ public class Db {
 	    e.printStackTrace();
 	}
 	return thumb;
-    }
-
-
-   /**
-    * Insert a blob the database
-    * @param int photo_id, String owner, int permitted, String subject, 
-    * String place, String date, String desc, Blob thumbnail, Blob photo 
-    * @return Integer
-    */  
-    public Integer addImage(String owner, int permitted, String subject, 
-			    String place, String date, String desc, 
-			    Blob thumbnail, Blob photo) {
-	String query = "insert into images values " + 
-	    "(image_id_sequence.nextval, '" + owner + "', '" + permitted + 
-	    "', '" + subject + "', '" + place + "', '" + date + "', '" 
-		+ desc + "', " + thumbnail + ", " + photo + ")";
-	return execute_update(query);
     }
     
     /**
