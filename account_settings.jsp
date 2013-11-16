@@ -26,13 +26,12 @@ username, firstname, lastname, address, email, phone
       response.sendRedirect("/c391proj/login.jsp");
    }
    // prepopulate the fields with user information if none exist
-   try {
-      email = (String) session.getAttribute("email");
-      firstname = (String) session.getAttribute("firstname");
-      lastname = (String) session.getAttribute("lastname");
-      address = (String) session.getAttribute("address");
-      phone = (String) session.getAttribute("phone");
-   } catch (NullPointerException e) {
+   email = (String) session.getAttribute("email");
+   firstname = (String) session.getAttribute("firstname");
+   lastname = (String) session.getAttribute("lastname");
+   address = (String) session.getAttribute("address");
+   phone = (String) session.getAttribute("phone");
+   if (email==null) {
       session.setAttribute("isPopulated", 0);
       response.sendRedirect("/c391proj/manageUser");
    }
