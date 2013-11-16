@@ -170,43 +170,39 @@ public class Db {
     }
     
     public User user_from_resultset(ResultSet rs_user, ResultSet rs_person) {
-	String user_name;
-	String password;
-	String date;
-	String email;
-	String fname;
-	String lname;
-	String phone;
-	String address;
-	User user;
-	ArrayList<Group> groups;
+	String user_name = null;
+	String password = null;
+	String date = null;
+	String email = null;
+	String fname = null;
+	String lname = null;
+	String phone = null;
+	String address = null;
+	User user = null;
+	ArrayList<Group> groups = null;
 
 	// Get data from rs_user
 	try {
-	    while (rs_user.next() & rs_person.next()) {
+	    while (rs_user.next()) { 
 	        user_name = rs_user.getString("user_name");
 		password = rs_user.getString("password");
 		date = rs_user.getString("date_registered");
-
+	    }
+	    while (rs_person.next()) {
        		email = rs_person.getString("email");
-		fname = rs_person.getString("fname");
-		lname = rs_person.getString("lname");
+		fname = rs_person.getString("first_name");
+		lname = rs_person.getString("last_name");
 		phone = rs_person.getString("phone");
 		address = rs_person.getString("address");
-
-		// Get group
-		groups = get_groups(user_name);
-		
-		user = new User(user_name, email, fname, lname, phone, address,
-				groups, date);
-		return user;
-
 	    }
-	    
+	    groups = get_groups(user_name);
+	    user = new User(user_name, email, fname, lname, phone, address,
+			    groups, date);
+	
 	} catch (SQLException e) {
 	    e.printStackTrace();
 	}
-	return null;
+	return user;
     }
 
     /**

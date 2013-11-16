@@ -45,7 +45,6 @@ public class manageUser extends HttpServlet {
 	} catch (NullPointerException e) {
 	    isPopulated = 0;
 	}
-	System.out.println("This is running here");
 	if (isPopulated.equals(0)) {
 	    // Grab the user and populate the fields for the user 
 	    Db database = new Db();
