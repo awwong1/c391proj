@@ -349,9 +349,10 @@ public class Db {
 	ResultSet rs = execute_stmt(query);
 	try {
 	    return rs.next();
-	} finally {
-	    return false;
+	} catch (SQLException e) {
+	    e.printStackTrace();
 	}
+	return true;
     }
 
     /**
