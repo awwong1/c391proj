@@ -4,7 +4,7 @@
     <title>Main Page</title>
     <jsp:include page="includes/header.jsp"/>
   </head>
-<body>
-  <p>Filler home page</p>
-</body>
+  <body>
+    <p>Filler home page</p>
+  </body>
 </html>

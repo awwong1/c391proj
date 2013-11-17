@@ -43,7 +43,7 @@ public class manage_Groups extends HttpServlet {
 	and actual user
 	*/  
 	invalid_friend = check_friend_changes(request, group_list);
-
+	
 	/* update group_list after changes */
 	group_list = database.get_groups(user);
 

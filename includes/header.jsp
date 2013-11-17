@@ -19,6 +19,7 @@ Author: Alexander Wong
         out.println("<a href=\"/c391proj/search.jsp\">search</a>");
         out.println(" | <a href=\"/c391proj/manage_Groups\">manage groups</a>");
 	out.println(" | <a href=\"/c391proj/uploadimage.jsp\">upload image</a>");
+	out.println(" | <a href=\"/c391proj/browsePictures\">browse pictures</a>");
 	out.println(" | <a href=\"/c391proj/account_settings.jsp\">account settings</a>");
         out.println(" | <a href=\"/c391proj/logout.jsp\">logout</a>"); 
     }

@@ -31,7 +31,7 @@ Webpage for registering a new user. Only displays if not logged in.
 	    <td colspan="2" align="center"> New user registration: </td>
 	  </tr>
 	  <tr>
-	    <td>Username:</td>
+	    <td>New Username:</td>
 	    <td> 
 	      <input type="text" name="user" maxlength="24" 
 		     required="required" />
@@ -40,7 +40,35 @@ Webpage for registering a new user. Only displays if not logged in.
 	  <tr>
 	    <td>New Email:</td>
 	    <td>
-	      <input type="text" name="email" maxlength="128" 
+	      <input type="email" name="email" maxlength="128" 
+		     required="required" />
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>New First Name:</td>
+	    <td>
+	      <input type="text" name="firstname" maxlength="128" 
+		     required="required" />
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>New Last Name:</td>
+	    <td>
+	      <input type="text" name="lastname" maxlength="128" 
+		     required="required" />
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>New Address:</td>
+	    <td>
+	      <input type="text" name="address" maxlength="128" 
+		     required="required" />
+	    </td>
+	  </tr>
+	  <tr>
+	    <td>New Phone:</td>
+	    <td>
+	      <input type="tel" name="phone" maxlength="128" 
 		     required="required" />
 	    </td>
 	  </tr>

@@ -52,7 +52,6 @@ public class Db {
 	try {
 	    this.stmt.close();
 	    this.conn.close();
-	    System.out.println("Disconnected from database.");
 	} catch (SQLException e) {
 	    e.printStackTrace();
 	}
@@ -294,7 +293,8 @@ public class Db {
      * @return Integer
      */
     public Integer addEmptyImage(String owner, int permitted, String subject, 
-				 String place, String desc, Integer pic_id) {
+				 String place, String desc, Integer pic_id,
+				 String date) {
         String query = "insert into images values (" + pic_id + ", '"  
 	    + owner + "', " + permitted + ", '" + subject + "', '" + place + 
 	    "', sysdate, '" + desc + "', empty_blob(), empty_blob())";
@@ -417,6 +417,35 @@ public class Db {
                         + keywords  + "', 1) > 0 order by score(1) desc";
 
         return execute_stmt(query);
+     }
+
+     /**
+     * Abstract the getting all photo ids to the database class.
+     * @return ResultSet
+     */
+    public ResultSet getAllPhotoIds() {
+	String query = "select photo_id from images";
+	return execute_stmt(query);
+    }
+    
+    /**
+     * Return the result set with the single thumbnail of the photoId
+     * @return ResultSet
+     */
+    public ResultSet getThumbnail(String photoId) {
+	String query = "select thumbnail from images where photo_id = '" +
+	    photoId +"'";
+	return execute_stmt(query);
     }
 
+    /**
+     * Returns the resultset with the single photo of the photoId
+     * @return ResultSet
+     */
+    public ResultSet getPhoto(String photoId) {
+	String query = "select photo from images where photo_id = '" +
+	    photoId + "'";
+	return execute_stmt(query);
+    }
+    
 }

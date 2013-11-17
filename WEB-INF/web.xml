@@ -22,6 +22,22 @@
       <url-pattern>/registerservlet</url-pattern>
     </servlet-mapping>
     <servlet>
+      <servlet-name>browsePictures</servlet-name>
+      <servlet-class>browsePictures</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>browsePictures</servlet-name>
+      <url-pattern>/browsePictures</url-pattern>
+    </servlet-mapping>
+    <servlet>
+      <servlet-name>browsePicture</servlet-name>
+      <servlet-class>browsePicture</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>browsePicture</servlet-name>
+      <url-pattern>/browsePicture</url-pattern>
+    </servlet-mapping>
+    <servlet>
       <servlet-name>manageUser</servlet-name>
       <servlet-class>manageUser</servlet-class>
     </servlet>
