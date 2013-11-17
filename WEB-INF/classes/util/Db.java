@@ -405,5 +405,34 @@ public class Db {
 	    phone + "' where user_name = '" + username + "'";
 	return execute_update(query);
     }
+    
+    /**
+     * Abstract the getting all photo ids to the database class.
+     * @return ResultSet
+     */
+    public ResultSet getAllPhotoIds() {
+	String query = "select photo_id from images";
+	return execute_stmt(query);
+    }
+    
+    /**
+     * Return the result set with the single thumbnail of the photoId
+     * @return ResultSet
+     */
+    public ResultSet getThumbnail(String photoId) {
+	String query = "select thumbnail from images where photo_id = '" +
+	    photoId +"'";
+	return execute_stmt(query);
+    }
 
+    /**
+     * Returns the resultset with the single photo of the photoId
+     * @return ResultSet
+     */
+    public ResultSet getPhoto(String photoId) {
+	String query = "select photo from images where photo_id = '" +
+	    photoId + "'";
+	return execute_stmt(query);
+    }
+    
 }
