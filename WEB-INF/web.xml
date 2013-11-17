@@ -53,5 +53,12 @@
         <servlet-name>uploadImage</servlet-name>
         <url-pattern>/uploadImage</url-pattern>
     </servlet-mapping>
-
+    <servlet>
+        <servlet-name>searchResults</servlet-name>
+        <servlet-class>searchResults</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>searchResults</servlet-name>
+        <url-pattern>/searchResults</url-pattern>
+    </servlet-mapping>
 </web-app>
