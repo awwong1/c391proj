@@ -12,7 +12,7 @@ import util.User;
 import util.Db;
 
 /**
- *
+ * Servlet to upload a single image
  *
 */
 
@@ -27,7 +27,7 @@ public class uploadImage extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		
+
 	String date = "";
 	String location = "";
 	String subject = "";
@@ -38,7 +38,7 @@ public class uploadImage extends HttpServlet {
 
 	    /*
 	     * Check if user is logged in, if not redirect
-	     */		
+	     */
 	    response.setContentType("text/html");
 	    session = request.getSession(true);
 	    owner = (String) session.getAttribute("username");
@@ -61,7 +61,7 @@ public class uploadImage extends HttpServlet {
 		    instream = item.getInputStream();
 		} else {
 		    String fieldname = item.getFieldName();
-		    
+
 		    if (fieldname.equals("date")) {
 			date = item.getString();
 		    }
@@ -136,19 +136,6 @@ public class uploadImage extends HttpServlet {
 	
 	//Output response to the client
 	response.sendRedirect("index.jsp");
-	/*
-	response.setContentType("text/html");
-	PrintWriter out = response.getWriter();
-	out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 " +
-		    "Transitional//EN\">\n" +
-		    "<HTML>\n" +
-		    "<HEAD><TITLE>Upload Message</TITLE></HEAD>\n" +
-		    "<BODY>\n" +
-		    "<H1>" +
-		    response_message +
-		    "</H1>\n" +
-		    "</BODY></HTML>");	
-	*/
     }
     
     /*

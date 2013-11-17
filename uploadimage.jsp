@@ -5,8 +5,10 @@ Webpage for uploading images
 
 <%
 	String error;
+        String username;
 	try{
 		error = (String) session.getAttribute("err");
+                username = (String session.getAttribute("username");
 	} catch (NullPointerException e) {
 		e.printStackTrace();
 	}
@@ -60,10 +62,8 @@ Webpage for uploading images
         <tr>
            <th>Security: </th>
              <td>
-		<select name="security" id="security">
-		  <option value="2">Private</option>
-                  <option value="1">Public</option>
-                  <option value="3">Group</option>
+		<p><input type="radio" name="security" value="2">Private</input></p>
+		<p><input type="radio" name="security" value="1">Public</input></p>
              </td>
         </tr>
 
