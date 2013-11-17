@@ -88,6 +88,11 @@ CREATE TABLE images (
    FOREIGN KEY(permitted) REFERENCES groups
 );
 
+INSERT INTO images values(1, 'hhoang', 1, 'firstimage','edmonton', sysdate, 'this is my first image', empty_blob(), empty_blob());
+INSERT INTO images values(2, 'hhoang', 1, 'secondimage','calgary', sysdate, 'this is my second image', empty_blob(), empty_blob());
+
+CREATE INDEX myimageindex ON images(description) INDEXTYPE IS CTXSYS.CONTEXT;
+
 CREATE SEQUENCE image_id_sequence
   START WITH 3
   INCREMENT BY 1

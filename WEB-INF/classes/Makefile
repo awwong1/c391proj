@@ -12,6 +12,7 @@ all:
 	make uploadImage
 	make manageUser
 	make getUserInfo
+	make searchResults
 login:
 	javac $(custsource) $(custclass) loginservlet.java
 register:
@@ -24,6 +25,8 @@ manageUser:
 	javac $(custsource) $(custclass) manageUser.java
 getUserInfo:
 	javac $(custsource) $(custclass) getUserInfo.java
+searchResults:
+	javac $(custsource) $(custclass) searchResults.java
 clean:
 	rm -rf *.class
 	rm -rf ./util/*.class

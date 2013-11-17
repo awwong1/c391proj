@@ -406,5 +406,17 @@ public class Db {
 	    phone + "' where user_name = '" + username + "'";
 	return execute_update(query);
     }
+    
+    /**
+     * Returns the resultset of the search by keywords
+     * @param String keywords
+     @ @return ResultSet
+     */
+    public ResultSet getResultByKeywords(String keywords) {
+        String query = "SELECT score(1), subject FROM images WHERE contains(description, '" 
+                        + keywords  + "', 1) > 0 order by score(1) desc";
+
+        return execute_stmt(query);
+    }
 
 }
