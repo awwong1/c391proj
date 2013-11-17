@@ -62,48 +62,57 @@ username, firstname, lastname, address, email, phone and password changing
 	</tr>
 	<tr>
 	  <td>Email:</td>
-	  <td><input type="text" name="email" maxlength="128"
+	  <td><input type="email" name="email" maxlength="128"
 		     placeholder="email"
 		     required="required"
-		     <% if (email!= null) {
-			out.write("value="+email);
-			}%> />
+		     value="<% if (email!= null) {
+			out.write(email);
+			} else {
+			out.write("");}%>" />
 	  </td>
 	</tr>
 	<tr>
 	  <td>First Name:</td>
 	  <td><input type="text" name="firstname" maxlength="24"
 		     placeholder="first name"
-		     <% if (firstname!= null) {
-			out.write("value="+firstname);
-			}%> />
+		     required="required"
+		     value="<% if (firstname!= null) {
+			    out.write(firstname);
+			    } else {
+			    out.write("");}%>" />
 	  </td>
 	</tr>
 	<tr>
 	  <td>Last Name:</td>
 	  <td><input type="text" name="lastname" maxlength="24"
 		     placeholder="last name"
-		     <% if (lastname!= null) {
-			out.write("value="+lastname);
-			}%> />
+		     required="required"
+		     value="<% if (lastname!= null) {
+			    out.write(lastname);
+			    } else {
+			    out.write("");}%>" />
 	  </td>
 	</tr>
 	<tr>
 	  <td>Address:</td>
 	  <td><input type="text" name="address" maxlength="128"
 		     placeholder="address"
-		     <% if (address!= null) {
-			out.write("value="+address);
-			}%> />
+		     required="required"
+		     value="<% if (address!= null) {
+			    out.write(address);
+			    } else {
+			    out.write("");}%>" />
 	  </td>
 	</tr>
 	<tr>
 	  <td>Phone:</td>
-	  <td><input type="text" name="phone" maxlength="10"
+	  <td><input type="tel" name="phone" maxlength="10"
 		     placeholder="phone"
-		     <% if (phone!= null) {
-			out.write("value="+phone);
-			}%> />
+		     required="required"
+		     value="<% if (phone!= null) {
+			    out.write(phone);
+			    } else {
+			    out.write("");}%>" />
 	  </td>
 	</tr>
 	<tr>
