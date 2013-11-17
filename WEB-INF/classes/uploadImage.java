@@ -23,16 +23,17 @@ public class uploadImage extends HttpServlet {
     private Db database;
     private HttpSession session;
     private String owner;
-    private String location;
-    private String date;
-    private String subject;
-    private String description;
-    private int security;
     public String response_message;
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		
+	String date = "";
+	String location = "";
+	String subject = "";
+	String description = "";
+	int security = 2; // default is private
+
 	try {
 
 	    /*
@@ -48,21 +49,42 @@ public class uploadImage extends HttpServlet {
 	    /*
 	     * Parse the HTTP request to get the image stream
 	     */
+	    InputStream instream = null;
 	    DiskFileUpload fu = new DiskFileUpload();
-	    List FileItems = fu.parseRequest(request);
+	    List<FileItem> FileItems = fu.parseRequest(request);
+
 	    /*
 	     * Process the uploaded items, assuming 1 image file uploaded
 	     */
-	    Iterator i = FileItems.iterator();
-	    FileItem item = (FileItem) i.next();
-	    while (i.hasNext() && item.isFormField()) {
-		item = (FileItem) i.next();
+	    for (FileItem item : FileItems) {
+		if (!item.isFormField()) {
+		    instream = item.getInputStream();
+		} else {
+		    String fieldname = item.getFieldName();
+		    
+		    if (fieldname.equals("date")) {
+			date = item.getString();
+		    }
+		    else if (fieldname.equals("location")) {
+			location = item.getString();
+		    }
+		    else if (fieldname.equals("subject")) {
+			subject = item.getString();
+		    }
+		    else if (fieldname.equals("description")) {
+			description = item.getString();
+		    }
+		    else if (fieldname.equals("security")) {
+			String sec = item.getString();
+			System.out.println("security = " + sec);
+			security = Integer.parseInt(sec);
+		    }
+		}
 	    }
 	    
 	    /*
 	     * Get Image Stream
 	     */
-	    InputStream instream = item.getInputStream();
 	    BufferedImage img = ImageIO.read(instream);
 	    BufferedImage thumbNail = shrink(img, 10);
 			
@@ -72,28 +94,20 @@ public class uploadImage extends HttpServlet {
 	    database = new Db();
 	    database.connect_db();
 	    	    
-	    /* 
-	     * Get inputs from owner
-	     */
-	    /*
-	    location = request.getParameter("location");
-	    date = request.getParameter("date");
 	    if (date == null) {
 		date = "sysdate";
 	    }
-	    subject = request.getParameter("subject");
-	    security = Integer.parseInt(request.getParameter("security"));
-	    */
+
 	    /*
 	     * Insert a empty blob into the table
 	     */
 	    int image_id = database.get_next_image_id();
-	    database.addEmptyImage(owner, 1, "", "", "", image_id);
+	    database.addEmptyImage(owner, security, subject, location, 
+				   description, image_id, date);
 	    
 	    /*
 	     * Get Blob from database
 	     */
-	    
 	    Blob myImage = database.getImageById(image_id, "photo");
 	    Blob myThumb = database.getImageById(image_id, "thumbnail");	
 	    
@@ -109,8 +123,8 @@ public class uploadImage extends HttpServlet {
 	    byte[] buffer = new byte[2048];
 	    int length = -1;
 	    while ((length = instream.read(buffer)) != -1)
-		outstream.write(buffer, 0, length);			
-	    System.out.println("after oustream.write");
+		outstream.write(buffer, 0, length);
+
 	    instream.close();
 	    outstream.close();
 	    response_message = " File has been Uploaded!    ";
@@ -121,6 +135,8 @@ public class uploadImage extends HttpServlet {
 	}	
 	
 	//Output response to the client
+	response.sendRedirect("index.jsp");
+	/*
 	response.setContentType("text/html");
 	PrintWriter out = response.getWriter();
 	out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 " +
@@ -131,8 +147,8 @@ public class uploadImage extends HttpServlet {
 		    "<H1>" +
 		    response_message +
 		    "</H1>\n" +
-		    "</BODY></HTML>");
-	
+		    "</BODY></HTML>");	
+	*/
     }
     
     /*

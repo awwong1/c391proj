@@ -293,7 +293,8 @@ public class Db {
      * @return Integer
      */
     public Integer addEmptyImage(String owner, int permitted, String subject, 
-				 String place, String desc, Integer pic_id) {
+				 String place, String desc, Integer pic_id,
+				 String date) {
         String query = "insert into images values (" + pic_id + ", '"  
 	    + owner + "', " + permitted + ", '" + subject + "', '" + place + 
 	    "', sysdate, '" + desc + "', empty_blob(), empty_blob())";

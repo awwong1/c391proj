@@ -60,10 +60,10 @@ Webpage for uploading images
         <tr>
            <th>Security: </th>
              <td>
-		<select id="security">
+		<select name="security" id="security">
 		  <option value="2">Private</option>
                   <option value="1">Public</option>
-                  <option value="group">Group</option>
+                  <option value="3">Group</option>
              </td>
         </tr>
 
