@@ -22,14 +22,20 @@ Webpage for uploading images
   <body>
     <form name="uploadimage" action="uploadImage" enctype="multipart/form-data" 
 	  method="POST">
-      <table>
-        <tr>
-	  <th>File path: </th>
-	    <td>
-	      <input name="filepath" type="file" size="30" ></input>
-	    </td>
-	</tr>
+      <applet code="applet-basic_files/wjhk.JUploadApplet" name="JUpload" 
+	      archive="applet-basic_files/wjhk.jar" mayscript="" 
+	      height="300" width="640">
+	<param name="CODE" value="wjhk.jupload2.JUploadApplet">
+	<param name="ARCHIVE" value="wjhk.jupload.jar">
+	<param name="type" value="application/x-java-applet;version=1.4">
+	<param name="scriptable" value="false">    
+	<param name="postURL"
+	       value="http://ui02.cs.ualberta.ca:16230/c391proj/uploadFolder.jsp?URLParam=URL+Parameter+Value">
+	<param name="nbFilesPerRequest" value="2">    
+	Java 1.4 or higher plugin required.
+</applet>
 
+      <table>
         <tr>
            <th>Date: </th>
              <td>
@@ -77,6 +83,3 @@ Webpage for uploading images
     </form>
   </body>
 </html>
-
-
-
