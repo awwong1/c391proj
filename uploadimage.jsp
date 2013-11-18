@@ -4,14 +4,14 @@ Webpage for uploading images
 <!DOCTYPE html>
 
 <%
-	String error;
-        String username;
-	try{
-		error = (String) session.getAttribute("err");
-                username = (String session.getAttribute("username");
-	} catch (NullPointerException e) {
-		e.printStackTrace();
-	}
+    String error;
+    String username;
+    try{
+	error = (String) session.getAttribute("err");
+        username = (String) session.getAttribute("username");
+    } catch (NullPointerException e) {
+	e.printStackTrace();
+    }
 %>
 
 <html>

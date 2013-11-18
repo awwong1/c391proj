@@ -413,9 +413,8 @@ public class Db {
      @ @return ResultSet
      */
     public ResultSet getResultByKeywords(String keywords) {
-        String query = "SELECT score(1), subject FROM images WHERE contains(description, '" 
+        String query = "SELECT score(1), photo_id FROM images WHERE contains(description, '" 
                         + keywords  + "', 1) > 0 order by score(1) desc";
-
         return execute_stmt(query);
      }
 
