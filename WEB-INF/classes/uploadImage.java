@@ -113,25 +113,22 @@ public class uploadImage extends HttpServlet {
 	 * Get Blob from database
 	 */
 	Blob myImage = database.getImageById(image_id, "photo");
-	Blob myThumb = database.getImageById(image_id, "thumbnail");	
-	    
-	/*
-	 * Write thumbnail image into a Blob object
-	 */ 
+	Blob myThumb = database.getImageById(image_id, "thumbnail");
+	
+	response_message = write_image(img, myImage);
+	response_message = write_image(thumbNail, myThumb);
+	
+	instream.close();
+	response_message = " File has been Uploaded!    ";
+	database.close_db();
+	
+	//Output response to the client
+	response.sendRedirect("index.jsp");
+    }
+    
+    private String write_image(BufferedImage img, Blob myImage) {
+	String response_message = "";
 	OutputStream outstream = null;
-	try {
-	    outstream = myThumb.setBinaryStream(0);
-	    ImageIO.write(thumbNail, "jpg", outstream);
-
-	    /*
-	     * Write image into a Blob object
-	     */	
-	    outstream = myImage.setBinaryStream(0);
-	} catch (Exception e) {
-	    response_message = e.getMessage();
-	}
-
-	// Write actual image into a Blob object
 	try {
 	    outstream = myImage.setBinaryStream(0);
 	    ImageIO.write(img, "jpg", outstream);
@@ -140,30 +137,20 @@ public class uploadImage extends HttpServlet {
 	     * Write image into a Blob object
 	     */	
 	    outstream = myImage.setBinaryStream(0);
+	    outstream.close();
 	} catch (Exception e) {
 	    response_message = e.getMessage();
 	}
-	
-	/*
-	byte[] buffer = new byte[2048];
-	int length = -1;
-	while ((length = instream.read(buffer)) != -1)
-	    outstream.write(buffer, 0, length);
-	*/
-	instream.close();
-	outstream.close();
-	response_message = " File has been Uploaded!    ";
-	database.close_db();
-	
-	//Output response to the client
-	response.sendRedirect("index.jsp");
+
+	return response_message;
+
     }
-    
+
     /*
      * Strink function
      * http://www.java-tips.org/java-se-tips/java.awt.image/shrinking-an-image-by-skipping-pixels.html
      */
-    public static BufferedImage shrink(BufferedImage image, int n) {
+    private BufferedImage shrink(BufferedImage image, int n) {
 	
 	int w = image.getWidth() / n;
 	int h = image.getHeight() / n;
