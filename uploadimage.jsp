@@ -8,7 +8,7 @@ Webpage for uploading images
         String username;
 	try{
 		error = (String) session.getAttribute("err");
-                username = (String session.getAttribute("username");
+                username = (String) session.getAttribute("username");
 	} catch (NullPointerException e) {
 		e.printStackTrace();
 	}

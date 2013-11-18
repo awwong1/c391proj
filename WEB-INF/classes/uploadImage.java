@@ -34,6 +34,9 @@ public class uploadImage extends HttpServlet {
 	String description = "";
 	int security = 2; // default is private
 
+	InputStream instream = null;
+	DiskFileUpload fu = new DiskFileUpload();
+
 	try {
 
 	    /*
@@ -49,8 +52,6 @@ public class uploadImage extends HttpServlet {
 	    /*
 	     * Parse the HTTP request to get the image stream
 	     */
-	    InputStream instream = null;
-	    DiskFileUpload fu = new DiskFileUpload();
 	    List<FileItem> FileItems = fu.parseRequest(request);
 
 	    /*
@@ -81,58 +82,78 @@ public class uploadImage extends HttpServlet {
 		    }
 		}
 	    }
+	} catch (Exception e) {
+	    response_message = e.getMessage();
+	}	
 	    
-	    /*
-	     * Get Image Stream
-	     */
-	    BufferedImage img = ImageIO.read(instream);
-	    BufferedImage thumbNail = shrink(img, 10);
-			
-	    /*
-	     *Connect to the database and create a statement
-	     */
-	    database = new Db();
-	    database.connect_db();
-	    	    
-	    if (date == null) {
-		date = "sysdate";
-	    }
-
-	    /*
-	     * Insert a empty blob into the table
-	     */
-	    int image_id = database.get_next_image_id();
-	    database.addEmptyImage(owner, security, subject, location, 
-				   description, image_id, date);
+	/*
+	 * Get Image Stream
+	 */
+	BufferedImage img = ImageIO.read(instream);
+	BufferedImage thumbNail = shrink(img, 10);
+	
+	/*
+	 *Connect to the database and create a statement
+	 */
+	database = new Db();
+	database.connect_db();
+	
+	if (date == null) {
+	    date = "sysdate";
+	}
+	
+	/*
+	 * Insert a empty blob into the table
+	 */
+	int image_id = database.get_next_image_id();
+	database.addEmptyImage(owner, security, subject, location, 
+			       description, image_id, date);
+	
+	/*
+	 * Get Blob from database
+	 */
+	Blob myImage = database.getImageById(image_id, "photo");
+	Blob myThumb = database.getImageById(image_id, "thumbnail");	
 	    
-	    /*
-	     * Get Blob from database
-	     */
-	    Blob myImage = database.getImageById(image_id, "photo");
-	    Blob myThumb = database.getImageById(image_id, "thumbnail");	
-	    
-	    /*
-	     * Write thumbnail image into a Blob object
-	     */ 
-	    OutputStream outstream = myThumb.setBinaryStream(0);
+	/*
+	 * Write thumbnail image into a Blob object
+	 */ 
+	OutputStream outstream = null;
+	try {
+	    outstream = myThumb.setBinaryStream(0);
 	    ImageIO.write(thumbNail, "jpg", outstream);
+
 	    /*
 	     * Write image into a Blob object
 	     */	
 	    outstream = myImage.setBinaryStream(0);
-	    byte[] buffer = new byte[2048];
-	    int length = -1;
-	    while ((length = instream.read(buffer)) != -1)
-		outstream.write(buffer, 0, length);
-
-	    instream.close();
-	    outstream.close();
-	    response_message = " File has been Uploaded!    ";
-	    database.close_db();
-	    
 	} catch (Exception e) {
 	    response_message = e.getMessage();
-	}	
+	}
+
+	// Write actual image into a Blob object
+	try {
+	    outstream = myImage.setBinaryStream(0);
+	    ImageIO.write(img, "jpg", outstream);
+
+	    /*
+	     * Write image into a Blob object
+	     */	
+	    outstream = myImage.setBinaryStream(0);
+	} catch (Exception e) {
+	    response_message = e.getMessage();
+	}
+	
+	/*
+	byte[] buffer = new byte[2048];
+	int length = -1;
+	while ((length = instream.read(buffer)) != -1)
+	    outstream.write(buffer, 0, length);
+	*/
+	instream.close();
+	outstream.close();
+	response_message = " File has been Uploaded!    ";
+	database.close_db();
 	
 	//Output response to the client
 	response.sendRedirect("index.jsp");
