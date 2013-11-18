@@ -2,16 +2,22 @@
 Webpage for uploading images
 -->
 <!DOCTYPE html>
-
+<%@ page import="util.Db,util.Group,java.util.ArrayList"%>
 <%
 	String error;
-        String username;
+        String username = "";
+        ArrayList<Group> all_groups = new ArrayList<Group>();
+
 	try{
 		error = (String) session.getAttribute("err");
                 username = (String) session.getAttribute("username");
 	} catch (NullPointerException e) {
 		e.printStackTrace();
 	}
+
+        Db database = new Db();
+        database.connect_db();
+        all_groups = database.get_groups(username);
 %>
 
 <html>
@@ -54,16 +60,21 @@ Webpage for uploading images
         <tr>
            <th>Description: </th>
              <td>
-		<textarea name="description" cols="25" rows="5" placeholder=
-"Description"></textarea>
+		<textarea name="description" cols="25" rows="5" 
+			  placeholder="Description"></textarea>
              </td>
         </tr>
 
         <tr>
            <th>Security: </th>
              <td>
-		<p><input type="radio" name="security" value="2">Private</input></p>
+		<p><input type="radio" name="security" value="2" checked="checked">Private</input></p>
 		<p><input type="radio" name="security" value="1">Public</input></p>
+		<% for (Group group: all_groups) {
+		     out.println("<p><input type='radio' name='security' value='" + group.getId()
+		   + "'>" + group.getName() + "</input></p>");
+		   }
+		   %>
              </td>
         </tr>
 
