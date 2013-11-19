@@ -13,7 +13,7 @@ import oracle.jdbc.*;
 
 import util.Group;
 import util.User;
-import util.Image;
+import util.Photo;
 
 public class Db {
     static final String USERNAME = "mnaylor";
@@ -292,12 +292,13 @@ public class Db {
      * String place, String date, String desc, Blob thumbnail, Blob photo
      * @return Integer
      */
-    public Integer addEmptyImage(String owner, int permitted, String subject, 
-				 String place, String desc, Integer pic_id,
-				 String date) {
-        String query = "insert into images values (" + pic_id + ", '"  
-	    + owner + "', " + permitted + ", '" + subject + "', '" + place + 
-	    "', sysdate, '" + desc + "', empty_blob(), empty_blob())";
+    public Integer addEmptyImage(Photo image) {
+        String query = "insert into images values (" + image.getPhotoId() + ", '"  
+	    + image.getOwnerName() + "', " + image.getPermitted() + ", '" 
+	    + image.getSubject() + "', '" + image.getLocation() + 
+	    "', '" + image.getDate() + "', '" + image.getDescription()
+	    + "', empty_blob(), empty_blob())";
+	System.out.println("query = " + query);
         return execute_update(query);
     }
 

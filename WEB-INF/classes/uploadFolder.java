@@ -75,10 +75,14 @@ public class uploadFolder extends HttpServlet {
 	    response_message = e.getMessage();
 	}
 	
-	/* 
-	 * Get files in directory /tmp
-	 */
+	File[] all_jpg = get_files();
 	
+
+	InputStream instream = null;
+	for (File img: all_jpg) {
+	    
+	}
+
 	    
 	//Output response to the client
 	response.sendRedirect("index.jsp");
@@ -86,9 +90,16 @@ public class uploadFolder extends HttpServlet {
     
     /**
      * Gets all .png files in the TEMPDIR directory
+     * @returns File[]
      */
     private File[] get_files() {
-
+	File[] all_jpg = [];
+	for (File file : TEMPDIR.listFiles()) {
+	    if (fileEntry.isFile() && file.getName().endsWith(".jpg")) {
+		all_jpg.add(file);
+	    }
+	}
+	return all_jpg;
     }
 
     /*

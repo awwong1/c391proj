@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import util.User;
 import util.Db;
+import util.Photo;
+import util.ImageUploader;
 
 /**
  * Servlet to upload a single image
@@ -34,7 +36,7 @@ public class uploadImage extends HttpServlet {
 	String description = "";
 	int security = 2; // default is private
 
-	InputStream instream = null;
+	FileItem file = null;
 	DiskFileUpload fu = new DiskFileUpload();
 
 	try {
@@ -59,7 +61,7 @@ public class uploadImage extends HttpServlet {
 	     */
 	    for (FileItem item : FileItems) {
 		if (!item.isFormField()) {
-		    instream = item.getInputStream();
+		    file = item;
 		} else {
 		    String fieldname = item.getFieldName();
 
@@ -84,83 +86,16 @@ public class uploadImage extends HttpServlet {
 	    }
 	} catch (Exception e) {
 	    response_message = e.getMessage();
-	}	
-	    
-	/*
-	 * Get Image Stream
-	 */
-	BufferedImage img = ImageIO.read(instream);
-	BufferedImage thumbNail = shrink(img, 10);
-	
-	/*
-	 *Connect to the database and create a statement
-	 */
-	database = new Db();
-	database.connect_db();
-	
-	if (date == null) {
-	    date = "sysdate";
 	}
 	
-	/*
-	 * Insert a empty blob into the table
-	 */
-	int image_id = database.get_next_image_id();
-	database.addEmptyImage(owner, security, subject, location, 
-			       description, image_id, date);
+	Photo image = new Photo(0, owner, date, location, subject, 
+				description, security);
 	
-	/*
-	 * Get Blob from database
-	 */
-	Blob myImage = database.getImageById(image_id, "photo");
-	Blob myThumb = database.getImageById(image_id, "thumbnail");
-	
-	response_message = write_image(img, myImage);
-	response_message = write_image(thumbNail, myThumb);
-	
-	instream.close();
-	response_message = " File has been Uploaded!    ";
-	database.close_db();
-	
+	ImageUploader iu = new ImageUploader(image, file);
+	response_message = iu.upload_image();
+    
 	//Output response to the client
 	response.sendRedirect("index.jsp");
     }
     
-    private String write_image(BufferedImage img, Blob myImage) {
-	String response_message = "";
-	OutputStream outstream = null;
-	try {
-	    outstream = myImage.setBinaryStream(0);
-	    ImageIO.write(img, "jpg", outstream);
-
-	    /*
-	     * Write image into a Blob object
-	     */	
-	    outstream = myImage.setBinaryStream(0);
-	    outstream.close();
-	} catch (Exception e) {
-	    response_message = e.getMessage();
-	}
-
-	return response_message;
-
-    }
-
-    /*
-     * Strink function
-     * http://www.java-tips.org/java-se-tips/java.awt.image/shrinking-an-image-by-skipping-pixels.html
-     */
-    private BufferedImage shrink(BufferedImage image, int n) {
-	
-	int w = image.getWidth() / n;
-	int h = image.getHeight() / n;
-	
-	BufferedImage shrunkImage = new BufferedImage(w, h, image.getType());
-	
-	for (int y=0; y < h; ++y)
-	    for (int x=0; x < w; ++x)
-		shrunkImage.setRGB(x, y, image.getRGB(x*n, y*n));
-	
-	return shrunkImage;
-    }
 }
