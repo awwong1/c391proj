@@ -23,18 +23,10 @@ public class uploadFolder extends HttpServlet {
     private HttpSession session;
     private String owner;
     public String response_message;
+    private String TEMPDIR = "/tmp/";
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-
-	//Initialization for chunk management.
-	boolean bLastChunk = false;
-	int numChunk = 0;
-
-	// Directory to store all the uploaded files
-	String ourTempDirectory = "/tmp/";
-	int ourMaxMemorySize  = 10000000;
-	int ourMaxRequestSize = 2000000000;
 
 	String date = "";
 	String location = "";
@@ -42,14 +34,7 @@ public class uploadFolder extends HttpServlet {
 	String description = "";
 	int security = 2; // default is private
 	
-	/*
-	 *Connect to the database and create a statement
-	 */
-	database = new Db();
-	database.connect_db();
-
 	try {
-
 	    /*
 	     * Check if user is logged in, if not redirect
 	     */
@@ -60,135 +45,52 @@ public class uploadFolder extends HttpServlet {
 		response.sendRedirect("login.jsp");
 	    }
 
-	    Enumeration paraNames = request.getParameterNames();
-	    String pname;
-	    String pvalue;
-	    while (paraNames.hasMoreElements()) {
-		pname = (String)paraNames.nextElement();
-		pvalue = request.getParameter(pname);
-		if (pname.equals("jufinal")) {
-		    bLastChunk = pvalue.equals("1");
-		} 
-		else if (pname.equals("jupart")) {
-		    numChunk = Integer.parseInt(pvalue);
-		}
-	    }
-
-	    // Create a factory for disk-based file items
-	    DiskFileItemFactory factory = new DiskFileItemFactory();
-	
-	    // Set factory constraints
-	    factory.setSizeThreshold(ourMaxMemorySize);
-	    factory.setRepository(new File(ourTempDirectory));
-	
-	    // Create a new file upload handler
-	    ServletFileUpload upload = new ServletFileUpload(factory);
-	
-	    // Set overall request size constraint
-	    upload.setSizeMax(ourMaxRequestSize);
-
 	    /*
-	     * Parse the HTTP request to get the image stream
+	     * Process the uploaded items, assuming 1 image file uploaded
 	     */
-	    List items = upload.parseRequest(request);
-	    Iterator iter = items.iterator();
-	    FileItem fileItem;
-	    File fout;
+	    for (FileItem item : FileItems) {
+		if (item.isFormField()) {
+		    String fieldname = item.getFieldName();
 
-	    while (iter.hasNext()) {
-		fileItem = (FileItem) iter.next();
-		
-		if (fileItem.isFormField()) {
-		    String fieldname = fileItem.getName();
-		
 		    if (fieldname.equals("date")) {
-			date = fileItem.getString();
+			date = item.getString();
 		    }
 		    else if (fieldname.equals("location")) {
-			location = fileItem.getString();
+			location = item.getString();
 		    }
 		    else if (fieldname.equals("subject")) {
-			subject = fileItem.getString();
+			subject = item.getString();
 		    }
 		    else if (fieldname.equals("description")) {
-			description = fileItem.getString();
+			description = item.getString();
 		    }
 		    else if (fieldname.equals("security")) {
-			String sec = fileItem.getString();
+			String sec = item.getString();
+			System.out.println("security = " + sec);
 			security = Integer.parseInt(sec);
 		    }
-		} else {
-		    String uploadedFilename = fileItem.getName()
-			+ ( numChunk>0 ? ".part"+numChunk : "") ;
-		    fout = new File(ourTempDirectory
-				    + (new File(uploadedFilename)).getName());
-		    // write the file
-		    fileItem.write(fout);
 		}
 	    }
 	} catch (Exception e) {
 	    response_message = e.getMessage();
 	}
-
-	if (bLastChunk) {
-	    FileInputStream instream;
-	    int nbBytes;
-	    byte[] byteBuff = new byte[1024];
-	    String filename;
+	
+	/* 
+	 * Get files in directory /tmp
+	 */
+	
 	    
-	    for (int i=1; i<=numChunk; i+=1) {
-		filename = fileItem.getName() + ".part" + i;
-		instream = new FileInputStream(ourTempDirectory + filename);
-		
-		/*
-		 * Get Image Stream
-		 */
-		BufferedImage img = ImageIO.read(instream);
-		BufferedImage thumbNail = shrink(img, 10);
-		
-		if (date == null) {
-		    date = "sysdate";
-		}
-		
-		/*
-		 * Insert a empty blob into the table
-		 */
-		int image_id = database.get_next_image_id();
-		database.addEmptyImage(owner, security, subject, location, 
-				       description, image_id, date);
-	
-		/*
-		 * Get Blob from database
-		 */
-		Blob myImage = database.getImageById(image_id, "photo");
-		Blob myThumb = database.getImageById(image_id, "thumbnail");	
-		
-		/*
-		 * Write thumbnail image into a Blob object
-		 */ 
-		OutputStream outstream = myThumb.setBinaryStream(0);
-		ImageIO.write(thumbNail, "jpg", outstream);
-
-		/*
-		 * Write image into a Blob object
-		 */	
-		outstream = myImage.setBinaryStream(0);
-		byte[] buffer = new byte[2048];
-		int length = -1;
-		while ((length = instream.read(buffer)) != -1)
-		    outstream.write(buffer, 0, length);
-		outstream.close();
-	    }
-	    instream.close();
-	}
-	
-	response_message = " File has been Uploaded!    ";
-	database.close_db();
-		
 	//Output response to the client
 	response.sendRedirect("index.jsp");
     }
     
+    /**
+     * Gets all .png files in the TEMPDIR directory
+     */
+    private File[] get_files() {
+
+    }
+
     /*
      * Strink function
      * http://www.java-tips.org/java-se-tips/java.awt.image/shrinking-an-image-by-skipping-pixels.html

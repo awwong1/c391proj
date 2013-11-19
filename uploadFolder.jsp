@@ -6,12 +6,17 @@ Webpage for uploading images
 <%
 	String error;
         String username;
+        String getURL = "";
 	try{
 		error = (String) session.getAttribute("err");
                 username = (String) session.getAttribute("username");
+                getURL=request.getRequestURL().toString();
 	} catch (NullPointerException e) {
 		e.printStackTrace();
 	}
+
+        int index = getURL.lastIndexOf("/");
+        getURL = getURL.substring(0, index) + "/parseRequest.jsp";
 %>
 
 <html>
@@ -30,10 +35,10 @@ Webpage for uploading images
 	<param name="type" value="application/x-java-applet;version=1.4">
 	<param name="scriptable" value="false">    
 	<param name="postURL"
-	       value="http://ui02.cs.ualberta.ca:16230/c391proj/uploadFolder.jsp?URLParam=URL+Parameter+Value">
+	       value=<%=getURL%>>
 	<param name="nbFilesPerRequest" value="2">    
 	Java 1.4 or higher plugin required.
-</applet>
+      </applet>
 
       <table>
         <tr>
@@ -60,8 +65,8 @@ Webpage for uploading images
         <tr>
            <th>Description: </th>
              <td>
-		<textarea name="description" cols="25" rows="5" placeholder=
-"Description"></textarea>
+		<textarea name="description" cols="25" rows="5" 
+			  placeholder="Description"></textarea>
              </td>
         </tr>
 
