@@ -16,7 +16,7 @@ import util.User;
 import util.Photo;
 
 public class Db {
-    static final String USERNAME = "mnaylor";
+    static final String USERNAME = "c391g10";
     static final String PASSWORD = "ravenraven1";
     // JDBC driver name and database URL
     static final String DRIVER_NAME = "oracle.jdbc.driver.OracleDriver";
