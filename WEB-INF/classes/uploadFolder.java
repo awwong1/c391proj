@@ -78,11 +78,6 @@ public class uploadFolder extends HttpServlet {
 	File[] all_jpg = get_files();
 	
 
-	InputStream instream = null;
-	for (File img: all_jpg) {
-	    
-	}
-
 	    
 	//Output response to the client
 	response.sendRedirect("index.jsp");

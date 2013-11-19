@@ -1,12 +1,15 @@
 <%@ page language="java" import="java.io.*, java.sql.*, java.util.*" %>
-<%@ page import="org.apache.commons.fileupload.*, org.apache.commons.fileupload.disk.*, org.apache.commons.fileupload.servlet.*" %>
+<%@ page import="org.apache.commons.fileupload.*, org.apache.commons.fileupload.disk.*, org.apache.commons.fileupload.servlet.*,util.Photo,util.ImageUploader" %>
 <%
   //Initialization for chunk management.
   boolean bLastChunk = false;
   int numChunk = 0;
 
+  String username = "";
+
   response.setContentType("text/plain");
   try{
+    username = (String) session.getAttribute("username");
     // Get URL Parameters.
     Enumeration paraNames = request.getParameterNames();
     out.println(" ------------------------------ ");
@@ -78,6 +81,12 @@
 	        // write the file
 	        fileItem.write(fout);	        
 	        
+	        Photo image = new Photo(username);
+	
+	        ImageUploader iu = new ImageUploader(image, fileItem);
+	        String response_message = iu.upload_image();
+
+
 	        //////////////////////////////////////////////////////////////////////////////////////
 	        //Chunk management: if it was the last chunk, let's recover the complete file
 	        //by concatenating all chunk parts.

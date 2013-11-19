@@ -4,12 +4,12 @@ import java.sql.*;
 
 public class Photo {
     int photo_id;
-    String ownername;
-    String dateUploaded;
-    String location;
-    String subject;
-    String description;
-    int permitted;
+    String ownername = "";
+    String dateUploaded = "";
+    String location = "";
+    String subject = "";
+    String description = "";
+    int permitted = 2; // default is private
     
     public Photo(int photo_id, String ownername, String dateUploaded, 
 		 String location, String subject, String description, 
@@ -26,6 +26,13 @@ public class Photo {
 	this.subject = subject;
 	this.description = description;
 	this.permitted = permitted;
+    }
+
+    /**
+     * Overloaded minimalist constructor
+     */
+    public Photo(String ownername) {
+	this.ownername = ownername;
     }
     
     /*
