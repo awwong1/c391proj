@@ -10,6 +10,7 @@ all:
 	make register
 	make manage_Groups
 	make uploadImage
+	make uploadFolder
 	make manageUser
 	make getUserInfo
 	make searchResults
@@ -23,6 +24,8 @@ manage_Groups:
 	javac $(custsource) $(custclass) manage_Groups.java
 uploadImage:
 	javac $(custsource) $(custclass) uploadImage.java
+uploadFolder:
+	javac $(custsource) $(custclass) uploadFolder.java
 manageUser:
 	javac $(custsource) $(custclass) manageUser.java
 getUserInfo:

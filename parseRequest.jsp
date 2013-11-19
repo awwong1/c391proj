@@ -5,20 +5,19 @@
   boolean bLastChunk = false;
   int numChunk = 0;
 
-  String username = "";
-
+  Photo image = null;
+  
   response.setContentType("text/plain");
   try{
-    username = (String) session.getAttribute("username");
+    image = (Photo) session.getAttribute("photo_descr");
+
     // Get URL Parameters.
     Enumeration paraNames = request.getParameterNames();
-    out.println(" ------------------------------ ");
     String pname;
     String pvalue;
     while (paraNames.hasMoreElements()) {
       pname = (String)paraNames.nextElement();
       pvalue = request.getParameter(pname);
-      out.println(pname + " = " + pvalue);
       if (pname.equals("jufinal")) {
       	bLastChunk = pvalue.equals("1");
       } else if (pname.equals("jupart")) {
@@ -79,9 +78,7 @@
 	        fout = new File(ourTempDirectory + (new File(uploadedFilename)).getName().toLowerCase());
 	        out.println("File Out: " + fout.toString());
 	        // write the file
-	        fileItem.write(fout);	        
-	        
-	        Photo image = new Photo(username);
+	        fileItem.write(fout);
 	
 	        ImageUploader iu = new ImageUploader(image, fileItem);
 	        String response_message = iu.upload_image();
@@ -121,6 +118,7 @@
   }catch(Exception e){
     out.println("Exception e = " + e.toString());
   }
-  
+  //Output response to the client
+  response.sendRedirect("index.jsp");
   out.close();
 %>

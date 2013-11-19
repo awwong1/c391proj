@@ -16,7 +16,7 @@ Webpage for uploading images
 	}
 
         int index = getURL.lastIndexOf("/");
-        getURL = getURL.substring(0, index) + "/parseRequest.jsp";
+        getURL = getURL.substring(0, index) + "/uploadFolder";
 %>
 
 <html>

@@ -5,21 +5,19 @@ import java.sql.*;
 import java.util.*;
 import oracle.sql.*;
 import oracle.jdbc.*;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import util.User;
 import util.Db;
 import util.Photo;
 import util.ImageUploader;
 
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileItem;
+
+
 /**
  * Servlet to upload a single image
  *
 */
-
-import org.apache.commons.fileupload.DiskFileUpload;
-import org.apache.commons.fileupload.FileItem;
 
 public class uploadImage extends HttpServlet {
     private Db database;

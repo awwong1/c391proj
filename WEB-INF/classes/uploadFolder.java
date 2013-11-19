@@ -5,27 +5,26 @@ import java.sql.*;
 import java.util.*;
 import oracle.sql.*;
 import oracle.jdbc.*;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import util.User;
 import util.Db;
+import util.Photo;
+import util.ImageUploader;
+
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileItem;
 
 /**
  * Servlet to upload a folder of images
  *
 */
 
-import org.apache.commons.fileupload.*;
-
 public class uploadFolder extends HttpServlet {
     private Db database;
     private HttpSession session;
     private String owner;
     public String response_message;
-    private String TEMPDIR = "/tmp/";
     
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void doUpload(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 
 	String date = "";
@@ -34,6 +33,9 @@ public class uploadFolder extends HttpServlet {
 	String description = "";
 	int security = 2; // default is private
 	
+	ArrayList<FileItem> all_files = new ArrayList<FileItem>();
+	DiskFileUpload fu = new DiskFileUpload();
+
 	try {
 	    /*
 	     * Check if user is logged in, if not redirect
@@ -44,6 +46,11 @@ public class uploadFolder extends HttpServlet {
 	    if(owner == null) {
 		response.sendRedirect("login.jsp");
 	    }
+
+	    /*
+	     * Parse the HTTP request to get the image stream
+	     */
+	    List<FileItem> FileItems = fu.parseRequest(request);
 
 	    /*
 	     * Process the uploaded items, assuming 1 image file uploaded
@@ -69,49 +76,24 @@ public class uploadFolder extends HttpServlet {
 			System.out.println("security = " + sec);
 			security = Integer.parseInt(sec);
 		    }
-		}
+		} else {
+		    all_files.add(item);
+		}	     
 	    }
 	} catch (Exception e) {
 	    response_message = e.getMessage();
 	}
-	
-	File[] all_jpg = get_files();
-	
 
-	    
+	Photo image = new Photo(0, owner, date, location, subject, 
+				description, security);
+	
+	for (FileItem item : all_files) {
+	    ImageUploader iu = new ImageUploader(image, item);
+	    response_message = iu.upload_image();
+	}
+
 	//Output response to the client
 	response.sendRedirect("index.jsp");
     }
     
-    /**
-     * Gets all .png files in the TEMPDIR directory
-     * @returns File[]
-     */
-    private File[] get_files() {
-	File[] all_jpg = [];
-	for (File file : TEMPDIR.listFiles()) {
-	    if (fileEntry.isFile() && file.getName().endsWith(".jpg")) {
-		all_jpg.add(file);
-	    }
-	}
-	return all_jpg;
-    }
-
-    /*
-     * Strink function
-     * http://www.java-tips.org/java-se-tips/java.awt.image/shrinking-an-image-by-skipping-pixels.html
-     */
-    public static BufferedImage shrink(BufferedImage image, int n) {
-	
-	int w = image.getWidth() / n;
-	int h = image.getHeight() / n;
-	
-	BufferedImage shrunkImage = new BufferedImage(w, h, image.getType());
-	
-	for (int y=0; y < h; ++y)
-	    for (int x=0; x < w; ++x)
-		shrunkImage.setRGB(x, y, image.getRGB(x*n, y*n));
-	
-	return shrunkImage;
-    }
 }
