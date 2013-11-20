@@ -59,7 +59,12 @@ public class uploadImage extends HttpServlet {
 	     */
 	    for (FileItem item : FileItems) {
 		if (!item.isFormField()) {
-		    file = item;
+		    String filename = item.getName().toLowerCase();
+		    String ext = filename.substring(filename.length() - 3);
+
+		    if (ext.equals("jpg") || ext.equals("gif")) {
+			file = item;
+		    }
 		} else {
 		    String fieldname = item.getFieldName();
 
@@ -85,7 +90,7 @@ public class uploadImage extends HttpServlet {
 	    response_message = e.getMessage();
 	}
 
-	if (file.getName().equals("")) {
+	if (file == null || file.getName().equals("")) {
 	    response_message = "You must have at least one file to upload.";
 	    session.setAttribute("err", response_message);
 	    response.sendRedirect("uploadimage.jsp");
