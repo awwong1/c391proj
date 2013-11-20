@@ -2,18 +2,26 @@
 Webpage for uploading images
 -->
 <!DOCTYPE html>
-
+<%@ page import="util.Db,util.Group,java.util.ArrayList"%>
 <%
-	String error;
-        String username;
+	String error = "";
+        String username = "";
         String getURL = "";
+        ArrayList<Group> all_groups = new ArrayList<Group>();
+
 	try{
 		error = (String) session.getAttribute("err");
+                session.setAttribute("err", "");
                 username = (String) session.getAttribute("username");
                 getURL=request.getRequestURL().toString();
 	} catch (NullPointerException e) {
 		e.printStackTrace();
 	}
+
+        Db database = new Db();
+        database.connect_db();
+        all_groups = database.get_groups(username);
+        database.close_db();
 
         int index = getURL.lastIndexOf("/");
         getURL = getURL.substring(0, index) + "/uploadFolder";
@@ -27,6 +35,10 @@ Webpage for uploading images
   <body>
     <form name="uploadimage" action="folderDesc" enctype="multipart/form-data" 
 	  method="POST">
+      <% if (!error.equals("")) {
+	 out.println(error + "<br>");
+	 }
+	 %>
 
       <applet code="applet-basic_files/wjhk.JUploadApplet" name="JUpload" 
 	      archive="applet-basic_files/wjhk.jar" mayscript="" 
@@ -77,6 +89,12 @@ Webpage for uploading images
 		<p><input type="radio" name="security" value="2" checked="checked">
 		    Private</input></p>
 		<p><input type="radio" name="security" value="1">Public</input></p>
+		<% for (Group group: all_groups) {
+		     out.println("<p><input type='radio' name='security' value='" 
+		   + group.getId()
+		   + "'>" + group.getName() + "</input></p>");
+		   }
+		   %>
              </td>
         </tr>
         <tr>

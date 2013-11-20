@@ -50,13 +50,22 @@ public class uploadFolder extends HttpServlet {
 	     */
 	    for (FileItem item : FileItems) {
 		if (!item.isFormField()) {
-		    all_files.add(item);
+		    String filename = item.getName().toLowerCase();
+		    String ext = filename.substring(filename.length() - 3);
+		    if (ext.equals("jpg") || ext.equals("gif")) {
+			all_files.add(item);
+		    }
 		}	     
 	    }
 	} catch (Exception e) {
 	    response_message = e.getMessage();
 	}
 
+	if (all_files.size() == 0) {
+	    response_message = "You must have at least one file to upload.";
+	    session.setAttribute("err", response_message);
+	    response.sendRedirect("uploadFolder.jsp");
+	}
 	session.setAttribute("folderPhotos", all_files);
     }
     
