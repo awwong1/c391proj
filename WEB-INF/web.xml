@@ -70,6 +70,23 @@
         <url-pattern>/uploadImage</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>uploadFolder</servlet-name>
+        <servlet-class>uploadFolder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>uploadFolder</servlet-name>
+        <url-pattern>/uploadFolder</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>folderDesc</servlet-name>
+        <servlet-class>folderDesc</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>folderDesc</servlet-name>
+        <url-pattern>/folderDesc</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>searchResults</servlet-name>
         <servlet-class>searchResults</servlet-class>
     </servlet>

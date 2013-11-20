@@ -68,10 +68,12 @@ Webpage for uploading images
         <tr>
            <th>Security: </th>
              <td>
-		<p><input type="radio" name="security" value="2" checked="checked">Private</input></p>
+		<p><input type="radio" name="security" value="2" checked="checked">
+		    Private</input></p>
 		<p><input type="radio" name="security" value="1">Public</input></p>
 		<% for (Group group: all_groups) {
-		     out.println("<p><input type='radio' name='security' value='" + group.getId()
+		     out.println("<p><input type='radio' name='security' value='" 
+		   + group.getId()
 		   + "'>" + group.getName() + "</input></p>");
 		   }
 		   %>

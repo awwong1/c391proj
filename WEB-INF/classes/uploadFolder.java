@@ -24,18 +24,11 @@ public class uploadFolder extends HttpServlet {
     private String owner;
     public String response_message;
     
-    public void doUpload(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-
-	String date = "";
-	String location = "";
-	String subject = "";
-	String description = "";
-	int security = 2; // default is private
 	
 	ArrayList<FileItem> all_files = new ArrayList<FileItem>();
 	DiskFileUpload fu = new DiskFileUpload();
-
 	try {
 	    /*
 	     * Check if user is logged in, if not redirect
@@ -56,44 +49,16 @@ public class uploadFolder extends HttpServlet {
 	     * Process the uploaded items, assuming 1 image file uploaded
 	     */
 	    for (FileItem item : FileItems) {
-		if (item.isFormField()) {
-		    String fieldname = item.getFieldName();
-
-		    if (fieldname.equals("date")) {
-			date = item.getString();
-		    }
-		    else if (fieldname.equals("location")) {
-			location = item.getString();
-		    }
-		    else if (fieldname.equals("subject")) {
-			subject = item.getString();
-		    }
-		    else if (fieldname.equals("description")) {
-			description = item.getString();
-		    }
-		    else if (fieldname.equals("security")) {
-			String sec = item.getString();
-			System.out.println("security = " + sec);
-			security = Integer.parseInt(sec);
-		    }
-		} else {
+		if (!item.isFormField()) {
 		    all_files.add(item);
 		}	     
 	    }
 	} catch (Exception e) {
 	    response_message = e.getMessage();
 	}
+	System.out.println("size of all_files: " + all_files.size());
 
-	Photo image = new Photo(0, owner, date, location, subject, 
-				description, security);
-	
-	for (FileItem item : all_files) {
-	    ImageUploader iu = new ImageUploader(image, item);
-	    response_message = iu.upload_image();
-	}
-
-	//Output response to the client
-	response.sendRedirect("index.jsp");
+	session.setAttribute("folderPhotos", all_files);
     }
     
 }

@@ -25,8 +25,9 @@ Webpage for uploading images
       <jsp:include page="includes/header.jsp"/>
   </head>
   <body>
-    <form name="uploadimage" action="uploadImage" enctype="multipart/form-data" 
+    <form name="uploadimage" action="folderDesc" enctype="multipart/form-data" 
 	  method="POST">
+
       <applet code="applet-basic_files/wjhk.JUploadApplet" name="JUpload" 
 	      archive="applet-basic_files/wjhk.jar" mayscript="" 
 	      height="300" width="640">
@@ -73,17 +74,16 @@ Webpage for uploading images
         <tr>
            <th>Security: </th>
              <td>
-		<p><input type="radio" name="security" value="2">Private</input></p>
+		<p><input type="radio" name="security" value="2" checked="checked">
+		    Private</input></p>
 		<p><input type="radio" name="security" value="1">Public</input></p>
              </td>
         </tr>
-
-
-	<tr>
-	  <td ALIGN=CENTER COLSPAN="2"><input type="submit" name=".submit"
-		value="Upload">
-	  </td>
-	</tr>
+        <tr>
+          <td ALIGN=CENTER COLSPAN="2"><input type="submit" name=".submit"
+                value="Upload">
+          </td>
+        </tr>
       </table>
     </form>
   </body>
