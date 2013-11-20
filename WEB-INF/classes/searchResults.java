@@ -17,8 +17,8 @@ import util.Db;
 
 public class searchResults extends HttpServlet implements SingleThreadModel {
     private Db database;
-    
-    
+    private String keywords; 
+
     protected void doGet(HttpServletRequest request, 
                          HttpServletResponse response) 
         throws ServletException, IOException {
@@ -26,7 +26,9 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         response.setContentType("text/html");
         database = new Db();
         database.connect_db();        
-        ResultSet rset = database.getResultByKeywords(request.getParameter("query"));
+        keywords = request.getParameter("query");
+//        ResultSet rsetUpdate = database.updateImageIndex();
+        ResultSet rset = database.getResultByKeywords(keywords);
 
         PrintWriter out = response.getWriter();
         out.println("<!DOCTYPE html>");
@@ -38,42 +40,44 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
          * Display header 
          */    
         try {
-            request.getRequestDispatcher("includes/header.jsp").include(request, response);
+            request.getRequestDispatcher("includes/header.jsp").include( 
+                                        request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }
         out.println("</head>");
         out.println("<body>");
 
-        try {
             /*
              * Get query from user and displays the results
-             * TODO index is apparently not indexed
              */ 
-            String pid = "";
-            if (request.getParameter("query") != null) {
-                out.println("<br>");
-                out.println("Your results for: " + request.getParameter("query"));
-                out.println("<br>");    
-                if (!(request.getParameter("query").equals(""))) {
-                    out.println("Query is " + request.getParameter("query"));
+        String pid = "";
+        if (keywords != null) {
+            out.println("<br>");
+            out.println("Your results for: " + keywords);
+            out.println("<br>");    
+            if (!(keywords.equals(""))) {
+                out.println("Query is " + keywords);
+                try {
                     while(rset.next()){
                         pid = (rset.getObject(1)).toString();
                         // specify the servlet for the image
-                        out.println("<a href=\"/c391proj/browsePicture?big" + pid + "\">");
+                        out.println("<a href=\"/c391proj/browsePicture?big" 
+                                    + pid + "\">");
                         // specify the servlet for the thumbnail
-                        out.println("<img src=\"/c391proj/browsePicture?" + pid + "\"></a>");
+                        out.println("<img src=\"/c391proj/browsePicture?" 
+                                    + pid + "\"></a>");
                     }
-                } else {
-                   out.println("<br><b>Please enter a search query</b>"); 
+                } catch (Exception e) {
+                    e.getStackTrace();
                 }
+            } else {
+                    out.println("<br><b>Please enter a search query</b>"); 
             }
-            database.close_db();
-        } catch (Exception e) {
-            e.getStackTrace();
-        }        
-        out.print("</body");
-        out.print("</html");
+        }
+        database.close_db();
+        out.print("</body>");
+        out.print("</html>");
         out.close();
     }
 }
