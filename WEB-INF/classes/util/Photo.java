@@ -16,12 +16,7 @@ public class Photo {
 		 int permitted) {
 	this.photo_id = photo_id;
 	this.ownername = ownername;
-	if (dateUploaded == null) {
-	    this.dateUploaded = "sysdate";
-	}
-	else {
-	    this.dateUploaded = dateUploaded;
-	}
+	this.dateUploaded = dateUploaded;
 	this.location = location;
 	this.subject = subject;
 	this.description = description;

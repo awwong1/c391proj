@@ -77,7 +77,6 @@ public class uploadImage extends HttpServlet {
 		    }
 		    else if (fieldname.equals("security")) {
 			String sec = item.getString();
-			System.out.println("security = " + sec);
 			security = Integer.parseInt(sec);
 		    }
 		}

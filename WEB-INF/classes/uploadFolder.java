@@ -56,7 +56,6 @@ public class uploadFolder extends HttpServlet {
 	} catch (Exception e) {
 	    response_message = e.getMessage();
 	}
-	System.out.println("size of all_files: " + all_files.size());
 
 	session.setAttribute("folderPhotos", all_files);
     }

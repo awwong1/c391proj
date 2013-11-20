@@ -73,7 +73,6 @@ public class Db {
     public Integer add_friend(int group_id, String friend) {
 	String query = "insert into group_lists values(" + group_id
 	               + ", '" + friend + "', sysdate, null)";
-	System.out.println(query);
 	return execute_update(query);
     }
 
@@ -293,12 +292,22 @@ public class Db {
      * @return Integer
      */
     public Integer addEmptyImage(Photo image) {
-        String query = "insert into images values (" + image.getPhotoId() + ", '"  
-	    + image.getOwnerName() + "', " + image.getPermitted() + ", '" 
-	    + image.getSubject() + "', '" + image.getLocation() + 
-	    "', '" + image.getDate() + "', '" + image.getDescription()
+	String date;
+	if (image.getDate().equals("")) {
+	    date = "sysdate";
+	}
+	else {
+	    date = "to_date('" + image.getDate() + "', 'yyyy-mm-dd')";
+	}
+        String query = "insert into images values (" 
+	    + image.getPhotoId() + ", '"  
+	    + image.getOwnerName() + "', " 
+	    + image.getPermitted() + ", '" 
+	    + image.getSubject() + "', '" 
+	    + image.getLocation() + "', " 
+	    + date + ", '"
+	    + image.getDescription()
 	    + "', empty_blob(), empty_blob())";
-	System.out.println("query: " + query);
         return execute_update(query);
     }
 

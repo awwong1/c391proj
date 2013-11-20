@@ -26,7 +26,6 @@ public class folderDesc extends HttpServlet {
     
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-	System.out.println("in folderdesc");
 	String date = "";
 	String location = "";
 	String subject = "";
@@ -70,7 +69,6 @@ public class folderDesc extends HttpServlet {
 		    }
 		    else if (fieldname.equals("security")) {
 			String sec = item.getString();
-			System.out.println("security = " + sec);
 			security = Integer.parseInt(sec);
 		    }
 		}	     
@@ -78,7 +76,6 @@ public class folderDesc extends HttpServlet {
 	} catch (Exception e) {
 	    response_message = e.getMessage();
 	}
-	System.out.println("at new photo");
 	Photo image = new Photo(0, owner, date, location, subject, 
 				description, security);
 	
@@ -87,8 +84,6 @@ public class folderDesc extends HttpServlet {
 	    response_message = iu.upload_image();
 	}
 
-	System.out.println("after imageuploader");
-	//Output response to the client
 	response.sendRedirect("index.jsp");
     }
     
