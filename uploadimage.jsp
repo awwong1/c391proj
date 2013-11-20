@@ -19,6 +19,7 @@ Webpage for uploading images
         Db database = new Db();
         database.connect_db();
         all_groups = database.get_groups(username);
+        database.close_db();
 %>
 
 <html>
