@@ -4,12 +4,13 @@ Webpage for uploading images
 <!DOCTYPE html>
 <%@ page import="util.Db,util.Group,java.util.ArrayList"%>
 <%
-	String error;
+	String error = "";
         String username = "";
         ArrayList<Group> all_groups = new ArrayList<Group>();
 
 	try{
 		error = (String) session.getAttribute("err");
+                session.setAttribute("err", "");
                 username = (String) session.getAttribute("username");
 	} catch (NullPointerException e) {
 		e.printStackTrace();
@@ -29,6 +30,10 @@ Webpage for uploading images
     <form name="uploadimage" action="uploadImage" enctype="multipart/form-data" 
 	  method="POST">
       <table>
+	<% if (!error.equals("")) {
+	   out.println("<tr>" + error + "</tr>");
+	   }
+	   %>
         <tr>
 	  <th>File path: </th>
 	    <td>

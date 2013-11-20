@@ -37,8 +37,17 @@ public class folderDesc extends HttpServlet {
 	    owner = (String) session.getAttribute("username");
 	    all_files = 
 		(ArrayList<FileItem>) session.getAttribute("folderPhotos");
+	    session.removeAttribute("folderPhotos");
 	} catch (Exception e) {
 	    response_message = e.getMessage();	    
+	}
+
+	/* Check that there is a file to upload */
+	if (all_files == null || all_files.size() == 0) {
+	    response_message = "You must have at least one file to upload.";
+	    session.setAttribute("err", response_message);
+	    response.sendRedirect("uploadFolder.jsp");
+	    return;
 	}
 
 	DiskFileUpload fu = new DiskFileUpload();

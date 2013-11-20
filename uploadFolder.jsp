@@ -4,11 +4,12 @@ Webpage for uploading images
 <!DOCTYPE html>
 
 <%
-	String error;
+	String error = "";
         String username;
         String getURL = "";
 	try{
 		error = (String) session.getAttribute("err");
+                session.setAttribute("err", "");
                 username = (String) session.getAttribute("username");
                 getURL=request.getRequestURL().toString();
 	} catch (NullPointerException e) {
@@ -27,6 +28,10 @@ Webpage for uploading images
   <body>
     <form name="uploadimage" action="folderDesc" enctype="multipart/form-data" 
 	  method="POST">
+      <% if (!error.equals("")) {
+	 out.println(error + "<br>");
+	 }
+	 %>
 
       <applet code="applet-basic_files/wjhk.JUploadApplet" name="JUpload" 
 	      archive="applet-basic_files/wjhk.jar" mayscript="" 
