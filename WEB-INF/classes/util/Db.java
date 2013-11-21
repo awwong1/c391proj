@@ -429,8 +429,6 @@ public class Db {
      */
     public ResultSet getResultsByDateAndKeywords(String fromdate, String todate, String
                                                 keywords) {
-        System.out.println(fromdate);
-        System.out.println(todate);
         String query = "SELECT photo_id FROM images WHERE (timing BETWEEN '" + fromdate
                         + "' AND '" + todate + "') AND contains(description, + '" + keywords
                         + "', 1) > 0 order by score(1) desc";
