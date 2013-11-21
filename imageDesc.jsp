@@ -17,13 +17,15 @@ Webpage for updating image descriptions
 	}
 	String picid  = request.getQueryString();
 	int photo_id = Integer.parseInt(picid.substring(picid.length() - 1));
+
 	Db database = new Db();
         database.connect_db();
-	photo = database.getPhotoDesc(photo_id);
-        all_groups = database.get_groups(username);
-        database.close_db();
 
-	System.out.println(photo.getSubject());
+	photo = database.getPhotoDesc(photo_id);
+	session.setAttribute("photo_id", photo_id);
+        all_groups = database.get_groups(username);
+
+        database.close_db();
 %>
 
 <html>
@@ -33,7 +35,7 @@ Webpage for updating image descriptions
   </head>
   <body>
     <form name="uploadimage" action="imageDesc" enctype="multipart/form-data" 
-	  method="POST">
+	  method="GET">
       <table>
 	<% if (!error.equals("")) {
 	   out.println("<tr>" + error + "</tr>");
@@ -70,7 +72,7 @@ Webpage for updating image descriptions
            <th>Description: </th>
              <td>
 		<textarea name="description" cols="25" rows="5">
-			  <%out.println(photo.getDescription());%>
+			  <%out.println(photo.getDescription().trim());%>
 		</textarea>
              </td>
         </tr>

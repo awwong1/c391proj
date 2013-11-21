@@ -312,11 +312,6 @@ public class Db {
         return execute_update(query);
     }
 
-    public Integer updateImage(Photo image) {
-	String query = "";
-	return execute_update(query);
-    }
-
     /**
      * 
      */
@@ -498,6 +493,25 @@ public class Db {
 	    e.printStackTrace();
 	}
 	return photos;
+    }
+
+    public void update_photo_desc(Photo photo) {
+	String date;
+	if (photo.getDate().equals("")) {
+	    date = "sysdate";
+	}
+	else {
+	    date = "to_date('" + photo.getDate() + "', 'yyyy-mm-dd')";
+	}
+
+	String query = "UPDATE images SET "
+	    + "permitted = " + photo.getPermitted() + ", "
+	    + "subject = '" + photo.getSubject() + "', "
+	    + "place = '" + photo.getLocation() + "', "
+	    + "timing = " + date + ", "
+	    + "description = '" + photo.getDescription().trim() + "' "
+	    + "WHERE photo_id = " + photo.getPhotoId();
+	execute_update(query);
     }
 
     /**

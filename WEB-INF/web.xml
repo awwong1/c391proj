@@ -85,7 +85,6 @@
         <servlet-name>folderDesc</servlet-name>
         <url-pattern>/folderDesc</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>searchResults</servlet-name>
         <servlet-class>searchResults</servlet-class>
@@ -94,4 +93,13 @@
         <servlet-name>searchResults</servlet-name>
         <url-pattern>/searchResults</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>imageDesc</servlet-name>
+        <servlet-class>imageDesc</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>imageDesc</servlet-name>
+        <url-pattern>/imageDesc</url-pattern>
+    </servlet-mapping>
+
 </web-app>

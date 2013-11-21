@@ -17,6 +17,7 @@ all:
 	make browsePicture
 	make browsePictures
 	make folderDesc
+	make imageDesc
 login:
 	javac $(custsource) $(custclass) loginservlet.java
 register:
@@ -39,6 +40,9 @@ browsePicture:
 	javac $(custsource) $(custclass) browsePicture.java
 folderDesc:
 	javac $(custsource) $(custclass) folderDesc.java
+imageDesc:
+	javac $(custsource) $(custclass) imageDesc.java
+
 clean:
 	rm -rf *.class
 	rm -rf ./util/*.class
