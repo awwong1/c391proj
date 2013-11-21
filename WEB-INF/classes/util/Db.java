@@ -417,18 +417,41 @@ public class Db {
 	    phone + "' where user_name = '" + username + "'";
 	return execute_update(query);
     }
-    
+
+    /**
+     * Returns the resultset of the search by keywords and date
+     * @param String fromdate, String todate, String keywords
+     * @return ResultSet
+     */
+    public ResultSet getResultsByDateAndKeywords(String fromdate, String todate, String
+                                                keywords) {
+        String query = "SELECT photo_id FROM images WHERE (timing BETWEEN '" + fromdate
+                        + "' AND '" + todate + "') AND contains(description, + '" + keywords
+                        + "', 1) > 0 order by score(1) desc";
+        return execute_stmt(query);
+    }
+
     /**
      * Returns the resultset of the search by keywords
      * @param String keywords
      @ @return ResultSet
      */
     public ResultSet getResultByKeywords(String keywords) {
-        String query = "SELECT score(1), photo_id FROM images WHERE "
-	               + "contains(description, '" 
-                       + keywords  + "', 1) > 0 order by score(1) desc";
+        String query = "SELECT photo_id FROM images WHERE contains(description," 
+                        + " '" + keywords  + "', 1) > 0 order by score(1) desc";
         return execute_stmt(query);
      }
+
+    /**
+     * Returns resultset of the serach by date
+     * @param String fromdate, String todate
+     * @return ResultSet
+     */
+    public ResultSet getResultsByDate(String fromdate, String todate) {
+        String query = "SELECT photo_id FROM images WHERE timing BETWEEN '"
+                      + fromdate + "' AND '" + todate + "'";
+        return execute_stmt(query);
+    }
 
      /**
      * Fetches all photo ids, owners, and permissions
