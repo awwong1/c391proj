@@ -423,10 +423,12 @@ public class Db {
      * @param String fromdate, String todate, String keywords
      * @return ResultSet
      */
-    public ResultSet getResultsByDateAndKeywords(String fromdate, String todate, String
-                                                keywords) {
-        String query = "SELECT photo_id FROM images WHERE (timing BETWEEN '" + fromdate
-                        + "' AND '" + todate + "') AND contains(description, + '" + keywords
+    public ResultSet getResultsByDateAndKeywords(String fromdate, 
+						 String todate, 
+						 String keywords) {
+        String query = "SELECT photo_id FROM images WHERE (timing BETWEEN '" 
+	    + fromdate + "' AND '" + todate + 
+	    "') AND contains(description, + '" + keywords
                         + "', 1) > 0 order by score(1) desc";
         return execute_stmt(query);
     }
@@ -437,8 +439,9 @@ public class Db {
      @ @return ResultSet
      */
     public ResultSet getResultByKeywords(String keywords) {
-        String query = "SELECT photo_id FROM images WHERE contains(description," 
-                        + " '" + keywords  + "', 1) > 0 order by score(1) desc";
+        String query = "SELECT photo_id FROM images WHERE "+
+	    "contains(description," + " '" + keywords  + 
+	    "', 1) > 0 order by score(1) desc";
         return execute_stmt(query);
      }
 
