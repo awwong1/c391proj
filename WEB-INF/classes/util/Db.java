@@ -454,16 +454,6 @@ public class Db {
     }
 
      /**
-     * Abstract the getting all photo ids to the database class.
-     * @return ResultSet
-     */
-    public ResultSet getResultsByDate(String fromdate, String todate) {
-        String query = "SELECT photo_id FROM images WHERE timing BETWEEN '"
-                      + fromdate + "' AND '" + todate + "'";
-        return execute_stmt(query);
-    }
-
-     /**
      * Fetches all photo ids, owners, and permissions
      * from the database.
      * @return ArrayList<Photo>
