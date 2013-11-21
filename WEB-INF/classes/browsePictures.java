@@ -35,7 +35,7 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	out.println("<!DOCTYPE html>");
 	out.println("<html>");
 	out.println("<head>");
-	out.println("<title> Browse Photos </title>");
+	out.println("<title> Browse Public Photos </title>");
 	try {
 	    session = request.getSession(true);
 	    username = (String) session.getAttribute("username");
@@ -62,11 +62,11 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	    out.println("Date Uploaded: " + photo.getDate() + "<br>");
 	    out.println("Location: " + photo.getLocation() + "<br>");
 	    out.println("Subject: " + photo.getSubject() + "<br>");
-	    out.println("Description: " + photo.getLocation() + "<br>");
+	    out.println("Description: " + photo.getDescription() + "<br>");
 	    if (photo.getOwnerName().equals(username)) {
-		out.println("</br><a href=\"/c391proj/imageDesc.jsp?"
+		out.println("<a href=\"/c391proj/imageDesc.jsp?"
 			    + photo.getPhotoId()
-			    + "\">Edit Image Descriptions</a>");
+			    + "\">Edit Image Description</a>");
 	    }
 	    out.println("</td></tr>");
 	}

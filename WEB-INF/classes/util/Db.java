@@ -459,7 +459,21 @@ public class Db {
      * @return ArrayList<Photo>
      */
     public ArrayList<Photo> getAllPhotos() {
-	String query = "select photo_id, owner_name, permitted from images";
+	String query = "select photo_id, owner_name, permitted, subject,"+
+	    " place, timing, description from images";
+	ResultSet rs = execute_stmt(query);
+	return photos_from_resultset(rs);
+    }
+
+    /**
+     * Gets all photos from the database with specific permission 
+     * from the database.
+     * @return ArrayList<Photo>
+     */
+    public ArrayList<Photo> getAllPermissionPhotos(int permission) {
+	String query = "select photo_id, owner_name, permitted, subject,"+
+	    " place, timing, description from images where permitted = '"+
+	    permission +"'";
 	ResultSet rs = execute_stmt(query);
 	return photos_from_resultset(rs);
     }
@@ -486,7 +500,6 @@ public class Db {
 
 	try {
 	    rsmd = rs.getMetaData();
-	    columnsNumber = rsmd.getColumnCount();
 	} catch (SQLException e) {
 	    e.printStackTrace();
 	}
@@ -496,21 +509,14 @@ public class Db {
 		photo_id = rs.getInt("photo_id");
 		owner_name = rs.getString("owner_name");
 		permitted = rs.getInt("permitted");
-
-		if (columnsNumber == 3) {
-		    Photo image = new Photo(photo_id, owner_name, permitted);
-		    photos.add(image);
-		}
-		else {
-		    subject = rs.getString("subject");
-		    description = rs.getString("description");
-		    place = rs.getString("place");
-		    timing = rs.getString("timing");
-		    Photo image = new Photo(photo_id, owner_name, timing,
-					    place, subject, description,
-					    permitted);
-		    photos.add(image);
-		}
+		subject = rs.getString("subject");
+		description = rs.getString("description");
+		place = rs.getString("place");
+		timing = rs.getString("timing");		    
+		Photo image = new Photo(photo_id, owner_name, timing,
+					place, subject, description,
+					permitted);
+		photos.add(image);	
 	    }
 	} catch (SQLException e) {
 	    e.printStackTrace();

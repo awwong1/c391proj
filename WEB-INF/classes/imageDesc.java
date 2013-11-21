@@ -12,7 +12,8 @@ import util.Photo;
 
 public class imageDesc extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+    protected void doGet(HttpServletRequest request, 
+			 HttpServletResponse response) 
 	throws ServletException, IOException {
 	HttpSession session = null;
 	String username = "";
