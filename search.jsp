@@ -23,40 +23,36 @@ Search page allows to user to enter a search query
 %>
 
 <html>
-    <head>
-        <title>Search</title>
-        <jsp:include page="includes/header.jsp"/>
-    </head>
-    <body>
-        <form name="searchform" action="searchResults" method="get">
-            <table>
-                <tr>
-                    <th>Keyword(s): </th>
-                        <td>
-                            <input name="query" placeholder=
-                                        "Enter search query.."></input>
-                        </td>
-                </tr>
-
-                <tr>
-                    <th>Date: </th>
-                        <td>
-                        <input name="fromdate" placeholder=
-                                    "from"> to 
-                        <input name="todate" placeholder=
-                                    "to"></input>
-                        </td>
-                </tr>
-
-                <tr>
-                    <th> </th>
-                        <td>
-                            <input type="submit" value="Search" name="search"/>
-                        </td>
-                </tr>
-
-
-            </table>
-        </form>
-    </body>
+  <head>
+    <title>Search</title>
+    <jsp:include page="includes/header.jsp"/>
+  </head>
+  <body>
+    <form name="searchform" action="searchResults" method="get">
+      <table>
+        <tr>
+          <th>Keyword(s): </th>
+          <td>
+            <input name="query" placeholder="Enter search query..">
+	    </input>
+          </td>
+        </tr>
+	
+        <tr>
+          <th>Date: </th>
+          <td>
+            <input name="fromdate" type="date" placeholder="from"> to 
+              <input name="todate" type="date" placeholder="to">
+          </td>
+        </tr>
+	
+        <tr>
+          <th> </th>
+          <td>
+            <input type="submit" value="Search" name="search"/>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </body>
 </html>

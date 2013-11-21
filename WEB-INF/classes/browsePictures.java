@@ -45,10 +45,10 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	    e.printStackTrace();
 	}
 	out.println("</head>");
-	out.println("<body>"); 
-
+	out.println("<body><table border=\"1\">"); 
 	for (Photo photo: all_photos) {
-	    out.println("<hr>");
+	    out.println("<tr>");
+	    out.println("<td>");
 	    // specify the servlet for the image
 	    out.println("<a href=\"/c391proj/browsePicture?big"
 			+ photo.getPhotoId() + "\">");
@@ -56,11 +56,19 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	    out.println("<img src=\"/c391proj/browsePicture?"
 			+ photo.getPhotoId() +
 			"\"></a>");
+	    out.println("</td><td>");
+	    out.println("PhotoID: " + photo.getPhotoId() + "<br>");
+	    out.println("Owned by: " + photo.getOwnerName() + "<br>");
+	    out.println("Date Uploaded: " + photo.getDate() + "<br>");
+	    out.println("Location: " + photo.getLocation() + "<br>");
+	    out.println("Subject: " + photo.getSubject() + "<br>");
+	    out.println("Description: " + photo.getLocation() + "<br>");
 	    if (photo.getOwnerName().equals(username)) {
-		out.println("<a href=\"/c391proj/imageDesc.jsp?"
+		out.println("</br><a href=\"/c391proj/imageDesc.jsp?"
 			    + photo.getPhotoId()
-			    + "\">Image Descriptions</a>");
+			    + "\">Edit Image Descriptions</a>");
 	    }
+	    out.println("</td></tr>");
 	}
 	database.close_db();
 

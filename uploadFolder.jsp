@@ -35,7 +35,7 @@ Webpage for uploading images
   <body>
     <form name="uploadimage" action="folderDesc" enctype="multipart/form-data" 
 	  method="POST">
-      <% if (!error.equals("")) {
+      <% if (error!=null) {
 	 out.println(error + "<br>");
 	 }
 	 %>

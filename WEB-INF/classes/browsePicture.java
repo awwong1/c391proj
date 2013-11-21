@@ -4,6 +4,7 @@ import javax.servlet.http.*;
 import java.sql.*;
 
 import util.Db;
+import util.Photo;
 
 /**
  *  Extension of the simple servlet used to display photos
@@ -41,14 +42,13 @@ public class browsePicture extends HttpServlet
 	//  construct the query  from the client's QueryString
 	String picid  = request.getQueryString();
 	ResultSet rset = null;
-	if ( picid.startsWith("big") )  
+	PrintWriter out = response.getWriter();
+	if (picid.startsWith("big"))
 	    rset = database.getPhoto(picid.substring(3));
 	else
 	    rset = database.getThumbnail(picid);
-	
-	ServletOutputStream out = response.getOutputStream();
-	try {
-	    if ( rset.next() ) {
+       	try {
+	    if (rset.next()) {
 		response.setContentType("image/gif");
 		InputStream input = rset.getBinaryStream(1);	    
 		int imageByte;
