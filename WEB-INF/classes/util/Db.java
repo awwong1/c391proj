@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -439,10 +440,18 @@ public class Db {
      * from the database.
      * @return ArrayList<Photo>
      */
-    public ArrayList<Photo> getAllPhotoIds() {
+    public ArrayList<Photo> getAllPhotos() {
 	String query = "select photo_id, owner_name, permitted from images";
 	ResultSet rs = execute_stmt(query);
 	return photos_from_resultset(rs);
+    }
+
+    public Photo getPhotoDesc(int id) {
+	String query = "select photo_id, owner_name, permitted, subject, "
+	                + "description, place, timing "
+	                + "from images where photo_id = " + id;
+	ResultSet rs = execute_stmt(query);
+	return photos_from_resultset(rs).get(0);
     }
 
     private ArrayList<Photo> photos_from_resultset(ResultSet rs) {
@@ -450,20 +459,45 @@ public class Db {
 	int photo_id;
 	String owner_name;
 	int permitted;
+	String subject;
+	String description;
+	String place;
+	String timing;
+	ResultSetMetaData rsmd = null;
+	int columnsNumber = 0;
+
+	try {
+	    rsmd = rs.getMetaData();
+	    columnsNumber = rsmd.getColumnCount();
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
 
 	try {
 	    while (rs.next()) {
 		photo_id = rs.getInt("photo_id");
 		owner_name = rs.getString("owner_name");
 		permitted = rs.getInt("permitted");
-		Photo image = new Photo(photo_id, owner_name, permitted);
-		photos.add(image);
+
+		if (columnsNumber == 3) {
+		    Photo image = new Photo(photo_id, owner_name, permitted);
+		    photos.add(image);
+		}
+		else {
+		    subject = rs.getString("subject");
+		    description = rs.getString("description");
+		    place = rs.getString("place");
+		    timing = rs.getString("timing");
+		    Photo image = new Photo(photo_id, owner_name, timing,
+					    place, subject, description,
+					    permitted);
+		    photos.add(image);
+		}
 	    }
 	} catch (SQLException e) {
 	    e.printStackTrace();
 	}
 	return photos;
-	
     }
 
     /**

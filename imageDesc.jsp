@@ -6,6 +6,7 @@ Webpage for updating image descriptions
 <%
 	String error = "";
         String username = "";
+	Photo photo;
         ArrayList<Group> all_groups = new ArrayList<Group>();
 	try{
 		error = (String) session.getAttribute("err");
@@ -14,11 +15,15 @@ Webpage for updating image descriptions
 	} catch (NullPointerException e) {
 		e.printStackTrace();
 	}
-
-        Db database = new Db();
+	String picid  = request.getQueryString();
+	int photo_id = Integer.parseInt(picid.substring(picid.length() - 1));
+	Db database = new Db();
         database.connect_db();
+	photo = database.getPhotoDesc(photo_id);
         all_groups = database.get_groups(username);
         database.close_db();
+
+	System.out.println(photo.getSubject());
 %>
 
 <html>
@@ -37,42 +42,53 @@ Webpage for updating image descriptions
         <tr>
            <th>Date: </th>
              <td>
-                <input name="date" type="date" placeholder="DD-MMM-YY"></input>
+                <input name="date" type="date" 
+		value=<%out.println(photo.getDate());%>>
+		</input>
              </td>
         </tr>
 
         <tr>
            <th>Location: </th>
              <td>
-                <input name="location" type="text" placeholder="location"></input>
+                <input name="location" type="text" 
+		value=<%out.println(photo.getLocation());%>>
+		</input>
              </td>
         </tr>
 
         <tr>
            <th>Subject: </th>
              <td>
-                <input name="subject" type="text" placeholder="subject"></input>
+                <input name="subject" type="text" 
+		value=<%out.println(photo.getSubject());%>>
+		</input>
              </td>
         </tr>
 
         <tr>
            <th>Description: </th>
              <td>
-		<textarea name="description" cols="25" rows="5" 
-			  placeholder="Description"></textarea>
+		<textarea name="description" cols="25" rows="5">
+			  <%out.println(photo.getDescription());%>
+		</textarea>
              </td>
         </tr>
 
         <tr>
            <th>Security: </th>
              <td>
-		<p><input type="radio" name="security" value="2">
+		<p><input type="radio" name="security" value="2"
+		<%if(photo.getPermitted() == 2){out.println("checked=true");}%>>
 		Private</input></p>
-		<p><input type="radio" name="security" value="1">Public</input></p>
+		<p><input type="radio" name="security" value="1"
+		<%if(photo.getPermitted() == 1){out.println("checked=true");}%>
+		>Public</input></p>
 		<% for (Group group: all_groups) {
 		     out.println("<p><input type='radio' name='security' value='" 
-		   + group.getId()
-		   + "'>" + group.getName() + "</input></p>");
+		     + group.getId() + "'");
+		     if(photo.getPermitted() == 1){out.println("checked=true");}
+		     out.println(">" + group.getName() + "</input></p>");
 		   }
 		   %>
              </td>

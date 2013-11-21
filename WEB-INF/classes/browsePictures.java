@@ -28,7 +28,7 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	res.setContentType("text/html");
 	database = new Db();
 	database.connect_db();
-	ArrayList<Photo> all_photos = database.getAllPhotoIds();
+	ArrayList<Photo> all_photos = database.getAllPhotos();
 	
 	PrintWriter out = res.getWriter();
 	/* write out images */
@@ -38,14 +38,14 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	out.println("<title> Browse Photos </title>");
 	try {
 	    session = request.getSession(true);
-	    System.out.println("username: " + username);
+	    username = (String) session.getAttribute("username");
 	    request.getRequestDispatcher("includes/header.jsp").
 		include(request, res);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 	out.println("</head>");
-	out.println("<body>");
+	out.println("<body>"); 
 
 	for (Photo photo: all_photos) {
 	    out.println("<hr>");
