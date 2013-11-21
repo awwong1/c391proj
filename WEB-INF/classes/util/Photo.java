@@ -26,8 +26,10 @@ public class Photo {
     /**
      * Overloaded minimalist constructor
      */
-    public Photo(String ownername) {
+    public Photo(int photo_id, String ownername, int permitted) {
+	this.photo_id = photo_id;
 	this.ownername = ownername;
+	this.permitted = permitted;
     }
     
     /*

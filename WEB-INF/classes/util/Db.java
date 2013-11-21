@@ -428,20 +428,44 @@ public class Db {
      @ @return ResultSet
      */
     public ResultSet getResultByKeywords(String keywords) {
-        String query = "SELECT score(1), photo_id FROM images WHERE contains(description, '" 
-                        + keywords  + "', 1) > 0 order by score(1) desc";
+        String query = "SELECT score(1), photo_id FROM images WHERE "
+	               + "contains(description, '" 
+                       + keywords  + "', 1) > 0 order by score(1) desc";
         return execute_stmt(query);
      }
 
      /**
-     * Abstract the getting all photo ids to the database class.
-     * @return ResultSet
+     * Fetches all photo ids, owners, and permissions
+     * from the database.
+     * @return ArrayList<Photo>
      */
-    public ResultSet getAllPhotoIds() {
-	String query = "select photo_id from images";
-	return execute_stmt(query);
+    public ArrayList<Photo> getAllPhotoIds() {
+	String query = "select photo_id, owner_name, permitted from images";
+	ResultSet rs = execute_stmt(query);
+	return photos_from_resultset(rs);
     }
-    
+
+    private ArrayList<Photo> photos_from_resultset(ResultSet rs) {
+	ArrayList<Photo> photos = new ArrayList<Photo>();
+	int photo_id;
+	String owner_name;
+	int permitted;
+
+	try {
+	    while (rs.next()) {
+		photo_id = rs.getInt("photo_id");
+		owner_name = rs.getString("owner_name");
+		permitted = rs.getInt("permitted");
+		Photo image = new Photo(photo_id, owner_name, permitted);
+		photos.add(image);
+	    }
+	} catch (SQLException e) {
+	    e.printStackTrace();
+	}
+	return photos;
+	
+    }
+
     /**
      * Return the result set with the single thumbnail of the photoId
      * @return ResultSet

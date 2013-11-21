@@ -8,6 +8,7 @@ import java.text.*;
 import java.net.*;
 
 import util.Db;
+import util.Photo;
 
 /**
  * Extension of the simple servlet used to browse thumbnails
@@ -21,11 +22,14 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
     public void doGet(HttpServletRequest request,
 		      HttpServletResponse res)
 	throws ServletException, IOException {
+	HttpSession session;
+	String username = "";
+
 	res.setContentType("text/html");
 	database = new Db();
 	database.connect_db();
-	ResultSet rset = database.getAllPhotoIds();
-
+	ArrayList<Photo> all_photos = database.getAllPhotoIds();
+	
 	PrintWriter out = res.getWriter();
 	/* write out images */
 	out.println("<!DOCTYPE html>");
@@ -33,6 +37,8 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	out.println("<head>");
 	out.println("<title> Browse Photos </title>");
 	try {
+	    session = request.getSession(true);
+	    System.out.println("username: " + username);
 	    request.getRequestDispatcher("includes/header.jsp").
 		include(request, res);
 	} catch (Exception e) {
@@ -40,26 +46,29 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	}
 	out.println("</head>");
 	out.println("<body>");
-	try {
-	    while (rset.next()) {
-		out.println("<hr>");
-		p_id = (rset.getObject(1)).toString();
-		// specify the servlet for the image
-		out.println("<a href=\"/c391proj/browsePicture?big"+p_id+"\">");
-		// specify the servlet for the thumbnail
-		out.println("<img src=\"/c391proj/browsePicture?"+p_id +
-			    "\"></a>");
-	    }	
-	    database.close_db();
-	} catch (SQLException e) {
-	    e.printStackTrace();
+
+	for (Photo photo: all_photos) {
+	    out.println("<hr>");
+	    // specify the servlet for the image
+	    out.println("<a href=\"/c391proj/browsePicture?big"
+			+ photo.getPhotoId() + "\">");
+	    // specify the servlet for the thumbnail
+	    out.println("<img src=\"/c391proj/browsePicture?"
+			+ photo.getPhotoId() +
+			"\"></a>");
+	    if (photo.getOwnerName().equals(username)) {
+		out.println("<a href=\"/c391proj/imageDesc.jsp?"
+			    + photo.getPhotoId()
+			    + "\">Image Descriptions</a>");
+	    }
 	}
+	database.close_db();
+
 	out.println("</body>");
 	out.println("</html>");
 	out.close();
     }
 }
-
 
 
 
