@@ -43,7 +43,7 @@ Search page allows to user to enter a search query
                         <td>
                         <input name="fromdate" placeholder=
                                     "from"> to 
-                        <input name"todate" placeholder=
+                        <input name="todate" placeholder=
                                     "to"></input>
                         </td>
                 </tr>
