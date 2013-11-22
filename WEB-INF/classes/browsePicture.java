@@ -43,9 +43,10 @@ public class browsePicture extends HttpServlet
 	String picid  = request.getQueryString();
 	ResultSet rset = null;
 	PrintWriter out = response.getWriter();
-	if (picid.startsWith("big"))
+	if (picid.startsWith("big")) {
+	    database.imageCountViewInc(picid.substring(3));
 	    rset = database.getPhoto(picid.substring(3));
-	else
+	} else
 	    rset = database.getThumbnail(picid);
        	try {
 	    if (rset.next()) {

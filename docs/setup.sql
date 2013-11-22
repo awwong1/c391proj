@@ -11,6 +11,7 @@ DROP TABLE group_lists CASCADE CONSTRAINTS;
 DROP TABLE groups CASCADE CONSTRAINTS;
 DROP TABLE persons CASCADE CONSTRAINTS;
 DROP TABLE users CASCADE CONSTRAINTS;
+DROP TABLE imagecount CASCADE CONSTRAINTS;
 DROP SEQUENCE group_id_sequence;
 DROP SEQUENCE image_id_sequence;
 
@@ -24,6 +25,7 @@ CREATE TABLE users (
 INSERT INTO users VALUES ('mnaylor', 'dog', sysdate);
 INSERT INTO users VALUES ('awong', 'cat', sysdate);
 INSERT INTO users VALUES ('hhoang', 'bird', sysdate);
+INSERT INTO users VALUES ('admin', 'admin', sysdate);
 
 CREATE TABLE persons (
    user_name varchar(24),
@@ -40,6 +42,7 @@ CREATE TABLE persons (
 INSERT INTO persons VALUES ('mnaylor', 'michelle', 'naylor', 'Edmonton', 'michelle@gmail.com', '9999999999');
 INSERT INTO persons VALUES ('awong', 'alex', 'wong', 'Edmonton', 'alex@gmail.com', '9999999999');
 INSERT INTO persons VALUES ('hhoang', 'henry', 'hoang', 'Edmonton', 'henry@gmail.com', '9999999999');
+INSERT INTO persons VALUES ('admin', 'Admin', 'Root', 'Admin Land', 'admin@admin.admin', '123456789');
 
 CREATE TABLE groups (
    group_id int,
@@ -88,10 +91,17 @@ CREATE TABLE images (
    FOREIGN KEY(permitted) REFERENCES groups
 );
 
+CREATE TABLE imagecount (
+       photo_id int,
+       photo_count int,
+       PRIMARY KEY (photo_id),
+       FOREIGN KEY (photo_id) REFERENCES images
+);
+
 CREATE INDEX myimageindex ON images(description) INDEXTYPE IS CTXSYS.CONTEXT;
 
 CREATE SEQUENCE image_id_sequence
-  START WITH 3
+  START WITH 1
   INCREMENT BY 1
   CACHE 200;
 

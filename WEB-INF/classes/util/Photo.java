@@ -36,6 +36,7 @@ public class Photo {
      * Getter and Setters
      */
     public int getPhotoId() {return photo_id;}
+    public String getPhotoIdString() {return new Integer(photo_id).toString();}
     public void setPhotoId(int photo_id) {this.photo_id = photo_id;}
     public String getOwnerName() {return ownername;}
     public void setOwnerName(String ownername) {this.ownername = ownername;}

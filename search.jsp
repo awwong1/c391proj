@@ -18,8 +18,6 @@ Search page allows to user to enter a search query
         session.setAttribute("err", err);
         response.sendRedirect("/c391proj/login.jsp");
     }
-
-
 %>
 
 <html>

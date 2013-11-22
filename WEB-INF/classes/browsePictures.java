@@ -63,6 +63,9 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	    out.println("Location: " + photo.getLocation() + "<br>");
 	    out.println("Subject: " + photo.getSubject() + "<br>");
 	    out.println("Description: " + photo.getDescription() + "<br>");
+	    out.println("Image View Count: " +
+			database.imageCountView(photo.getPhotoIdString())+
+			"<br>");
 	    if (photo.getOwnerName().equals(username)) {
 		out.println("<a href=\"/c391proj/imageDesc.jsp?"
 			    + photo.getPhotoId()

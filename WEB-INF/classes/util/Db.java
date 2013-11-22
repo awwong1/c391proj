@@ -565,5 +565,54 @@ public class Db {
 	    photoId + "'";
 	return execute_stmt(query);
     }
-    
+
+    /**
+     * This function is supposed to be called when an image is viewed.
+     * This function returns the number of times an image has been viewed
+     * if an image has never been viewed before, it will add it to the 
+     * table of viewed images and increment the view count by 1.
+     * @return int
+     */
+    public int imageCountViewInc(String photoId) {
+	String query = "select photo_count from imagecount where " + 
+	    "photo_id = '" + photoId + "'";
+	ResultSet rset = execute_stmt(query);
+	try {
+	    if(rset.next()) {
+		query = "update imagecount set photo_count = (" +
+		    "select photo_count from imagecount where photo_id='"+
+		    photoId + "')+1 where photo_id = '" + photoId + "'";
+		execute_stmt(query);
+	    } else {
+		query = "insert into imagecount (photo_id, photo_count) "+
+		    "values ("+ photoId +", 1)";
+		execute_stmt(query);
+	    }
+	    query = "select photo_count from imagecount where photo_id='"+
+		photoId+"'";
+	    rset = execute_stmt(query);
+	    if (rset.next())
+		return rset.getInt(1);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	return 0;
+    }
+
+    /**
+     * Returns the number of times an image is viewed, otherwise
+     * returns 0.
+     */
+    public int imageCountView(String photoId) {
+	String query = "select photo_count from imagecount where "+
+	    "photo_id = '" + photoId + "'";
+	ResultSet rset = execute_stmt(query);
+	try {
+	    if (rset.next()) 
+		return rset.getInt(1);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	return 0;
+    }
 }
