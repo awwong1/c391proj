@@ -152,18 +152,18 @@ public class Db {
 	
 	for (Group group: groups) {
 	    ArrayList<String> users;
-	    users = get_users_from_group(group);
+	    users = get_users_from_group(group.getId());
 	    group.setFriends(users);
 	}
 	return groups;
     }
     
-    public ArrayList<String> get_users_from_group(Group group) {
+    public ArrayList<String> get_users_from_group(int group_id) {
 	ResultSet rs;
 	String query = "SELECT friend_id "
 	    + "FROM group_lists "
 	    + "WHERE group_id = "
-	    + group.getId();
+	    + group_id;
 	rs = execute_stmt(query);
 	return user_from_resultset_group(rs);
     }

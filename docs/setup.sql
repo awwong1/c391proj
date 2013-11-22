@@ -108,6 +108,4 @@ CREATE INDEX myimageindex ON images(description) INDEXTYPE IS CTXSYS.CONTEXT;
 
 CREATE SEQUENCE image_id_sequence
   START WITH 1
-  INCREMENT BY 1
-  CACHE 200;
-
+  INCREMENT BY 1 nomaxvalue;

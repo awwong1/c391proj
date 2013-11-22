@@ -2,6 +2,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
+import java.util.ArrayList;
 
 import util.Db;
 import util.Photo;
@@ -28,6 +29,7 @@ public class browsePicture extends HttpServlet
     private Db database;
     private HttpSession session;
     private String username;
+    private Photo photo;
     
     /**
      *    This method first gets the query string indicating PHOTO_ID,
@@ -41,16 +43,54 @@ public class browsePicture extends HttpServlet
 	throws ServletException, IOException {
 	session = request.getSession(true);
 	username = (String) session.getAttribute("username");
+	
 	if (username == null) {
 	    String errormsg = "Please login before viewing photos";
 	    session.setAttribute("err", errormsg);
 	    response.sendRedirect("/c391proj/login.jsp");
 	    return;
 	}
+
 	database = new Db();
 	database.connect_db();
 	//  construct the query  from the client's QueryString
 	String picid  = request.getQueryString();
+	String truepicid;
+	if (picid.startsWith("big")) {
+	    truepicid = picid.substring(3);
+	} else {
+	    truepicid = picid;
+	}
+	photo = database.getPhotoDesc(Integer.parseInt(truepicid));
+
+	// Check that the photo is not private being viewed by someone else
+	if (photo.getPermitted() == 2) {
+	    // If private, only owner or admin can see photo
+	    System.out.println("photo ownername = '"+photo.getOwnerName()+"'");
+	    System.out.println("username = '"+username+"'");
+	    if (!username.equals(photo.getOwnerName()) ^ 
+		!username.equals("admin")) {
+		// do nothing, continue
+	    } else {
+		String errormsg = "You are not permitted to view this photo";
+		session.setAttribute("err", errormsg);
+		response.sendRedirect("/c391proj/index.jsp");
+		return;
+	    }
+	} else if (photo.getPermitted() != 1) {
+	    // Photo is part of a group, make sure only group members
+	    // or admin can see this photo
+	    ArrayList<String> users = database.
+		get_users_from_group(photo.getPermitted());
+	    if (!users.contains(username) ^ !username.equals("admin")) {}
+	    else {
+		String errormsg = "You are not permitted to view this photo";
+		session.setAttribute("err", errormsg);
+		response.sendRedirect("/c391proj/index.jsp");
+		return;
+	    }
+	}
+	
 	ResultSet rset = null;
 	PrintWriter out = response.getWriter();
 	if (picid.startsWith("big")) {
