@@ -9,14 +9,13 @@ Webpage for updating image descriptions
 	Photo photo;
         ArrayList<Group> all_groups = new ArrayList<Group>();
 	try{
-		error = (String) session.getAttribute("err");
                 session.setAttribute("err", "");
                 username = (String) session.getAttribute("username");
 	} catch (NullPointerException e) {
 		e.printStackTrace();
 	}
 	String picid  = request.getQueryString();
-	int photo_id = Integer.parseInt(picid.substring(picid.length() - 1));
+	int photo_id = Integer.parseInt(picid);
 
 	Db database = new Db();
         database.connect_db();
@@ -37,10 +36,6 @@ Webpage for updating image descriptions
     <form name="uploadimage" action="imageDesc" enctype="multipart/form-data" 
 	  method="GET">
       <table>
-	<% if (!error.equals("")) {
-	   out.println("<tr>" + error + "</tr>");
-	   }
-	   %>
         <tr>
            <th>Date: </th>
              <td>

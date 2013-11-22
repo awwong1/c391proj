@@ -43,14 +43,29 @@ public class Photo {
     public String getDate() {return dateUploaded;}
     public void setDateUploaded(String dateUploaded) {
 	this.dateUploaded = dateUploaded;}
-    public String getLocation() {return location;}
+    public String getLocation() {
+	if (location == null)
+	    return "";
+	else
+	    return location;
+    }
     public void setLocation(String location) {this.location = location;}
-    public String getDescription() {return description;}
+    public String getDescription() {
+	if (description == null)
+	    return "";
+	else
+	    return description;
+    }
     public void setDescription(String description) {
 	this.description = description;}
     public int getPermitted() {return permitted;}
     public void setPermitted(int permitted) {this.permitted = permitted;}
-    public String getSubject() {return subject;}
+    public String getSubject() {
+	if (subject == null)
+	    return "";
+	else
+	    return subject;
+    }
     public void setSubject(String subject) {this.subject = subject;}
 }
 
