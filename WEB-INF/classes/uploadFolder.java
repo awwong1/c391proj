@@ -27,7 +27,7 @@ public class uploadFolder extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 	
-	ArrayList<FileItem> all_files = new ArrayList<FileItem>();
+	ArrayList<FileItem> all_files = null;
 	DiskFileUpload fu = new DiskFileUpload();
 	try {
 	    /*
@@ -35,18 +35,18 @@ public class uploadFolder extends HttpServlet {
 	     */
 	    response.setContentType("text/html");
 	    session = request.getSession(true);
-	    owner = (String) session.getAttribute("username");
-	    if(owner == null) {
-		response.sendRedirect("login.jsp");
-	    }
 
+	    all_files = (ArrayList<FileItem>) session.getAttribute("folderPhotos");
+	    if (all_files == null) {
+		all_files = new ArrayList<FileItem>();
+	    }
+	    System.out.println("all_files len = " + all_files.size());
 	    /*
 	     * Parse the HTTP request to get the image stream
 	     */
 	    List<FileItem> FileItems = fu.parseRequest(request);
-
 	    /*
-	     * Process the uploaded items, assuming 1 image file uploaded
+	     * Process the uploaded items
 	     */
 	    for (FileItem item : FileItems) {
 		if (!item.isFormField()) {
@@ -68,5 +68,4 @@ public class uploadFolder extends HttpServlet {
 	}
 	session.setAttribute("folderPhotos", all_files);
     }
-    
 }
