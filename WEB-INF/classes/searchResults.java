@@ -6,14 +6,12 @@ import java.sql.*;
 import oracle.jdbc.driver.*;
 import java.text.*;
 import java.net.*;
-
 import util.Db;
 
 /**
  * This class displays the results of the indexd search by querying the
  * database which is including keyword and/or date search.
  */
-
 
 public class searchResults extends HttpServlet implements SingleThreadModel {
     private Db database;
@@ -26,7 +24,7 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
     protected void doGet(HttpServletRequest request, 
                          HttpServletResponse response) 
         throws ServletException, IOException {
-
+	
         response.setContentType("text/html");
         database = new Db();
         database.connect_db();        
@@ -52,12 +50,12 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         }
         out.println("</head>");
         out.println("<body>");
-        out.println("<br>");
-
+        out.println("<br>");	
         /*
          * The user has to input from and to dates otherwise
          * only keyword search to get resultset of query
          */
+
         if (!(keywords.equals(""))) {
             if((fromDate.equals("")) || (toDate.equals(""))) {
                 rset = database.getResultByKeywords(keywords);

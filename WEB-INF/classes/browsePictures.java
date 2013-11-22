@@ -28,7 +28,7 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	res.setContentType("text/html");
 	database = new Db();
 	database.connect_db();
-	ArrayList<Photo> all_photos = database.getAllPhotos();
+	ArrayList<Photo> all_photos = database.getAllPermissionPhotos(1);
 	
 	PrintWriter out = res.getWriter();
 	/* write out images */
@@ -66,7 +66,8 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	    out.println("Image View Count: " +
 			database.imageCountView(photo.getPhotoIdString())+
 			"<br>");
-	    if (photo.getOwnerName().equals(username)) {
+	    if (photo.getOwnerName().equals(username) || 
+		username.equals("admin")) {
 		out.println("<a href=\"/c391proj/imageDesc.jsp?"
 			    + photo.getPhotoId()
 			    + "\">Edit Image Description</a>");

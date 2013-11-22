@@ -14,6 +14,7 @@ DROP TABLE users CASCADE CONSTRAINTS;
 DROP TABLE imagecount CASCADE CONSTRAINTS;
 DROP SEQUENCE group_id_sequence;
 DROP SEQUENCE image_id_sequence;
+DROP SEQUENCE count_id_sequence;
 
 CREATE TABLE users (
    user_name varchar(24),
@@ -92,11 +93,16 @@ CREATE TABLE images (
 );
 
 CREATE TABLE imagecount (
+       count_id int,
        photo_id int,
-       photo_count int,
-       PRIMARY KEY (photo_id),
-       FOREIGN KEY (photo_id) REFERENCES images
+       user_name varchar(24),
+       PRIMARY KEY (count_id),
+       FOREIGN KEY (photo_id) REFERENCES images,
+       FOREIGN KEY (user_name) REFERENCES users
 );
+
+CREATE SEQUENCE count_id_sequence
+  START WITH 1 INCREMENT BY 1 nomaxvalue;
 
 CREATE INDEX myimageindex ON images(description) INDEXTYPE IS CTXSYS.CONTEXT;
 

@@ -26,6 +26,8 @@ import util.Photo;
 public class browsePicture extends HttpServlet 
     implements SingleThreadModel {
     private Db database;
+    private HttpSession session;
+    private String username;
     
     /**
      *    This method first gets the query string indicating PHOTO_ID,
@@ -37,6 +39,14 @@ public class browsePicture extends HttpServlet
     public void doGet(HttpServletRequest request,
 		      HttpServletResponse response)
 	throws ServletException, IOException {
+	session = request.getSession(true);
+	username = (String) session.getAttribute("username");
+	if (username == null) {
+	    String errormsg = "Please login before viewing photos";
+	    session.setAttribute("err", errormsg);
+	    response.sendRedirect("/c391proj/login.jsp");
+	    return;
+	}
 	database = new Db();
 	database.connect_db();
 	//  construct the query  from the client's QueryString
@@ -44,7 +54,7 @@ public class browsePicture extends HttpServlet
 	ResultSet rset = null;
 	PrintWriter out = response.getWriter();
 	if (picid.startsWith("big")) {
-	    database.imageCountViewInc(picid.substring(3));
+	    database.imageCountViewInc(picid.substring(3), username);
 	    rset = database.getPhoto(picid.substring(3));
 	} else
 	    rset = database.getThumbnail(picid);

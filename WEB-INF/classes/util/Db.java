@@ -418,44 +418,6 @@ public class Db {
 	return execute_update(query);
     }
 
-    /**
-     * Returns the resultset of the search by keywords and date
-     * @param String fromdate, String todate, String keywords
-     * @return ResultSet
-     */
-    public ResultSet getResultsByDateAndKeywords(String fromdate, 
-						 String todate, 
-						 String keywords) {
-        String query = "SELECT photo_id FROM images WHERE (timing BETWEEN '" 
-	    + fromdate + "' AND '" + todate + 
-	    "') AND contains(description, + '" + keywords
-                        + "', 1) > 0 order by score(1) desc";
-        return execute_stmt(query);
-    }
-
-    /**
-     * Returns the resultset of the search by keywords
-     * @param String keywords
-     @ @return ResultSet
-     */
-    public ResultSet getResultByKeywords(String keywords) {
-        String query = "SELECT photo_id FROM images WHERE "+
-	    "contains(description," + " '" + keywords  + 
-	    "', 1) > 0 order by score(1) desc";
-        return execute_stmt(query);
-     }
-
-    /**
-     * Returns resultset of the serach by date
-     * @param String fromdate, String todate
-     * @return ResultSet
-     */
-    public ResultSet getResultsByDate(String fromdate, String todate) {
-        String query = "SELECT photo_id FROM images WHERE timing BETWEEN '"
-                      + fromdate + "' AND '" + todate + "'";
-        return execute_stmt(query);
-    }
-
      /**
      * Fetches all photo ids, owners, and permissions
      * from the database.
@@ -573,46 +535,90 @@ public class Db {
      * table of viewed images and increment the view count by 1.
      * @return int
      */
-    public int imageCountViewInc(String photoId) {
-	String query = "select photo_count from imagecount where " + 
-	    "photo_id = '" + photoId + "'";
+    public int imageCountViewInc(String photoId, String username) {
+	// Check if user viewed this image before
+	String query = "select user_name, photo_id from imagecount where " + 
+	    "photo_id = '" + photoId + "' and user_name = '"+username+"'";
 	ResultSet rset = execute_stmt(query);
 	try {
-	    if(rset.next()) {
-		query = "update imagecount set photo_count = (" +
-		    "select photo_count from imagecount where photo_id='"+
-		    photoId + "')+1 where photo_id = '" + photoId + "'";
-		execute_stmt(query);
-	    } else {
-		query = "insert into imagecount (photo_id, photo_count) "+
-		    "values ("+ photoId +", 1)";
+	    if(!rset.next()) {
+		// Add user into the added count view for this image
+		query = "insert into imagecount " +
+		    "values(count_id_sequence.nextval, '"+photoId+
+		    "', '"+username+"')";
 		execute_stmt(query);
 	    }
-	    query = "select photo_count from imagecount where photo_id='"+
-		photoId+"'";
-	    rset = execute_stmt(query);
-	    if (rset.next())
-		return rset.getInt(1);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	return 0;
+	return imageCountView(photoId);
     }
 
     /**
      * Returns the number of times an image is viewed, otherwise
-     * returns 0.
+     * returns -1.
      */
     public int imageCountView(String photoId) {
-	String query = "select photo_count from imagecount where "+
+	String query = "select count(count_id) from imagecount where "+
 	    "photo_id = '" + photoId + "'";
 	ResultSet rset = execute_stmt(query);
+	int counter = 0;
 	try {
-	    if (rset.next()) 
+	    if(rset.next()) 
 		return rset.getInt(1);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	return 0;
+	return -1;
     }
+    
+    /**
+     * This function takes an arraylist of photos and ranks them
+     * based on the criteria given in the spec.
+     * 
+     * where Rank(photo_id) = 6*frequency(subject) + 3*frequency(place) +
+     *      frequency(description)
+     */
+    public ArrayList<Photo> rankPhotos(ArrayList<Photo> inputPhotos) {
+	return inputPhotos;
+    }
+
+    /**
+     * Returns the resultset of the search by keywords and date
+     * @param String fromdate, String todate, String keywords
+     * @return ResultSet
+     */
+    public ResultSet getResultsByDateAndKeywords(String fromdate, 
+						 String todate, 
+						 String keywords) {
+        String query = "SELECT photo_id FROM images WHERE (timing BETWEEN '" 
+	    + fromdate + "' AND '" + todate + 
+	    "') AND contains(description, + '" + keywords
+	    + "', 1) > 0 order by score(1) desc";
+        return execute_stmt(query);
+    }
+
+    /**
+     * Returns the resultset of the search by keywords
+     * @param String keywords
+     @ @return ResultSet
+     */
+    public ResultSet getResultByKeywords(String keywords) {
+        String query = "SELECT photo_id FROM images WHERE "+
+	    "contains(description," + " '" + keywords  + 
+	    "', 1) > 0 order by score(1) desc";
+        return execute_stmt(query);
+     }
+
+    /**
+     * Returns resultset of the serach by date
+     * @param String fromdate, String todate
+     * @return ResultSet
+     */
+    public ResultSet getResultsByDate(String fromdate, String todate) {
+        String query = "SELECT photo_id FROM images WHERE timing BETWEEN '"
+                      + fromdate + "' AND '" + todate + "'";
+        return execute_stmt(query);
+    }
+
 }

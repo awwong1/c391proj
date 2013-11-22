@@ -31,19 +31,16 @@ Search page allows to user to enter a search query
         <tr>
           <th>Keyword(s): </th>
           <td>
-            <input name="query" placeholder="Enter search query..">
-	    </input>
+            <input name="query" placeholder="Enter search query.."></input>
           </td>
         </tr>
-	
         <tr>
           <th>Date: </th>
           <td>
-            <input name="fromdate" type="date" placeholder="from"> to 
-              <input name="todate" type="date" placeholder="to">
+            <input name="fromdate" type="date" placeholder="from"></input> to 
+            <input name="todate" type="date" placeholder="to"></input>
           </td>
         </tr>
-	
         <tr>
           <th> </th>
           <td>
