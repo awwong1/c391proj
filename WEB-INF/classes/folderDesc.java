@@ -37,7 +37,7 @@ public class folderDesc extends HttpServlet {
 	    owner = (String) session.getAttribute("username");
 	    all_files = 
 		(ArrayList<FileItem>) session.getAttribute("folderPhotos");
-	    session.removeAttribute("folderPhotos");
+	    session.setAttribute("folderPhotos", null);
 	} catch (Exception e) {
 	    response_message = e.getMessage();	    
 	}
