@@ -10,7 +10,7 @@ Webpage for uploading images
 
 	try{
 		error = (String) session.getAttribute("err");
-                session.setAttribute("err", "");
+                session.setAttribute("err", null);
                 username = (String) session.getAttribute("username");
 	} catch (NullPointerException e) {
 		e.printStackTrace();
@@ -31,7 +31,7 @@ Webpage for uploading images
     <form name="uploadimage" action="uploadImage" enctype="multipart/form-data" 
 	  method="POST">
       <table>
-	<% if (!error.equals("")) {
+	<% if (!(error == null)) {
 	   out.println("<tr>" + error + "</tr>");
 	   }
 	   %>

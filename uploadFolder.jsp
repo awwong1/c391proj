@@ -11,7 +11,7 @@ Webpage for uploading images
 
 	try{
 		error = (String) session.getAttribute("err");
-                session.setAttribute("err", "");
+                session.setAttribute("err", null);
                 username = (String) session.getAttribute("username");
                 getURL=request.getRequestURL().toString();
 	} catch (NullPointerException e) {
@@ -35,7 +35,7 @@ Webpage for uploading images
   <body>
     <form name="uploadimage" action="folderDesc" enctype="multipart/form-data" 
 	  method="POST">
-      <% if (error!=null) {
+      <% if (!(error == null)) {
 	 out.println(error + "<br>");
 	 }
 	 %>
