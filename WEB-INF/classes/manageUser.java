@@ -111,6 +111,17 @@ public class manageUser extends HttpServlet {
 	    session.setAttribute("phone", nPhone);
 	}
 	
+	String nPass = request.getParameter("pass");
+	String nPass2= request.getParameter("pass2");
+	// Check if new passwords match 
+	if (!nPass.equals(nPass2) && nPass != null && nPass2 != null){
+	    returnmsg = returnmsg + "New passwords do not match<br>";
+	} else {
+	    database.updatePass(eUsername, nPass);
+	    returnmsg = returnmsg + "Sucessfully updated password<br>";
+	}
+	
+	
 	database.close_db();
 	session.setAttribute("err", returnmsg);
 	response.sendRedirect("/c391proj/account_settings.jsp");

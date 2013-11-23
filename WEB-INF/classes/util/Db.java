@@ -118,6 +118,12 @@ public class Db {
 	}
 	return tPassword;
     }
+
+    public int updatePass(String username, String password) {
+	String query = "update users set password = '"+password+
+	    "' where user_name = '"+username+"'";
+	return execute_update(query);
+    }
     
     public ArrayList<Group> get_groups(String username) {
 	ResultSet rs;

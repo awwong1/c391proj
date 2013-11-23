@@ -117,13 +117,13 @@ username, firstname, lastname, address, email, phone and password changing
 	</tr>
 	<tr>
 	  <td>New Password:</td>
-	  <td><input type="pass" name="pass" maxlength="24"
+	  <td><input type="password" name="pass" maxlength="24"
 		     placeholder="new password" />
 	  </td>
 	</tr>
 	<tr>
 	  <td>Confrim New Password:</td>
-	  <td><input type="pass" name="pass2" maxlength="24"
+	  <td><input type="password" name="pass2" maxlength="24"
 		     placeholder="confirm password" />
 	  </td>
 	</tr>
