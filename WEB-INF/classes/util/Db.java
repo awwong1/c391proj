@@ -77,6 +77,20 @@ public class Db {
 	return execute_update(query);
     }
 
+    public void delete_group(String group_id) {
+	// change permissions in images
+	String query_images = "update images set permitted = 2 "
+	    + "where permitted = " + group_id;
+	// delete group_lists where group_id == group_id
+	String query_group_lists = "delete from group_lists where group_id = "
+	    + group_id;
+	// delete groups where group_id == group_id
+	String query_groups = "delete groups where group_id = " + group_id;
+	execute_update(query_images);
+	execute_update(query_group_lists);
+	execute_update(query_groups);
+    }
+
     /**
      * 
      * @param query
