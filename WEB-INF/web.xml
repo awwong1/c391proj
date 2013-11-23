@@ -6,6 +6,14 @@
  version="2.4">
 
     <servlet>
+        <servlet-name>adminStats</servlet-name>
+        <servlet-class>adminStats</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>adminStats</servlet-name>
+        <url-pattern>/adminStats</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>loginservlet</servlet-name>
         <servlet-class>loginservlet</servlet-class>
     </servlet>

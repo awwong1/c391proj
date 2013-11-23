@@ -6,6 +6,7 @@ custclass = -classpath ../lib/ojdbc6.jar:../lib/servlet-api-2.3.jar:../lib/commo
 custsource = -sourcepath ./:util 
 
 all: 
+	make adminStats
 	make login
 	make register
 	make manage_Groups
@@ -18,6 +19,8 @@ all:
 	make browsePictures
 	make folderDesc
 	make imageDesc
+adminStats:
+	javac $(custsource) $(custclass) adminStats.java
 login:
 	javac $(custsource) $(custclass) loginservlet.java
 register:

@@ -23,6 +23,9 @@ Author: Alexander Wong
 	out.println(" | <a href=\"/c391proj/choosePhotos.jsp\">browse group pictures</a>");
 	out.println(" | <a href=\"/c391proj/account_settings.jsp\">account settings</a>");
         out.println(" | <a href=\"/c391proj/logout.jsp\">logout</a>"); 
+	if (username.equals("admin")) {
+	   out.println(" | <a href=\"/c391proj/adminStats\">admin stats</a>");
+	}
     }
 %>
 </p>
