@@ -432,13 +432,24 @@ public class Db {
 
     /**
      * Gets all photos from the database with specific permission 
-     * from the database.
+     * from the database. If permission is set to private or group,
+     * handle the username as well.
      * @return ArrayList<Photo>
      */
-    public ArrayList<Photo> getAllPermissionPhotos(int permission) {
-	String query = "select photo_id, owner_name, permitted, subject,"+
-	    " place, timing, description from images where permitted = '"+
-	    permission +"'";
+    public ArrayList<Photo> getAllPermissionPhotos(int permission, 
+						   String username) {
+	String query;
+	if (permission == 2) {
+	    // handle private images
+	    query = "select photo_id, owner_name, permitted, subject, "+
+		"place, timing, description from images where permitted = '"+
+		permission +"' and owner_name = '" + username + "'";
+	} else {
+	    // Handle public and group images
+	    query = "select photo_id, owner_name, permitted, subject,"+
+		" place, timing, description from images where permitted = '"+
+		permission +"'";
+	}
 	ResultSet rs = execute_stmt(query);
 	return photos_from_resultset(rs);
     }
