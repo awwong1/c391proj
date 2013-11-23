@@ -42,6 +42,14 @@ Search page allows to user to enter a search query
           </td>
         </tr>
         <tr>
+          <th>Sort by: </th>
+          <td>
+            <input type="radio" name="sortby" value="1" checked="checked">
+                    Timing</input>
+            <input type="radio" name="sortby" value="2">Rank</input>
+          </td>
+        </tr>
+        <tr>
           <th> </th>
           <td>
             <input type="submit" value="Search" name="search"/>

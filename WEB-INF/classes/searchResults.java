@@ -20,6 +20,7 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
     private String toDate; 
     private ResultSet rset;
     private String pid;
+    private String sortby;
 
     protected void doGet(HttpServletRequest request, 
                          HttpServletResponse response) 
@@ -31,6 +32,7 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         keywords = request.getParameter("query");
         fromDate = request.getParameter("fromdate");
         toDate = request.getParameter("todate");
+        sortby = request.getParameter("sortby");
         pid = "";
 
         PrintWriter out = response.getWriter();
@@ -78,22 +80,35 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         /*
          * Displays the results
          */
-        try {
-            while(rset.next()){
-                pid = (rset.getObject(1)).toString();
-                // specify the servlet for the image
-                out.println("<a href=\"/c391proj/browsePicture?big" 
-                            + pid + "\">");
-                // specify the servlet for the thumbnail
-                out.println("<img src=\"/c391proj/browsePicture?" 
-                            + pid + "\"></a>");
-            }
-        } catch (Exception e) {
-            e.getStackTrace();
+        if(sortby.equals("1")) {
+            out.println("Sorted By Timing");
+            out.println("<br>");
+            displayThumbs(rset, out);   
+        } else {
+            out.println("Sorted By Rank");
+            out.println("<br>");
+            displayThumbs(rset, out);
         }
         database.close_db();
         out.print("</body>");
         out.print("</html>");
         out.close();
     }
+
+    public void displayThumbs(ResultSet rset, PrintWriter out) {
+        try {
+            while(rset.next()){
+                pid = (rset.getObject(2)).toString();
+                // specify the servlet for the image
+                out.println("<a href=\"/c391proj/browsePicture?big"
+                            + pid + "\">");
+                // specify the servlet for the thumbnail
+                out.println("<img src=\"/c391proj/browsePicture?"
+                            + pid + "\"></a>");
+            }
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+    }
+
 }
