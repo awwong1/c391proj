@@ -38,7 +38,7 @@ public class manage_Groups extends HttpServlet {
 	group_list = database.get_groups(user);
 	
 	check_new_group(request);
-	
+	check_group_changes(request);
 	/* if invalid_friend, user tried to add a friend that is not
 	and actual user
 	*/  
@@ -81,7 +81,9 @@ public class manage_Groups extends HttpServlet {
 
 	    /* check for new friend */
 	    try {
-		new_friend = request.getParameter(group.getName() + "new_friend");
+		new_friend = request.getParameter(group.getName().
+						  replaceAll(" ", "") 
+						  + "new_friend");
 	    } catch (Exception e) {
 		e.printStackTrace();
 	    }
@@ -93,6 +95,15 @@ public class manage_Groups extends HttpServlet {
 	    }
 	}
 	return invalid_friend;
+    }
+
+    public void check_group_changes(HttpServletRequest request) {
+	String[] delete_groups = request.getParameterValues("group");
+	if (delete_groups != null) {
+	    for (String group_id: delete_groups) {
+		database.delete_group(group_id);
+	    }
+	}
     }
 
     public void handle_write(HttpServletRequest request, 
@@ -121,15 +132,17 @@ public class manage_Groups extends HttpServlet {
 	out.println("<body><h2>My Groups: </h2>");
 	
 	for (Group group: group_list) {
-	    out.println("<h3>" + group.getName() + "</h3>");
+	    out.println("<input type='checkbox' name='group' "
+			+ "value='" + group.getId() 
+			+ "'><b><font size=5>" + group.getName() + "</font></b>");
 	    for (String friend: group.getFriends()) {
 		out.println("<p><input type='checkbox' name='" 
-			    + group.getName() + "'"
+			    + group.getName().replaceAll(" ", "") + "'"
 			    + "value='" + friend + "'>" + friend + "</p>");
 	    }
-	    out.println("<p>&nbsp;&nbsp;&nbsp;<input type='text' name = " 
-			+ group.getName() 
-			+ "new_friend placeholder='New Friend'/>"
+	    out.println("<p>&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='" 
+			+ group.getName().replaceAll(" ", "")
+			+ "new_friend' placeholder='New Friend'/>"
 			+ "</blockquote></p>");
 	}
 	
