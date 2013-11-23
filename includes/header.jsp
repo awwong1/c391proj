@@ -20,8 +20,7 @@ Author: Alexander Wong
         out.println(" | <a href=\"/c391proj/manage_Groups\">manage groups</a>");
 	out.println(" | <a href=\"/c391proj/uploadimage.jsp\">upload image</a>");
 	out.println(" | <a href=\"/c391proj/uploadFolder.jsp\">upload folder</a>");
-	out.println(" | <a href=\"/c391proj/browsePictures?group=1\">browse public pictures</a>");
-	out.println(" | <a href=\"/c391proj/browsePictures?group=2\">browse private pictures</a>");
+	out.println(" | <a href=\"/c391proj/choosePhotos.jsp\">browse group pictures</a>");
 	out.println(" | <a href=\"/c391proj/account_settings.jsp\">account settings</a>");
         out.println(" | <a href=\"/c391proj/logout.jsp\">logout</a>"); 
     }

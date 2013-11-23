@@ -130,6 +130,23 @@ public class Db {
     }
     
     /**
+     * This function returns all the groups that the user is a
+     * part of. If another person adds this user to his or her
+     * group, it will appear here.
+     * If a user created a group, it will also appear here.
+     */
+    public ArrayList<Group> getParticipantGroups(String username) {
+	ResultSet rs;
+	String query = "SELECT group_id, group_name FROM groups WHERE " +
+	    "group_id in " +
+	    "(SELECT group_id FROM group_lists where " +
+	    "friend_id = '"+username+"') OR " + 
+	    "user_name = '"+username+"'";
+	rs = execute_stmt(query);
+	return group_from_resultset(rs);
+    }
+
+    /**
      * Gets groups (and users in groups) from a resultset
      * @param rs
      * @return

@@ -25,6 +25,7 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	HttpSession session;
 	String username = "";
 	int groupId = 1;
+	ArrayList<Photo> all_photos = new ArrayList<Photo>();
 
 	res.setContentType("text/html");
 	database = new Db();
@@ -39,14 +40,32 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	try {
 	    session = request.getSession(true);
 	    username = (String) session.getAttribute("username");
-	    groupId = Integer.parseInt(request.getParameter("group"));
 	    request.getRequestDispatcher("includes/header.jsp").
 		include(request, res);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	ArrayList<Photo> all_photos = database.
-	    getAllPermissionPhotos(groupId, username);
+
+	try {
+	    session = request.getSession(true);
+	    groupId = Integer.parseInt(request.getParameter("group"));
+	    if (groupId == 0) {
+		if (!username.equals("admin")) {
+		    session.setAttribute("err", 
+					 "You are not allowed to do that.");
+		    res.sendRedirect("/c391proj/index.jsp");
+		    return;
+		} else {
+		    all_photos = database.getAllPhotos();
+		}
+	    } else {
+		all_photos = database.
+		    getAllPermissionPhotos(groupId, username);
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+
 
 	out.println("</head>");
 	out.println("<body><table border=\"1\">"); 
