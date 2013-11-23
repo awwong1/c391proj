@@ -121,13 +121,15 @@ public class manage_Groups extends HttpServlet {
 	out.println("<body><h2>My Groups: </h2>");
 	
 	for (Group group: group_list) {
-	    out.println("<h3>" + group.getName() + "</h3>");
+	    out.println("<input type='checkbox' name='" + group.getName() 
+			+ "' value='" + group.getName() 
+			+ "'><b><font size=5>" + group.getName() + "</font></b>");
 	    for (String friend: group.getFriends()) {
 		out.println("<p><input type='checkbox' name='" 
 			    + group.getName() + "'"
 			    + "value='" + friend + "'>" + friend + "</p>");
 	    }
-	    out.println("<p>&nbsp;&nbsp;&nbsp;<input type='text' name = " 
+	    out.println("<p>&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name = " 
 			+ group.getName() 
 			+ "new_friend placeholder='New Friend'/>"
 			+ "</blockquote></p>");
