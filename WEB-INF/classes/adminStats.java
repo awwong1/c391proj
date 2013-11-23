@@ -3,11 +3,13 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import util.OLAPCommands;
+
 /**
  * Handles the data cube stuff, all the stats about our photo things here
  */
 public class adminStats extends HttpServlet {
     private OLAPCommands olap;
+    private String tframe;
     
     public void doGet(HttpServletRequest request,
 		      HttpServletResponse response)
@@ -30,6 +32,35 @@ public class adminStats extends HttpServlet {
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	out.println("</head></html>");
+	
+	// Handle timeframe stuff
+	out.println("</head><body>");
+	out.println("<form name='choosetime' action='adminStats' "+
+		    "method='PUT'>");
+	out.println("<table><tr><th>Timeframe</th><td>");
+	out.println("<input type='radio' name='tframe' value='weekly'>"+
+		    "Weekly</input>");
+	out.println("<input type='radio' name='tframe' value='monthly'>"+
+		    "Monthly</input>");
+	out.println("<input type='radio' name='tframe' value='yearly'>"+
+		    "Yearly</input>");
+	out.println("</td></tr>");
+	out.println("<tr><td><input type='submit'></input></td></tr>");
+	out.println("</table>");
+	out.println("</form>");
+	try {
+	    tframe = (String) request.getParameter("tframe");
+	} catch (Exception e) {}
+	// handle displaying statistical values
+	try {
+	    olap = new OLAPCommands(tframe);
+	    out.println("<hr><h3>Users Registed, grouped "+tframe+"</h3>");
+	    out.println(olap.getRegUsers());
+	    out.println("<hr><h3>Images Uploaded, grouped "+tframe+"</h3>");
+	    out.println(olap.getDateUploadImages());
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	out.println("</body></html>");
     }
 }

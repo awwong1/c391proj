@@ -37,59 +37,59 @@ Webpage for uploading images
 	   %>
         <tr>
 	  <th>File path: </th>
-	    <td>
-	      <input name="filepath" type="file" size="30" ></input>
-	    </td>
+	  <td>
+	    <input name="filepath" type="file" size="30" ></input>
+	  </td>
 	</tr>
-
+	
         <tr>
-           <th>Date: </th>
-             <td>
-                <input name="date" type="date" placeholder="DD-MMM-YY"></input>
-             </td>
+          <th>Date: </th>
+          <td>
+            <input name="date" type="date" placeholder="DD-MMM-YY"></input>
+          </td>
         </tr>
-
+	
         <tr>
-           <th>Location: </th>
-             <td>
-                <input name="location" type="text" placeholder="location"></input>
-             </td>
+          <th>Location: </th>
+          <td>
+            <input name="location" type="text" placeholder="location"></input>
+          </td>
         </tr>
-
+	
         <tr>
-           <th>Subject: </th>
-             <td>
-                <input name="subject" type="text" placeholder="subject"></input>
-             </td>
+          <th>Subject: </th>
+          <td>
+            <input name="subject" type="text" placeholder="subject"></input>
+          </td>
         </tr>
-
+	
         <tr>
-           <th>Description: </th>
-             <td>
-		<textarea name="description" cols="25" rows="5" 
-			  placeholder="Description"></textarea>
-             </td>
+          <th>Description: </th>
+          <td>
+	    <textarea name="description" cols="25" rows="5" 
+		      placeholder="Description"></textarea>
+          </td>
         </tr>
-
+	
         <tr>
-           <th>Security: </th>
-             <td>
-		<p><input type="radio" name="security" value="2" checked="checked">
-		    Private</input></p>
-		<p><input type="radio" name="security" value="1">Public</input></p>
-		<% for (Group group: all_groups) {
-		     out.println("<p><input type='radio' name='security' value='" 
-		   + group.getId()
-		   + "'>" + group.getName() + "</input></p>");
-		   }
-		   %>
-             </td>
+          <th>Security: </th>
+          <td>
+	    <p><input type="radio" name="security" value="2" checked="checked">
+		Private</input></p>
+	    <p><input type="radio" name="security" value="1">Public</input></p>
+	    <% for (Group group: all_groups) {
+	       out.println("<p><input type='radio' name='security' value='" 
+	       + group.getId()
+	       + "'>" + group.getName() + "</input></p>");
+	       }
+	       %>
+          </td>
         </tr>
-
-
+	
+	
 	<tr>
 	  <td ALIGN=CENTER COLSPAN="2"><input type="submit" name=".submit"
-		value="Upload">
+					      value="Upload">
 	  </td>
 	</tr>
       </table>
