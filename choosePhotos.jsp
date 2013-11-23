@@ -36,6 +36,8 @@ Webpage for choosing which group of photos to view
 	    <input type="radio" name="group" value="1" checked="checked">
 	      Public</input>
 	    <br>
+	    <input type="radio" name="group" value="-1">Public Top 5</input>
+	    <br>
 	    <input type="radio" name="group" value="2">Private</input>
 	    <% 
 	       if (username.equals("admin")) {

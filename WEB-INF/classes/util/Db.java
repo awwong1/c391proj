@@ -621,6 +621,43 @@ public class Db {
     }
     
     /**
+     * returns the top 5 most popular photos of all time
+     * if there is a tie, display all ties
+     */
+    public ArrayList<Photo> getTopFivePublicPhotos() {
+	int counter = 0;
+	int curpop = 0;
+	int oldpop = 0;
+
+	String query = "select images.photo_id, count(imagecount.count_id) "+
+	    "from imagecount right join images on imagecount.photo_id = "+
+	    "images.photo_id group by images.photo_id order by "+
+	    "count(count_id) desc";
+	ArrayList<Integer> result = new ArrayList<Integer>();
+	ResultSet rset = execute_stmt(query);	
+	try {
+	    while (rset.next()) {
+		int photoid = rset.getInt(1);
+		curpop = rset.getInt(2);;
+		if (curpop!=oldpop) {
+		    oldpop = curpop;
+		    counter++;
+		}
+		if (counter > 5)
+		    break;
+		result.add(photoid);
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	// turn the arraylist of photo ids into photos
+	ArrayList<Photo> resultPhotos = new ArrayList<Photo>();
+	for (int val : result)
+	    resultPhotos.add(getPhotoDesc(val));
+	return resultPhotos;
+    }
+
+    /**
      * This function takes an arraylist of photos and ranks them
      * based on the criteria given in the spec.
      * 

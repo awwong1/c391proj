@@ -49,7 +49,11 @@ public class browsePictures extends HttpServlet implements SingleThreadModel {
 	try {
 	    session = request.getSession(true);
 	    groupId = Integer.parseInt(request.getParameter("group"));
-	    if (groupId == 0) {
+	    if (groupId == -1) {
+		// Browse top 5 public photos
+		all_photos = database.getTopFivePublicPhotos();
+	    }
+	    else if (groupId == 0) {
 		if (!username.equals("admin")) {
 		    session.setAttribute("err", 
 					 "You are not allowed to do that.");
