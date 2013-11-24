@@ -670,40 +670,51 @@ public class Db {
 
     /**
      * Returns the resultset of the search by keywords and date
-     * @param String fromdate, String todate, String keywords
+     *
+     * Rank(photo_id) = 6*frequency(subject) + 3*frequency(location)
+     * + frequency(description)
+     *
+     * @param String fromdate, String todate, String keywords, String order
      * @return ResultSet
      */
     public ResultSet getResultsByDateAndKeywords(String fromdate, 
 						 String todate, 
-						 String keywords) {
-        String query = "SELECT photo_id FROM images WHERE (timing BETWEEN '" 
-	    + fromdate + "' AND '" + todate + 
-	    "') AND contains(description, + '" + keywords
-	    + "', 1) > 0 order by score(1) desc";
+						 String keywords,
+                                                 String order) {
+        String query = "SELECT score(1)*6 + score(2)*3 + score(3) AS score, "
+                        + "photo_id FROM images WHERE "
+                        + "((timing BETWEEN '" + fromdate + "' AND '" + todate
+                        +  " ') AND (contains(subject, '"+ keywords + "', 1) > "
+                        + "0) OR (contains(place, '" + keywords +"', 2) > 0) "
+                        + "OR (contains(description, '" + keywords + "', 3) > "
+                        + "0)) " + order;
         return execute_stmt(query);
     }
 
     /**
      * Returns the resultset of the search by keywords
-     * @param String keywords
+     * @param String keywords, String order
      @ @return ResultSet
      */
-    public ResultSet getResultByKeywords(String keywords) {
-        String query = "SELECT photo_id FROM images WHERE "+
-	    "contains(description," + " '" + keywords  + 
-	    "', 1) > 0 order by score(1) desc";
+    public ResultSet getResultByKeywords(String keywords, String order) {
+        String query = "SELECT score(1)*6 + score(2)*3 + score(3) AS score, "
+                        + "photo_id FROM images WHERE "
+                        + "((contains(subject, '"+ keywords + "', 1) > "
+                        + "0) OR (contains(place, '" + keywords +"', 2) > 0) "
+                        + "OR (contains(description, '" + keywords + "', 3) > "
+                        + "0)) " + order;
         return execute_stmt(query);
      }
 
     /**
      * Returns resultset of the serach by date
-     * @param String fromdate, String todate
+     * @param String fromdate, String todate, String order
      * @return ResultSet
      */
-    public ResultSet getResultsByDate(String fromdate, String todate) {
-        String query = "SELECT photo_id FROM images WHERE timing BETWEEN '"
-                      + fromdate + "' AND '" + todate + "'";
+    public ResultSet getResultsByDate(String fromdate, String todate, String
+                                        order) {
+        String query = "SELECT timing, photo_id FROM images WHERE (timing BETWEEN '"
+                      + fromdate + "' AND '" + todate + "') " + order;
         return execute_stmt(query);
     }
-
 }

@@ -20,6 +20,7 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
     private String toDate; 
     private ResultSet rset;
     private String pid;
+    private String sortby;
 
     protected void doGet(HttpServletRequest request, 
                          HttpServletResponse response) 
@@ -31,6 +32,7 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         keywords = request.getParameter("query");
         fromDate = request.getParameter("fromdate");
         toDate = request.getParameter("todate");
+        sortby = request.getParameter("sortby");
         pid = "";
 
         PrintWriter out = response.getWriter();
@@ -39,6 +41,18 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         out.println("<head>");
         out.println("<title>Search Results</title>");
 
+        /*
+         * Get how query will be sorted
+         */
+        String order = null;
+        if (sortby.equals("1")) {
+            order = "order by timing DESC";
+        } else if (sortby.equals("2")) {
+            order = "order by timing";
+        } else {
+            order = "order by 1 DESC";
+        }
+        
         /* 
          * Display header 
          */    
@@ -50,26 +64,31 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         }
         out.println("</head>");
         out.println("<body>");
-        out.println("<br>");	
+        out.println("<br>");
+        System.out.println(sortby);	
         /*
          * The user has to input from and to dates otherwise
          * only keyword search to get resultset of query
          */
-
         if (!(keywords.equals(""))) {
             if((fromDate.equals("")) || (toDate.equals(""))) {
-                rset = database.getResultByKeywords(keywords);
+                rset = database.getResultByKeywords(keywords, order);
                 out.println("Your results for: '" + keywords + "'");
             } else {
                 rset = database.getResultsByDateAndKeywords(fromDate, toDate,
-                                                            keywords);
+                                                            keywords, order);
                 out.println("Your results for: '" + keywords + "' Between: "
                             + fromDate + " and " + toDate);
             }
         } else if (!((fromDate.equals("")) || (toDate.equals("")))) {
-            rset = database.getResultsByDate(fromDate, toDate);
-            out.println("Your results for dates between: " + fromDate + " and "
-                            + toDate);
+            if (!(order.equals("order by 1 DESC"))) {
+                rset = database.getResultsByDate(fromDate, toDate, order);
+                out.println("Your results for dates between: " + fromDate
+                            + " and " + toDate);
+            } else {
+                out.println("<b>Cannot sort by rank with just time, please"
+                            + " sort differently or add keywords</b>");
+            }
         } else {
             out.println("<b>Please enter a search query</b>");
         }
@@ -80,12 +99,12 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
          */
         try {
             while(rset.next()){
-                pid = (rset.getObject(1)).toString();
+                pid = (rset.getObject(2)).toString();
                 // specify the servlet for the image
-                out.println("<a href=\"/c391proj/browsePicture?big" 
+                out.println("<a href=\"/c391proj/browsePicture?big"
                             + pid + "\">");
                 // specify the servlet for the thumbnail
-                out.println("<img src=\"/c391proj/browsePicture?" 
+                out.println("<img src=\"/c391proj/browsePicture?"
                             + pid + "\"></a>");
             }
         } catch (Exception e) {
