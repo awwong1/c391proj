@@ -105,6 +105,8 @@ CREATE SEQUENCE count_id_sequence
   START WITH 1 INCREMENT BY 1 nomaxvalue;
 
 CREATE INDEX myimageindex ON images(description) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX mysubindex ON images(subject) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX mylocindec ON images(place) INDEXTYPE IS CTXSYS.CONTEXT;
 
 CREATE SEQUENCE image_id_sequence
   START WITH 1
