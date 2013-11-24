@@ -7,6 +7,15 @@ import util.Db;
 
 /**
  * OLAP Commands for the olap report generation stats
+ * note; I am cheating something hard core- sql commands return
+ * the full result set. Using java to manually parse out necessary
+ * fields for the olap table
+ *
+ * So.. basically all these O(1) operations are O(n)
+ * also, this is some of the worst code I've written... ever
+ * One good thing is that all return values here are html ready
+ *
+ * @author alexanderwwong
  */
 public class OLAPCommands {
     Db db;
@@ -125,6 +134,54 @@ public class OLAPCommands {
 	db.close_db();
 	return result;
     }
+    
+    /**
+     * Returns the total count of images uploaded for
+     * the specific time date format
+     */
+    public String getDateUploadImagesCount() {
+	String query = "SELECT timing as timeframe, photo_id from images "+
+	    "order by timeframe";
+	String result = "";
+	String title = "";
+	String oldTitle = "";
+	Calendar mydate = Calendar.getInstance();
+	ResultSet rset;
+	int datecounter = 0;
+	boolean firstRun = true;
+	db.connect_db();
+	try {
+	    rset = db.execute_stmt(query);
+	    result = result + "<table border='1'>";
+	    while(rset.next()) {
+		mydate.setTime(rset.getDate(1));
+		title = getColTitle(mydate);
+		if (!title.equals(oldTitle)) {
+		    if (firstRun == true) {
+			firstRun = false;
+			oldTitle = title;
+			result = result + "<tr><th>"+title+"</th>";
+			datecounter++;
+			continue;
+		    }
+		    else {
+			oldTitle = title;
+			result = result+"<td>"+
+			    Integer.toString(datecounter)+"</td></tr>";
+			result = result + "<tr><th>"+title+"</th>";
+			datecounter = 0;
+		    }
+		}
+		datecounter++;
+	    }
+	    result = result +"<td>"+
+		Integer.toString(datecounter)+"</td></tr></table>";
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	db.close_db();
+	return result;
+    }
 
     /**
      * Returns the total number of photos uploaded
@@ -163,6 +220,54 @@ public class OLAPCommands {
 		    "</tr>";
 	    }
 	    result = result + "</table>";
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	db.close_db();
+	return result;
+    }
+    
+    /**
+     * Returns a formatted table of descriptions and counts
+     * grouped by the specified time quantum
+     */
+    public String getImgDescCount() {
+	String query = "select timing, photo_id, subject from images"+
+	    " order by timing asc";
+	Calendar mydate = Calendar.getInstance();
+	String result = "";
+	boolean firstRun = true;
+	ResultSet rset;
+	String title = "";
+	String oldTitle = "";
+	int datecounter = 0;
+	db.connect_db();
+	try {
+	    rset = db.execute_stmt(query);
+	    result = result + "<table border='1'>";
+	    while(rset.next()) {
+		mydate.setTime(rset.getDate(1));
+		title = getColTitle(mydate) + ", " + rset.getString(3);
+		if (!title.equals(oldTitle)) {
+		    if (firstRun == true) {
+			firstRun = false;
+			oldTitle = title;
+			result = result + "<tr><th>"+title+"</th>";
+			datecounter++;
+			continue;
+		    }
+		    else {
+			oldTitle = title;
+			result = result+"<td>"+
+			    Integer.toString(datecounter)+"</td></tr>";
+			result = result + "<tr><th>"+title+"</th>";
+			datecounter = 0;
+		    }
+		}
+		datecounter++;
+	    }
+	    result = result +"<td>"+
+		Integer.toString(datecounter)+"</td></tr></table>";
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
