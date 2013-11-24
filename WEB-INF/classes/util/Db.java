@@ -596,19 +596,13 @@ public class Db {
 						 String todate, 
 						 String keywords,
                                                  String order) {
-        String orderby = null;
-        if(order.equals("1")) {
-            orderby = "order by timing DESC";
-        } else {
-            orderby = "order by 1 DESC";
-        }
         String query = "SELECT score(1)*6 + score(2)*3 + score(3) AS score, "
                         + "photo_id FROM images WHERE "
                         + "((timing BETWEEN '" + fromdate + "' AND '" + todate
                         +  " ') AND (contains(subject, '"+ keywords + "', 1) > "
                         + "0) OR (contains(place, '" + keywords +"', 2) > 0) "
                         + "OR (contains(description, '" + keywords + "', 3) > "
-                        + "0)) " + orderby;
+                        + "0)) " + order;
         return execute_stmt(query);
     }
 
@@ -618,29 +612,24 @@ public class Db {
      @ @return ResultSet
      */
     public ResultSet getResultByKeywords(String keywords, String order) {
-        String orderby = null;
-        if(order.equals("1")) {
-            orderby = "order by timing DESC";
-        } else {
-            orderby = "order by 1 DESC";
-        }
         String query = "SELECT score(1)*6 + score(2)*3 + score(3) AS score, "
                         + "photo_id FROM images WHERE "
                         + "((contains(subject, '"+ keywords + "', 1) > "
                         + "0) OR (contains(place, '" + keywords +"', 2) > 0) "
                         + "OR (contains(description, '" + keywords + "', 3) > "
-                        + "0)) " + orderby;
+                        + "0)) " + order;
         return execute_stmt(query);
      }
 
     /**
      * Returns resultset of the serach by date
-     * @param String fromdate, String todate
+     * @param String fromdate, String todate, String order
      * @return ResultSet
      */
-    public ResultSet getResultsByDate(String fromdate, String todate) {
+    public ResultSet getResultsByDate(String fromdate, String todate, String
+                                        order) {
         String query = "SELECT timing, photo_id FROM images WHERE (timing BETWEEN '"
-                      + fromdate + "' AND '" + todate + "') order by timing DESC";
+                      + fromdate + "' AND '" + todate + "') " + order;
         return execute_stmt(query);
     }
 }
