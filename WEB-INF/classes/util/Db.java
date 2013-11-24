@@ -589,34 +589,47 @@ public class Db {
      * Rank(photo_id) = 6*frequency(subject) + 3*frequency(location)
      * + frequency(description)
      *
-     * @param String fromdate, String todate, String keywords
+     * @param String fromdate, String todate, String keywords, String order
      * @return ResultSet
      */
     public ResultSet getResultsByDateAndKeywords(String fromdate, 
 						 String todate, 
-						 String keywords) {
+						 String keywords,
+                                                 String order) {
+        String orderby = null;
+        if(order.equals("1")) {
+            orderby = "order by timing DESC";
+        } else {
+            orderby = "order by 1 DESC";
+        }
         String query = "SELECT score(1)*6 + score(2)*3 + score(3) AS score, "
                         + "photo_id FROM images WHERE "
                         + "((timing BETWEEN '" + fromdate + "' AND '" + todate
                         +  " ') AND (contains(subject, '"+ keywords + "', 1) > "
                         + "0) OR (contains(place, '" + keywords +"', 2) > 0) "
                         + "OR (contains(description, '" + keywords + "', 3) > "
-                        + "0))  order by 1 DESC";
+                        + "0)) " + orderby;
         return execute_stmt(query);
     }
 
     /**
      * Returns the resultset of the search by keywords
-     * @param String keywords
+     * @param String keywords, String order
      @ @return ResultSet
      */
-    public ResultSet getResultByKeywords(String keywords) {
+    public ResultSet getResultByKeywords(String keywords, String order) {
+        String orderby = null;
+        if(order.equals("1")) {
+            orderby = "order by timing DESC";
+        } else {
+            orderby = "order by 1 DESC";
+        }
         String query = "SELECT score(1)*6 + score(2)*3 + score(3) AS score, "
                         + "photo_id FROM images WHERE "
                         + "((contains(subject, '"+ keywords + "', 1) > "
                         + "0) OR (contains(place, '" + keywords +"', 2) > 0) "
                         + "OR (contains(description, '" + keywords + "', 3) > "
-                        + "0)) order by 1 DESC";
+                        + "0)) " + orderby;
         return execute_stmt(query);
      }
 

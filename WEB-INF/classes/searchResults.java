@@ -52,19 +52,19 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         }
         out.println("</head>");
         out.println("<body>");
-        out.println("<br>");	
+        out.println("<br>");
+        System.out.println(sortby);	
         /*
          * The user has to input from and to dates otherwise
          * only keyword search to get resultset of query
          */
-
         if (!(keywords.equals(""))) {
             if((fromDate.equals("")) || (toDate.equals(""))) {
-                rset = database.getResultByKeywords(keywords);
+                rset = database.getResultByKeywords(keywords, sortby);
                 out.println("Your results for: '" + keywords + "'");
             } else {
                 rset = database.getResultsByDateAndKeywords(fromDate, toDate,
-                                                            keywords);
+                                                            keywords, sortby);
                 out.println("Your results for: '" + keywords + "' Between: "
                             + fromDate + " and " + toDate);
             }
@@ -80,22 +80,6 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         /*
          * Displays the results
          */
-        if(sortby.equals("1")) {
-            out.println("Sorted By Timing");
-            out.println("<br>");
-            displayThumbs(rset, out);   
-        } else {
-            out.println("Sorted By Rank");
-            out.println("<br>");
-            displayThumbs(rset, out);
-        }
-        database.close_db();
-        out.print("</body>");
-        out.print("</html>");
-        out.close();
-    }
-
-    public void displayThumbs(ResultSet rset, PrintWriter out) {
         try {
             while(rset.next()){
                 pid = (rset.getObject(2)).toString();
@@ -109,6 +93,9 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
         } catch (Exception e) {
             e.getStackTrace();
         }
+        database.close_db();
+        out.print("</body>");
+        out.print("</html>");
+        out.close();
     }
-
 }
