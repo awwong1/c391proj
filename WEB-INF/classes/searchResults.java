@@ -86,7 +86,8 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
                 out.println("Your results for dates between: " + fromDate
                             + " and " + toDate);
             } else {
-                out.println("<b>Please sort by just time, or add keywords</b>");
+                out.println("<b>Cannot sort by rank with just time, please"
+                            + " sort differently or add keywords</b>");
             }
         } else {
             out.println("<b>Please enter a search query</b>");

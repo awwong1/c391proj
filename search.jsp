@@ -45,8 +45,9 @@ Search page allows to user to enter a search query
           <th>Sort by: </th>
           <td>
             <input type="radio" name="sortby" value="1" checked="checked">
-                    Timing</input>
-            <input type="radio" name="sortby" value="2">Rank</input>
+                    Decending Time</input>
+            <input type="radio" name="sortby" value="2">Ascending Time</input>
+            <input type="radio" name="sortby" value="3">Rank</input>
           </td>
         </tr>
         <tr>
