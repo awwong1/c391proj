@@ -45,7 +45,7 @@ Webpage for uploading images
         <tr>
           <th>Date: </th>
           <td>
-            <input name="date" type="date" placeholder="DD-MMM-YY"></input>
+            <input name="date" type="date" placeholder="YYYY-MM-DD"></input>
           </td>
         </tr>
 	

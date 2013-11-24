@@ -38,6 +38,8 @@ public class adminStats extends HttpServlet {
 	out.println("<form name='choosetime' action='adminStats' "+
 		    "method='PUT'>");
 	out.println("<table><tr><th>Timeframe</th><td>");
+	out.println("<input type='radio' name='tframe' value='daily'>"+
+		    "Daily</input>");
 	out.println("<input type='radio' name='tframe' value='weekly'>"+
 		    "Weekly</input>");
 	out.println("<input type='radio' name='tframe' value='monthly'>"+
@@ -54,9 +56,13 @@ public class adminStats extends HttpServlet {
 	// handle displaying statistical values
 	try {
 	    olap = new OLAPCommands(tframe);
-	    out.println("<hr><h3>Users Registed, grouped "+tframe+"</h3>");
+	    if (tframe == null)
+		tframe.equals(tframe); // just to trigger that exception
+	    out.println("<hr><h3>User Registered Count, grouped "+tframe+"</h3>");
+	    out.println(olap.getRegUsersCount());
+	    out.println("<hr><h3>Users Registed Details, grouped "+tframe+"</h3>");
 	    out.println(olap.getRegUsers());
-	    out.println("<hr><h3>Images Uploaded, grouped "+tframe+"</h3>");
+	    out.println("<hr><h3>Images Uploaded Details, grouped "+tframe+"</h3>");
 	    out.println(olap.getDateUploadImages());
 	} catch (Exception e) {
 	    e.printStackTrace();

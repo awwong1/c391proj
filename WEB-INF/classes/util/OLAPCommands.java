@@ -11,24 +11,17 @@ import util.Db;
 public class OLAPCommands {
     Db db;
     String timeframe;
-    String dateformat;
 
     public OLAPCommands(String tframe) {
 	this.db = new Db();
 	this.timeframe = tframe;
-	if (tframe.equals("yearly"))
-	    dateformat = "YYYY";
-	else if (tframe.equals("monthly"))
-	    dateformat = "MONTH";
-	else if (tframe.equals("weekly"))
-	    dateformat = "WW";
     }
     /**
      * Tries to parse out a column title for the row's results
      * in the statement execution
      */
     public String getColTitle(Calendar mydate) {
-	String title = Integer.toString(mydate.get(Calendar.YEAR));
+	String title = "";
 	if (timeframe.equals("monthly")) {
 		    title = title +" Month: " + Integer.
 			toString(mydate.get(Calendar.MONTH)+1);
@@ -37,16 +30,72 @@ public class OLAPCommands {
 	    title = title + " Week: " + Integer.
 		toString(mydate.get(Calendar.WEEK_OF_YEAR));
 	}
+	if (timeframe.equals("daily")) {
+	    title = title + " Day: " + 
+		Integer.toString(mydate.get(Calendar.DATE)) + " " +
+		Integer.toString(mydate.get(Calendar.MONTH));
+	}
+	title = title+" "+Integer.toString(mydate.get(Calendar.YEAR));
 	return title;
     }
+    
     /**
-     * Returns the total number of users registered 
+     * Returns the total count of users registered for
+     * the specified timeframe format
+     */
+    public String getRegUsersCount() {
+	String query = "SELECT date_registered as timeframe, "+
+	    "user_name from users order by " +
+	    "timeframe";
+	String result = "";
+	String title = "";
+	String oldTitle = "";
+	Calendar mydate = Calendar.getInstance();
+	ResultSet rset;
+	int datecounter = 0;
+	boolean firstRun = true;
+	db.connect_db();
+	try {
+	    rset = db.execute_stmt(query);
+	    result = result + "<table border='1'>";
+	    while (rset.next()) {
+		mydate.setTime(rset.getDate(1));
+		title = getColTitle(mydate);
+		if (!title.equals(oldTitle)) {
+		    if (firstRun == true) {
+			firstRun = false;
+			oldTitle = title;
+			result = result + "<tr><th>"+title+"</th>";
+			datecounter++;
+			continue;
+		    }
+		    else {
+			oldTitle = title;
+			result = result+"<td>"+
+			    Integer.toString(datecounter)+"</td></tr>";
+			result = result + "<tr><th>"+title+"</th>";
+			datecounter = 0;
+		    }
+		}
+		datecounter++;
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	result = result +"<td>"+
+	    Integer.toString(datecounter)+"</td></tr></table>";
+	db.close_db();
+	return result;
+    }
+
+    /**
+     * Returns the total details of users registered 
      * for the specified timeframe format
      */
     public String getRegUsers() {
 	String query = "SELECT date_registered as timeframe, "+
 	    "user_name from users order by "+
-	    "timeframe";;
+	    "timeframe";
 	String result = "";
 	Calendar mydate = Calendar.getInstance();
 	String title = "";
@@ -76,6 +125,7 @@ public class OLAPCommands {
 	db.close_db();
 	return result;
     }
+
     /**
      * Returns the total number of photos uploaded
      * for the specific timeframe format
