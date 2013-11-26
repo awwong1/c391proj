@@ -2,6 +2,7 @@ package util;
 
 import java.sql.ResultSet;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import util.Db;
 
@@ -228,10 +229,10 @@ public class OLAPCommands {
     }
     
     /**
-     * Returns a formatted table of descriptions and counts
+     * Returns a formatted table of subjects and counts
      * grouped by the specified time quantum
      */
-    public String getImgDescCount() {
+    public String getImgSubjCount() {
 	String query = "select timing, photo_id, subject from images"+
 	    " order by timing asc";
 	Calendar mydate = Calendar.getInstance();
@@ -239,39 +240,34 @@ public class OLAPCommands {
 	boolean firstRun = true;
 	ResultSet rset;
 	String title = "";
-	String oldTitle = "";
+	ArrayList<String> titles = new ArrayList<String>();
+	ArrayList<Integer> values = new ArrayList<Integer>();
 	int datecounter = 0;
 	db.connect_db();
 	try {
 	    rset = db.execute_stmt(query);
-	    result = result + "<table border='1'>";
 	    while(rset.next()) {
 		mydate.setTime(rset.getDate(1));
 		title = getColTitle(mydate) + ", " + rset.getString(3);
-		if (!title.equals(oldTitle)) {
-		    if (firstRun == true) {
-			firstRun = false;
-			oldTitle = title;
-			result = result + "<tr><th>"+title+"</th>";
-			datecounter++;
-			continue;
-		    }
-		    else {
-			oldTitle = title;
-			result = result+"<td>"+
-			    Integer.toString(datecounter)+"</td></tr>";
-			result = result + "<tr><th>"+title+"</th>";
-			datecounter = 0;
-		    }
+		if (titles.contains(title)) {
+		    values.set(titles.indexOf(title), 
+			       values.get(titles.indexOf(title))+1);
+		} else {
+		    titles.add(title);
+		    values.add(1);
 		}
-		datecounter++;
 	    }
-	    result = result +"<td>"+
-		Integer.toString(datecounter)+"</td></tr></table>";
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
 	db.close_db();
+	result = "<table border='1'>";
+	while(!titles.isEmpty()) {
+	    result+= "<tr><td>"+
+	    titles.remove(0)+"</td><td>"+
+	    Integer.toString(values.remove(0))+"</td></tr>";
+	}
+	result+="</table>";
 	return result;
     }
 }
