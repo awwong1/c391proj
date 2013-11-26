@@ -62,9 +62,13 @@ public class adminStats extends HttpServlet {
 	    out.println(olap.getRegUsersCount());
 	    out.println("<h3>Images Uploaded Count, grouped "+tframe+"</h3>");
 	    out.println(olap.getDateUploadImagesCount());
-	    out.println("<h3>Images Description Count, grouped "+tframe+"</h3>");
+	    out.println("<h3>Images Description Count, grouped "+tframe+
+			"</h3>");
 	    out.println(olap.getImgSubjCount());
-	    out.println("<hr><h3>Users Registed Details, grouped "+tframe+"</h3>");
+	    out.println("<h3>Images User Count, grouped "+tframe+"</h3>");
+	    out.println(olap.getImgUsrCount());
+	    out.println("<hr><h3>Users Registed Details, grouped "+tframe+
+			"</h3>");
 	    out.println(olap.getRegUsers());
 	    out.println("<h3>Images Uploaded Details, grouped "+tframe+"</h3>");
 	    out.println(olap.getDateUploadImages());

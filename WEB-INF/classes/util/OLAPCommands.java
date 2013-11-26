@@ -270,4 +270,47 @@ public class OLAPCommands {
 	result+="</table>";
 	return result;
     }
+
+   /**
+     * Returns a formatted table of users and counts
+     * grouped by the specified time quantum
+     */
+    public String getImgUsrCount() {
+	String query = "select timing, photo_id, owner_name from images"+
+	    " order by timing asc";
+	Calendar mydate = Calendar.getInstance();
+	String result = "";
+	boolean firstRun = true;
+	ResultSet rset;
+	String title = "";
+	ArrayList<String> titles = new ArrayList<String>();
+	ArrayList<Integer> values = new ArrayList<Integer>();
+	int datecounter = 0;
+	db.connect_db();
+	try {
+	    rset = db.execute_stmt(query);
+	    while(rset.next()) {
+		mydate.setTime(rset.getDate(1));
+		title = getColTitle(mydate) + ", " + rset.getString(3);
+		if (titles.contains(title)) {
+		    values.set(titles.indexOf(title), 
+			       values.get(titles.indexOf(title))+1);
+		} else {
+		    titles.add(title);
+		    values.add(1);
+		}
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	db.close_db();
+	result = "<table border='1'>";
+	while(!titles.isEmpty()) {
+	    result+= "<tr><td>"+
+	    titles.remove(0)+"</td><td>"+
+	    Integer.toString(values.remove(0))+"</td></tr>";
+	}
+	result+="</table>";
+	return result;
+    }
 }
