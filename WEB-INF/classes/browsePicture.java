@@ -51,8 +51,6 @@ public class browsePicture extends HttpServlet
 	    return;
 	}
 
-	database = new Db();
-	database.connect_db();
 	//  construct the query  from the client's QueryString
 	String picid  = request.getQueryString();
 	String truepicid;
@@ -61,8 +59,10 @@ public class browsePicture extends HttpServlet
 	} else {
 	    truepicid = picid;
 	}
+	database = new Db();
+	database.connect_db();
 	photo = database.getPhotoDesc(Integer.parseInt(truepicid));
-
+	database.close_db();
 	// Check that the photo is not private being viewed by someone else
 	if (photo.getPermitted() == 2) {
 	    // If private, only owner or admin can see photo
@@ -80,8 +80,10 @@ public class browsePicture extends HttpServlet
 	} else if (photo.getPermitted() != 1) {
 	    // Photo is part of a group, make sure only group members
 	    // or admin can see this photo
+	    database.connect_db();
 	    ArrayList<String> users = database.
 		get_users_from_group(photo.getPermitted());
+	    database.close_db();
 	    if (!users.contains(username) ^ !username.equals("admin")) {}
 	    else {
 		String errormsg = "You are not permitted to view this photo";
@@ -93,6 +95,7 @@ public class browsePicture extends HttpServlet
 	
 	ResultSet rset = null;
 	PrintWriter out = response.getWriter();
+	database.connect_db();
 	if (picid.startsWith("big")) {
 	    database.imageCountViewInc(picid.substring(3), username);
 	    rset = database.getPhoto(picid.substring(3));

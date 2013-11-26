@@ -196,13 +196,24 @@ public class Db {
     }
     
     public ArrayList<String> get_users_from_group(int group_id) {
+	ArrayList<String> friend_ids = new ArrayList<String>();
 	ResultSet rs;
 	String query = "SELECT friend_id "
 	    + "FROM group_lists "
 	    + "WHERE group_id = "
 	    + group_id;
 	rs = execute_stmt(query);
-	return user_from_resultset_group(rs);
+	friend_ids =  user_from_resultset_group(rs);
+	query = "SELECT user_name from groups where group_id = " +
+	    group_id;
+	rs = execute_stmt(query);
+	try {
+	    if (rs.next())
+		friend_ids.add(rs.getString("user_name"));
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	return friend_ids;
     }
     
     public User user_from_resultset(ResultSet rs_user, ResultSet rs_person) {
@@ -631,7 +642,8 @@ public class Db {
 
 	String query = "select images.photo_id, count(imagecount.count_id) "+
 	    "from imagecount right join images on imagecount.photo_id = "+
-	    "images.photo_id group by images.photo_id order by "+
+	    "images.photo_id where images.permitted=1"+
+	    "group by images.photo_id order by "+
 	    "count(count_id) desc";
 	ArrayList<Integer> result = new ArrayList<Integer>();
 	ResultSet rset = execute_stmt(query);	
