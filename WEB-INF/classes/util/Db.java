@@ -46,9 +46,6 @@ public class Db {
 	return 0;
     }
     
-    /**
-     * 
-     */
     public void close_db() {
 	try {
 	    this.stmt.close();
@@ -58,6 +55,11 @@ public class Db {
 	}
     }
     
+    /**
+     * Adds a group to the database
+     * @param String user
+     * @param String group_name
+     */
     public Integer add_group(String user, String group_name) {
 	String query = "insert into groups " + "values ("
 	    + "group_id_sequence.nextval, '" + user + "', '" + 
@@ -65,18 +67,33 @@ public class Db {
 	return execute_update(query);
     }
 
+    /**
+     * Deletes a friend from a group
+     * @param int group_id
+     * @param String friend
+     */
     public Integer delete_friend(int group_id, String friend) {
 	String query = "delete from group_lists where group_id = " + group_id
 	               + " and friend_id = '" + friend + "'";
 	return execute_update(query);
     }
 
+    /**
+     * Adds a friend to a group
+     * @param int group_id
+     * @param String friend
+     */
     public Integer add_friend(int group_id, String friend) {
 	String query = "insert into group_lists values(" + group_id
 	               + ", '" + friend + "', sysdate, null)";
 	return execute_update(query);
     }
 
+    /**
+     * Deletes a group from the group_lists and groups tables
+     * Updates images permitted = 2 where permitted = group_id
+     * @param String group_id
+     */
     public void delete_group(String group_id) {
 	// change permissions in images
 	String query_images = "update images set permitted = 2 "
@@ -92,9 +109,10 @@ public class Db {
     }
 
     /**
-     * 
+     * Performs the update query execution.
+     * Returns 0 when unsuccessful
      * @param query
-     * @return
+     * @return Integer
      */
     public Integer execute_update(String query) {
 	try {
@@ -106,6 +124,11 @@ public class Db {
     }
     
 
+    /**
+     * Fetches all information in database relating to username
+     * @param String username
+     * @returns User
+     */
     public User get_user(String username) {
 	ResultSet rs_users;
 	ResultSet rs_persons;
@@ -118,6 +141,11 @@ public class Db {
 	return user_from_resultset(rs_users, rs_persons);
     }
 
+    /**
+     * Returns the username's matching password
+     * @param String username
+     * @returns String password
+     */
     public String get_password(String username) {
 	String tPassword = "";
 	String query = "select password from users where user_name = '" + 
@@ -133,12 +161,24 @@ public class Db {
 	return tPassword;
     }
 
+    /**
+     * Update's a user's password
+     * Returns 0 when unsuccessful
+     * @param String username
+     * @param String password
+     * @return int
+     */
     public int updatePass(String username, String password) {
 	String query = "update users set password = '"+password+
 	    "' where user_name = '"+username+"'";
 	return execute_update(query);
     }
     
+    /**
+     * Get's a user's groups
+     * @param String username
+     * @reutrns ArrayList<Group>
+     */
     public ArrayList<Group> get_groups(String username) {
 	ResultSet rs;
 	String query = "SELECT group_id, group_name "
@@ -194,7 +234,12 @@ public class Db {
 	}
 	return groups;
     }
-    
+
+    /**
+     * Returns all usernames in a group
+     * @param int group_id
+     * @returns ArrayList<String>
+     */
     public ArrayList<String> get_users_from_group(int group_id) {
 	ArrayList<String> friend_ids = new ArrayList<String>();
 	ResultSet rs;
@@ -216,6 +261,13 @@ public class Db {
 	return friend_ids;
     }
     
+    /**
+     * Returns a User object from two resultsets
+     * resulting from the user and persons tables
+     * @param ResultSet rs_user
+     * @param ResultSet rs_person
+     * @returns User
+     */
     public User user_from_resultset(ResultSet rs_user, ResultSet rs_person) {
 	String user_name = null;
 	String password = null;
@@ -502,6 +554,11 @@ public class Db {
 	return photos_from_resultset(rs);
     }
 
+    /**
+     * Retrieve's a photo's descriptors, returning a Photo object
+     * @param int id
+     * @returns Photo
+     */
     public Photo getPhotoDesc(int id) {
 	String query = "select photo_id, owner_name, permitted, subject, "
 	                + "description, place, timing "
@@ -510,6 +567,11 @@ public class Db {
 	return photos_from_resultset(rs).get(0);
     }
 
+    /**
+     * Converts a ResultSet into an ArrayList of photos
+     * @param ResultSet
+     * @returns ArrayList<Photo>
+     */
     private ArrayList<Photo> photos_from_resultset(ResultSet rs) {
 	ArrayList<Photo> photos = new ArrayList<Photo>();
 	int photo_id;
@@ -548,6 +610,10 @@ public class Db {
 	return photos;
     }
 
+    /**
+     * Updates a photo's descriptors
+     * @param Photo
+     */
     public void update_photo_desc(Photo photo) {
 	String date;
 	if (photo.getDate().equals("")) {

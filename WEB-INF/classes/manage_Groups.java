@@ -51,6 +51,11 @@ public class manage_Groups extends HttpServlet {
 	handle_write(request, response, group_list, invalid_friend);
     }	
 
+    /**
+     * Checks to see if a group name has been entered in the
+     * "new_group" box
+     * @param HttpServletRequest
+     */
     public void check_new_group(HttpServletRequest request) {
 	String new_group = "";
 	/* check new group value */
@@ -66,6 +71,12 @@ public class manage_Groups extends HttpServlet {
 	}
     }
 
+    /**
+     * Checks to see if the checkbox is clicked for any friend in each
+     * group. If yes, the friend is deleted from the group.
+     * @param HttpServletRequest
+     * @param ArrayList<Group>
+     */
     public String check_friend_changes(HttpServletRequest request,
 				       ArrayList<Group> group_list) {
 	String new_friend = "";
@@ -96,7 +107,12 @@ public class manage_Groups extends HttpServlet {
 	}
 	return invalid_friend;
     }
-
+    
+    /**
+     * Checks the "group" checkboxes to see if any groups must be deleted
+     * If yes, the group is deleted from the database.
+     * @param HttpServletRequest
+     */
     public void check_group_changes(HttpServletRequest request) {
 	String[] delete_groups = request.getParameterValues("group");
 	if (delete_groups != null) {
@@ -106,6 +122,13 @@ public class manage_Groups extends HttpServlet {
 	}
     }
 
+    /**
+     * Writes the jsp out to the browser
+     * @param HttpServletRequest
+     * @param HttpServletResponse
+     * @param ArrayList<Group>
+     * @param String
+     */
     public void handle_write(HttpServletRequest request, 
 			     HttpServletResponse response,
 			     ArrayList<Group> group_list,
