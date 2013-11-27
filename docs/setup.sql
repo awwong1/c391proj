@@ -23,9 +23,6 @@ CREATE TABLE users (
    primary key(user_name)
 );
 
-INSERT INTO users VALUES ('mnaylor', 'dog', sysdate);
-INSERT INTO users VALUES ('awong', 'cat', sysdate);
-INSERT INTO users VALUES ('hhoang', 'bird', sysdate);
 INSERT INTO users VALUES ('admin', 'admin', sysdate);
 
 CREATE TABLE persons (
@@ -39,11 +36,6 @@ CREATE TABLE persons (
    UNIQUE (email),
    FOREIGN KEY (user_name) REFERENCES users
 );
-
-INSERT INTO persons VALUES ('mnaylor', 'michelle', 'naylor', 'Edmonton', 'michelle@gmail.com', '9999999999');
-INSERT INTO persons VALUES ('awong', 'alex', 'wong', 'Edmonton', 'alex@gmail.com', '9999999999');
-INSERT INTO persons VALUES ('hhoang', 'henry', 'hoang', 'Edmonton', 'henry@gmail.com', '9999999999');
-INSERT INTO persons VALUES ('admin', 'Admin', 'Root', 'Admin Land', 'admin@admin.admin', '123456789');
 
 CREATE TABLE groups (
    group_id int,
@@ -62,7 +54,6 @@ CREATE SEQUENCE group_id_sequence
 
 INSERT INTO groups values(1,null,'public', sysdate);
 INSERT INTO groups values(2,null,'private',sysdate);
-INSERT INTO groups values(group_id_sequence.nextval,'mnaylor','friends',sysdate);
 
 CREATE TABLE group_lists (
    group_id int,
@@ -73,9 +64,6 @@ CREATE TABLE group_lists (
    FOREIGN KEY(group_id) REFERENCES groups,
    FOREIGN KEY(friend_id) REFERENCES users
 );
-
-INSERT INTO group_lists values(group_id_sequence.currval,'awong',sysdate,null);
-INSERT INTO group_lists values(group_id_sequence.currval,'hhoang',sysdate,null);
 
 CREATE TABLE images (
    photo_id int,
