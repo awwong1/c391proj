@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.*;
+import java.util.Date;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
@@ -18,6 +18,8 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
     private String keywords;
     private String fromDate;
     private String toDate; 
+    private String fromdatesql;
+    private String todatesql;
     private ResultSet rset;
     private String pid;
     private String sortby;
@@ -28,13 +30,28 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
 	
         response.setContentType("text/html");
         database = new Db();
-        database.connect_db();        
+        database.connect_db();   
         keywords = request.getParameter("query");
         fromDate = request.getParameter("fromdate");
         toDate = request.getParameter("todate");
         sortby = request.getParameter("sortby");
         pid = "";
-
+        
+        /*
+         * Changing format from yyyy-MM-dd to dd-MMM-yy for sql
+         */
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MMM-yy");
+        
+        try {
+            Date date = sdf.parse(fromDate);
+            Date date1 = sdf.parse(toDate);
+            fromdatesql = sdf1.format(date);
+            todatesql = sdf1.format(date1);
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        
         PrintWriter out = response.getWriter();
         out.println("<!DOCTYPE html>");
         out.println("<html>");
@@ -75,14 +92,14 @@ public class searchResults extends HttpServlet implements SingleThreadModel {
                 rset = database.getResultByKeywords(keywords, order);
                 out.println("Your results for: '" + keywords + "'");
             } else {
-                rset = database.getResultsByDateAndKeywords(fromDate, toDate,
-                                                            keywords, order);
+                rset = database.getResultsByDateAndKeywords(fromdatesql, 
+                                                todatesql, keywords, order);
                 out.println("Your results for: '" + keywords + "' Between: "
                             + fromDate + " and " + toDate);
             }
         } else if (!((fromDate.equals("")) || (toDate.equals("")))) {
             if (!(order.equals("order by 1 DESC"))) {
-                rset = database.getResultsByDate(fromDate, toDate, order);
+                rset = database.getResultsByDate(fromdatesql, todatesql, order);
                 out.println("Your results for dates between: " + fromDate
                             + " and " + toDate);
             } else {
