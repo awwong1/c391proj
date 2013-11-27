@@ -37,8 +37,9 @@ Search page allows to user to enter a search query
         <tr>
           <th>Date: </th>
           <td>
-            <input name="fromdate" type="date" placeholder="from"></input> to 
-            <input name="todate" type="date" placeholder="to"></input>
+            <input name="fromdate" type="date" placeholder="YYYY-MM-DD">
+            </input> to 
+            <input name="todate" type="date" placeholder="YYYY-MM-DD"></input>
           </td>
         </tr>
         <tr>
