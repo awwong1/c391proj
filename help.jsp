@@ -137,6 +137,22 @@
 	photos with a date set to the selected range.</p>
 
     <h1 id="data">Data Analysis</h1>
-    
+
+    <p>The admin user is able to access all photos in the database,
+    and is able to access the photo analytics.  You may log in as the
+    admin user with the password "admin".</p>
+
+    <p>To view data information, you must first choose a data
+    timeframe - daily, weekly, monthly, or yearly.  The following data
+    summary items will then be displayed for the selected time breakdowns:
+    <ul>
+    <li>Users registered</li>
+    <li>Images uploaded</li>
+    <li>Image description word count</li>
+    </ul>
+
+    Below the summary, you will find a listing of changes by time
+    period.</p>
+
     </body>
 </html>
