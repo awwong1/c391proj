@@ -61,6 +61,7 @@ public class Photo {
     public int getPermitted() {return permitted;}
     public void setPermitted(int permitted) {this.permitted = permitted;}
     public String getSubject() {
+	System.out.println("Subject: " + subject);
 	if (subject == null)
 	    return "";
 	else

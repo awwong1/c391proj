@@ -19,7 +19,7 @@ Author: Alexander Wong
     } else {
         out.println("<a href=\"/c391proj/search.jsp\">search</a>");
         out.println(" | <a href=\"/c391proj/manage_Groups\">manage groups</a>");
-	out.println(" | <a href=\"/c391proj/uploadimage.jsp\">upload photos</a>");
+	out.println(" | <a href=\"/c391proj/uploadimage.jsp\">upload photo</a>");
 	out.println(" | <a href=\"/c391proj/uploadFolder.jsp\">upload folder</a>");
 	out.println(" | <a href=\"/c391proj/choosePhotos.jsp\">browse photos</a>");
 	out.println(" | <a href=\"/c391proj/account_settings.jsp\">account settings</a>");
