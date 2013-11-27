@@ -49,7 +49,7 @@ Webpage for updating image descriptions
            <th>Location: </th>
              <td>
                 <input name="location" type="text" 
-		value=<%out.println(photo.getLocation());%>>
+		value=<%out.println("'" + photo.getLocation() + "'");%>>
 		</input>
              </td>
         </tr>
@@ -58,7 +58,7 @@ Webpage for updating image descriptions
            <th>Subject: </th>
              <td>
                 <input name="subject" type="text" 
-		value=<%out.println(photo.getSubject());%>>
+		value=<%out.println("'" + photo.getSubject() + "'");%>>
 		</input>
              </td>
         </tr>

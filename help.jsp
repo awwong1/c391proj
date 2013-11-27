@@ -19,7 +19,7 @@
         <li>Untar the file in the /catalina/webapps directory.  You
         should now have a directory called c391proj.</li>
 	<li>$ cd /path/to/catalina/webapps/c391proj/WEB-INF/classes</li>
-	<li>$ make</li>
+	<li>$ make all</li>
 	<li>$ starttomcat</li>
 	<li>Open a browser (preferably one with html5 support) and
 	navigate to
